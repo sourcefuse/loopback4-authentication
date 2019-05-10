@@ -1,3 +1,4 @@
+/* tslint:disable:no-any */
 import * as passport from 'passport';
 
 export interface StrategyOptionsWithRequestInterface {
@@ -29,11 +30,7 @@ export class Strategy extends passport.Strategy {
   constructor(verify: VerifyFunction);
   constructor(
     options: StrategyOptionsWithRequestInterface,
-    verify: VerifyFunctionWithRequest,
-  );
-  constructor(
-    options: StrategyOptionsWithRequestInterface,
-    verify: VerifyFunction,
+    verify: VerifyFunctionWithRequest | VerifyFunction,
   );
   constructor(
     options: StrategyOptionsWithRequestInterface | VerifyFunction,
@@ -59,7 +56,8 @@ export class Strategy extends passport.Strategy {
       !req.body ||
       (!req.body['client_id'] || !req.body['username'] || !req.body['password'])
     ) {
-      return this.fail();
+      this.fail();
+      return;
     }
 
     const clientId = req.body['client_id'];
@@ -69,13 +67,16 @@ export class Strategy extends passport.Strategy {
 
     const verified = (err: any, client: any, user: any) => {
       if (err) {
-        return this.error(err);
+        this.error(err);
+        return;
       }
       if (!client) {
-        return this.fail();
+        this.fail();
+        return;
       }
       if (!user) {
-        return this.fail();
+        this.fail();
+        return;
       }
       this.success(user);
     };

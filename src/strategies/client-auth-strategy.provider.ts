@@ -58,9 +58,9 @@ export class ClientAuthStrategyProvider
                 AuthErrorKeys.ClientVerificationFailed,
               );
             }
-            return cb(null, client);
+            cb(null, client);
           } catch (err) {
-            return cb(err);
+            cb(err);
           }
         },
       );
@@ -83,9 +83,9 @@ export class ClientAuthStrategyProvider
                 AuthErrorKeys.ClientVerificationFailed,
               );
             }
-            return cb(null, client);
+            cb(null, client);
           } catch (err) {
-            return cb(err);
+            cb(err);
           }
         },
       );

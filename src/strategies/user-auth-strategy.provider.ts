@@ -69,9 +69,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
                 AuthErrorKeys.InvalidCredentials,
               );
             }
-            return cb(null, user);
+            cb(null, user);
           } catch (err) {
-            return cb(err);
+            cb(err);
           }
         },
       );
@@ -90,9 +90,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
                 AuthErrorKeys.InvalidCredentials,
               );
             }
-            return cb(null, user);
+            cb(null, user);
           } catch (err) {
-            return cb(err);
+            cb(err);
           }
         },
       );
@@ -104,15 +104,19 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
           cb: (err: Error | null, user?: IAuthUser | false) => void,
         ) => {
           try {
-            const user = await this.verifierLocal(username, password);
+            const user = await this.verifierLocal(
+              username,
+              password,
+              undefined,
+            );
             if (!user) {
               throw new HttpErrors.Unauthorized(
                 AuthErrorKeys.InvalidCredentials,
               );
             }
-            return cb(null, user);
+            cb(null, user);
           } catch (err) {
-            return cb(err);
+            cb(err);
           }
         },
       );
@@ -135,9 +139,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
             if (!user) {
               throw new HttpErrors.Unauthorized(AuthErrorKeys.TokenInvalid);
             }
-            return cb(null, user);
+            cb(null, user);
           } catch (err) {
-            return cb(err);
+            cb(err);
           }
         },
       );
@@ -153,9 +157,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
             if (!user) {
               throw new HttpErrors.Unauthorized(AuthErrorKeys.TokenInvalid);
             }
-            return cb(null, user);
+            cb(null, user);
           } catch (err) {
-            return cb(err);
+            cb(err);
           }
         },
       );
@@ -172,9 +176,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
                 AuthErrorKeys.InvalidCredentials,
               );
             }
-            return cb(null, user);
+            cb(null, user);
           } catch (err) {
-            return cb(err);
+            cb(err);
           }
         },
       );
@@ -212,9 +216,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
                 AuthErrorKeys.InvalidCredentials,
               );
             }
-            return cb(null, userInfo.client, userInfo.user);
+            cb(null, userInfo.client, userInfo.user);
           } catch (err) {
-            return cb(err);
+            cb(err);
           }
         },
       );
@@ -243,9 +247,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
                 AuthErrorKeys.InvalidCredentials,
               );
             }
-            return cb(null, userInfo.client, userInfo.user);
+            cb(null, userInfo.client, userInfo.user);
           } catch (err) {
-            return cb(err);
+            cb(err);
           }
         },
       );
