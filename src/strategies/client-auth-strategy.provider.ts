@@ -37,9 +37,9 @@ export class ClientAuthStrategyProvider
   getClientPasswordVerifier(
     options?: StrategyOptionsWithRequestInterface,
   ): ClientPasswordStrategy {
-    if (options) {
+    if (options && options.passReqToCallback) {
       return new ClientPasswordStrategy(
-        options as StrategyOptionsWithRequestInterface,
+        options,
         async (
           req: Request,
           clientId: string,
