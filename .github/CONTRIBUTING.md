@@ -12,7 +12,7 @@ someone else in the community has already created a ticket. If not, go ahead and
 
 ### Fork & create a branch
 
-If this is something you think you can fix, then [fork Active Admin](https://help.github.com/articles/fork-a-repo) and
+If this is something you think you can fix, then [fork](https://help.github.com/articles/fork-a-repo) this repo and
 create a branch with a descriptive name.
 
 A good branch name would be (where issue #325 is the ticket you're working on):
