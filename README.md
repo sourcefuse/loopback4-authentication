@@ -2,6 +2,15 @@
 
 [![LoopBack](<https://github.com/strongloop/loopback-next/raw/master/docs/site/imgs/branding/Powered-by-LoopBack-Badge-(blue)-@2x.png>)](http://loopback.io/)
 
+[![Node version](https://img.shields.io/node/v/loopback4-authentication.svg?style=flat-square)](https://nodejs.org/en/download/)
+[![Dependencies Status](https://img.shields.io/david/sourcefuse/loopback4-authentication.svg?style=flat-square&label=Dependencies)](https://github.com/sourcefuse/loopback4-authentication)
+[![npm vulnerabilities](https://img.shields.io/snyk/vulnerabilities/npm/loopback4-authentication.svg?label=npm%20vulnerabilities&style=flat-square)](https://www.npmjs.com/package/loopback4-authentication)
+
+[![Latest version](https://img.shields.io/npm/v/loopback4-authentication.svg?style=flat-square)](https://www.npmjs.com/package/loopback4-authentication)
+[![License](https://img.shields.io/github/license/sourcefuse/loopback4-authentication.svg?color=blue&label=License&style=flat-square)](https://github.com/sourcefuse/loopback4-authentication/blob/master/LICENSE)
+[![Downloads](https://img.shields.io/npm/dw/loopback4-authentication.svg?label=Downloads&style=flat-square&color=blue)](https://www.npmjs.com/package/loopback4-authentication)
+[![Total Downloads](https://img.shields.io/npm/dt/loopback4-authentication.svg?label=Total%20Downloads&style=flat-square&color=blue)](https://www.npmjs.com/package/loopback4-authentication)
+
 This is a loopback-next extension for adding authentication layer to a REST application in loopback 4.
 It provides support for four passport based strategies.
 
