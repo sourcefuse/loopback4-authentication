@@ -19,7 +19,7 @@ It provides support for four passport based strategies.
 3. [passport-local](https://github.com/jaredhanson/passport-local) - Passport strategy for authenticating with a username and password. This module lets you authenticate using a username and password in your Node.js applications.
 4. [passport-oauth2-resource-owner-password](https://www.npmjs.com/package/passport-oauth2-resource-owner-password) - OAuth 2.0 resource owner password authentication strategy for Passport. This module lets you authenticate requests containing resource owner credentials in the request body, as [defined](http://tools.ietf.org/html/draft-ietf-oauth-v2-27#section-1.3.3) by the OAuth 2.0 specification.
 
-You can use one or more strategies of the above in your application. For each of the strategy, you just need to provide your own verifier function, making it easily configurable. Rest of the strategy implementation intricacies is handled by extension.
+You can use one or more strategies of the above in your application. For each of the strategy (only which you use), you just need to provide your own verifier function, making it easily configurable. Rest of the strategy implementation intricacies is handled by extension.
 
 ## Install
 
@@ -141,12 +141,12 @@ Please note the Verify function type _VerifyFunction.OauthClientPasswordFn_.
 Now bind this provider to the application in application.ts.
 
 ```ts
+// Add authentication component
+this.component(AuthenticationComponent);
 // Customize authentication verify handlers
 this.bind(
   AuthenticationBindings.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER,
 ).toProvider(ClientPasswordVerifyProvider);
-// Add authentication component
-this.component(AuthenticationComponent);
 ```
 
 Finally, add the authenticate function as a sequence action to sequence.ts.
@@ -311,12 +311,12 @@ Please note the Verify function type _VerifyFunction.BearerFn_
 Now bind this provider to the application in application.ts.
 
 ```ts
+// Add authentication component
+this.component(AuthenticationComponent);
 // Customize authentication verify handlers
 this.bind(AuthenticationBindings.Passport.BEARER_TOKEN_VERIFIER).toProvider(
   BearerTokenVerifyProvider,
 );
-// Add authentication component
-this.component(AuthenticationComponent);
 ```
 
 Finally, add the authenticate function as a sequence action to sequence.ts as shown previously.
@@ -439,12 +439,12 @@ Please note the Verify function type _VerifyFunction.LocalPasswordFn_
 Now bind this provider to the application in application.ts.
 
 ```ts
+// Add authentication component
+this.component(AuthenticationComponent);
 // Customize authentication verify handlers
 this.bind(AuthenticationBindings.Passport.LOCAL_PASSWORD_VERIFIER).toProvider(
   LocalPasswordVerifyProvider,
 );
-// Add authentication component
-this.component(AuthenticationComponent);
 ```
 
 Finally, add the authenticate function as a sequence action to sequence.ts as shown previously.
@@ -627,12 +627,12 @@ Also, in this case, verifier will return AuthClient as well as User model.
 Now bind this provider to the application in application.ts.
 
 ```ts
+// Add authentication component
+this.component(AuthenticationComponent);
 // Customize authentication verify handlers
 this.bind(
   AuthenticationBindings.Passport.RESOURCE_OWNER_PASSWORD_VERIFIER,
 ).toProvider(ResourceOwnerVerifyProvider);
-// Add authentication component
-this.component(AuthenticationComponent);
 ```
 
 Finally, add the authenticate function as a sequence action to sequence.ts as shown previously.
