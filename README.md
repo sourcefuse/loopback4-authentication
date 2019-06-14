@@ -320,7 +320,36 @@ this.bind(AuthenticationBindings.Passport.BEARER_TOKEN_VERIFIER).toProvider(
 );
 ```
 
-Finally, add the authenticate function as a sequence action to sequence.ts as shown previously.
+Finally, add the authenticate function as a sequence action to sequence.ts.
+
+```ts
+export class MySequence implements SequenceHandler {
+  constructor(
+    @inject(SequenceActions.FIND_ROUTE) protected findRoute: FindRoute,
+    @inject(SequenceActions.PARSE_PARAMS) protected parseParams: ParseParams,
+    @inject(SequenceActions.INVOKE_METHOD) protected invoke: InvokeMethod,
+    @inject(SequenceActions.SEND) public send: Send,
+    @inject(SequenceActions.REJECT) public reject: Reject,
+    @inject(AuthenticationBindings.USER_AUTH_ACTION)
+    protected authenticateRequest: AuthenticateFn<AuthUser>,
+  ) {}
+
+  async handle(context: RequestContext) {
+    try {
+      const {request, response} = context;
+
+      const route = this.findRoute(request);
+      const args = await this.parseParams(request, route);
+      request.body = args[args.length - 1];
+      const authUser: AuthUser = await this.authenticateRequest(request);
+      const result = await this.invoke(route, args);
+      this.send(response, result);
+    } catch (err) {
+      this.reject(context, err);
+    }
+  }
+}
+```
 
 After this, you can use decorator to apply auth to controller functions wherever needed. See below.
 
@@ -448,7 +477,36 @@ this.bind(AuthenticationBindings.Passport.LOCAL_PASSWORD_VERIFIER).toProvider(
 );
 ```
 
-Finally, add the authenticate function as a sequence action to sequence.ts as shown previously.
+Finally, add the authenticate function as a sequence action to sequence.ts.
+
+```ts
+export class MySequence implements SequenceHandler {
+  constructor(
+    @inject(SequenceActions.FIND_ROUTE) protected findRoute: FindRoute,
+    @inject(SequenceActions.PARSE_PARAMS) protected parseParams: ParseParams,
+    @inject(SequenceActions.INVOKE_METHOD) protected invoke: InvokeMethod,
+    @inject(SequenceActions.SEND) public send: Send,
+    @inject(SequenceActions.REJECT) public reject: Reject,
+    @inject(AuthenticationBindings.USER_AUTH_ACTION)
+    protected authenticateRequest: AuthenticateFn<AuthUser>,
+  ) {}
+
+  async handle(context: RequestContext) {
+    try {
+      const {request, response} = context;
+
+      const route = this.findRoute(request);
+      const args = await this.parseParams(request, route);
+      request.body = args[args.length - 1];
+      const authUser: AuthUser = await this.authenticateRequest(request);
+      const result = await this.invoke(route, args);
+      this.send(response, result);
+    } catch (err) {
+      this.reject(context, err);
+    }
+  }
+}
+```
 
 After this, you can use decorator to apply auth to controller functions wherever needed. See below.
 
@@ -636,7 +694,36 @@ this.bind(
 ).toProvider(ResourceOwnerVerifyProvider);
 ```
 
-Finally, add the authenticate function as a sequence action to sequence.ts as shown previously.
+Finally, add the authenticate function as a sequence action to sequence.ts.
+
+```ts
+export class MySequence implements SequenceHandler {
+  constructor(
+    @inject(SequenceActions.FIND_ROUTE) protected findRoute: FindRoute,
+    @inject(SequenceActions.PARSE_PARAMS) protected parseParams: ParseParams,
+    @inject(SequenceActions.INVOKE_METHOD) protected invoke: InvokeMethod,
+    @inject(SequenceActions.SEND) public send: Send,
+    @inject(SequenceActions.REJECT) public reject: Reject,
+    @inject(AuthenticationBindings.USER_AUTH_ACTION)
+    protected authenticateRequest: AuthenticateFn<AuthUser>,
+  ) {}
+
+  async handle(context: RequestContext) {
+    try {
+      const {request, response} = context;
+
+      const route = this.findRoute(request);
+      const args = await this.parseParams(request, route);
+      request.body = args[args.length - 1];
+      const authUser: AuthUser = await this.authenticateRequest(request);
+      const result = await this.invoke(route, args);
+      this.send(response, result);
+    } catch (err) {
+      this.reject(context, err);
+    }
+  }
+}
+```
 
 After this, you can use decorator to apply auth to controller functions wherever needed. See below.
 
