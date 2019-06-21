@@ -6,12 +6,24 @@ import {
   AuthMetadataProvider,
   ClientAuthenticateActionProvider,
   ClientAuthMetadataProvider,
+} from './providers';
+import {
+  AuthStrategyProvider,
+  ClientAuthStrategyProvider,
   ClientPasswordVerifyProvider,
   LocalPasswordVerifyProvider,
   BearerTokenVerifyProvider,
   ResourceOwnerVerifyProvider,
-} from './providers';
-import {AuthStrategyProvider, ClientAuthStrategyProvider} from './strategies';
+  LocalPasswordStrategyFactoryProvider,
+  ClientPasswordStrategyFactoryProvider,
+  BearerStrategyFactoryProvider,
+  ResourceOwnerPasswordStrategyFactoryProvider,
+} from './strategies';
+import {Strategies} from './strategies/keys';
+import {
+  GoogleAuthStrategyFactoryProvider,
+  GoogleAuthVerifyProvider,
+} from './strategies/passport/passport-google-oauth2';
 
 export class AuthenticationComponent implements Component {
   constructor() {
@@ -23,14 +35,30 @@ export class AuthenticationComponent implements Component {
       [AuthenticationBindings.CLIENT_METADATA.key]: ClientAuthMetadataProvider,
       [AuthenticationBindings.USER_STRATEGY.key]: AuthStrategyProvider,
       [AuthenticationBindings.CLIENT_STRATEGY.key]: ClientAuthStrategyProvider,
-      [AuthenticationBindings.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER
+
+      // Strategy function factories
+      [Strategies.Passport.LOCAL_STRATEGY_FACTORY
+        .key]: LocalPasswordStrategyFactoryProvider,
+      [Strategies.Passport.CLIENT_PASSWORD_STRATEGY_FACTORY
+        .key]: ClientPasswordStrategyFactoryProvider,
+      [Strategies.Passport.BEARER_STRATEGY_FACTORY
+        .key]: BearerStrategyFactoryProvider,
+      [Strategies.Passport.RESOURCE_OWNER_STRATEGY_FACTORY
+        .key]: ResourceOwnerPasswordStrategyFactoryProvider,
+      [Strategies.Passport.GOOGLE_OAUTH2_STRATEGY_FACTORY
+        .key]: GoogleAuthStrategyFactoryProvider,
+
+      // Verifier functions
+      [Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER
         .key]: ClientPasswordVerifyProvider,
-      [AuthenticationBindings.Passport.LOCAL_PASSWORD_VERIFIER
+      [Strategies.Passport.LOCAL_PASSWORD_VERIFIER
         .key]: LocalPasswordVerifyProvider,
-      [AuthenticationBindings.Passport.BEARER_TOKEN_VERIFIER
+      [Strategies.Passport.BEARER_TOKEN_VERIFIER
         .key]: BearerTokenVerifyProvider,
-      [AuthenticationBindings.Passport.RESOURCE_OWNER_PASSWORD_VERIFIER
+      [Strategies.Passport.RESOURCE_OWNER_PASSWORD_VERIFIER
         .key]: ResourceOwnerVerifyProvider,
+      [Strategies.Passport.GOOGLE_OAUTH2_VERIFIER
+        .key]: GoogleAuthVerifyProvider,
     };
   }
 
