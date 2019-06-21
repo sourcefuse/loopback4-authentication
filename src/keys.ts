@@ -1,13 +1,13 @@
-import {Strategy} from 'passport';
-import {
-  AuthenticateFn,
-  IAuthUser,
-  IAuthClient,
-  VerifyFunction,
-  AuthenticationMetadata,
-} from './types';
 import {BindingKey} from '@loopback/context';
 import {MetadataAccessor} from '@loopback/metadata';
+import {Strategy} from 'passport';
+
+import {
+  AuthenticateFn,
+  AuthenticationMetadata,
+  IAuthClient,
+  IAuthUser,
+} from './types';
 
 /**
  * Binding keys used by this component.
@@ -44,21 +44,6 @@ export namespace AuthenticationBindings {
   export const CURRENT_CLIENT = BindingKey.create<IAuthClient | undefined>(
     'sf.clientAuthentication.currentClient',
   );
-
-  export namespace Passport {
-    export const OAUTH2_CLIENT_PASSWORD_VERIFIER = BindingKey.create<
-      VerifyFunction.OauthClientPasswordFn
-    >('sf.passport.verifier.oauth2ClientPassword');
-    export const LOCAL_PASSWORD_VERIFIER = BindingKey.create<
-      VerifyFunction.LocalPasswordFn
-    >('sf.passport.verifier.localPassword');
-    export const BEARER_TOKEN_VERIFIER = BindingKey.create<
-      VerifyFunction.BearerFn
-    >('sf.passport.verifier.bearerToken');
-    export const RESOURCE_OWNER_PASSWORD_VERIFIER = BindingKey.create<
-      VerifyFunction.ResourceOwnerPasswordFn
-    >('sf.passport.verifier.resourceOwnerPassword');
-  }
 }
 
 export const USER_AUTHENTICATION_METADATA_KEY = MetadataAccessor.create<

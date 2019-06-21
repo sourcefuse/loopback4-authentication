@@ -5,6 +5,7 @@ import {Strategy} from 'passport';
 import {AuthenticationBindings} from '../keys';
 import {StrategyAdapter} from '../strategy-adapter';
 import {IAuthClient, AuthenticateFn} from '../types';
+import {isObjectLike, isEmpty} from 'lodash';
 
 export class ClientAuthenticateActionProvider
   implements Provider<AuthenticateFn<IAuthClient | undefined>> {
@@ -29,6 +30,10 @@ export class ClientAuthenticateActionProvider
       throw new Error('invalid strategy parameter');
     }
     const strategyAdapter = new StrategyAdapter<IAuthClient>(strategy);
+    // Added for cases, where data is passed not in body but in query parameter
+    if (!request.body || !isObjectLike(request.body) || isEmpty(request.body)) {
+      request.body = request.query;
+    }
     const client: IAuthClient = await strategyAdapter.authenticate(request);
     this.setCurrentClient(client);
     return client;

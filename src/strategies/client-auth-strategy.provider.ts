@@ -1,23 +1,20 @@
 import {inject, Provider, ValueOrPromise} from '@loopback/context';
-import {HttpErrors, Request} from '@loopback/rest';
 import {Strategy} from 'passport';
-import {
-  Strategy as ClientPasswordStrategy,
-  StrategyOptionsWithRequestInterface,
-} from 'passport-oauth2-client-password';
+import {StrategyOptionsWithRequestInterface} from 'passport-oauth2-client-password';
 
-import {AuthErrorKeys} from '../error-keys';
 import {AuthenticationBindings} from '../keys';
 import {STRATEGY} from '../strategy-name.enum';
-import {IAuthClient, VerifyFunction, AuthenticationMetadata} from '../types';
+import {AuthenticationMetadata} from '../types';
+import {Strategies} from './keys';
+import {ClientPasswordStrategyFactory} from './passport/passport-client-password';
 
 export class ClientAuthStrategyProvider
   implements Provider<Strategy | undefined> {
   constructor(
     @inject(AuthenticationBindings.CLIENT_METADATA)
     private readonly clientMetadata: AuthenticationMetadata,
-    @inject(AuthenticationBindings.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER)
-    private readonly verifier: VerifyFunction.OauthClientPasswordFn,
+    @inject(Strategies.Passport.CLIENT_PASSWORD_STRATEGY_FACTORY)
+    private readonly getClientPasswordVerifier: ClientPasswordStrategyFactory,
   ) {}
 
   value(): ValueOrPromise<Strategy | undefined> {
@@ -31,64 +28,6 @@ export class ClientAuthStrategyProvider
         .options as StrategyOptionsWithRequestInterface);
     } else {
       return Promise.reject(`The strategy ${name} is not available.`);
-    }
-  }
-
-  getClientPasswordVerifier(
-    options?: StrategyOptionsWithRequestInterface,
-  ): ClientPasswordStrategy {
-    if (options && options.passReqToCallback) {
-      return new ClientPasswordStrategy(
-        options,
-        async (
-          req: Request,
-          clientId: string,
-          clientSecret: string,
-          cb: (err: Error | null, client?: IAuthClient | false) => void,
-        ) => {
-          try {
-            const client = await this.verifier(clientId, clientSecret, req);
-            if (!client) {
-              throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
-            } else if (
-              !client.clientSecret ||
-              client.clientSecret !== clientSecret
-            ) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.ClientVerificationFailed,
-              );
-            }
-            cb(null, client);
-          } catch (err) {
-            cb(err);
-          }
-        },
-      );
-    } else {
-      return new ClientPasswordStrategy(
-        async (
-          clientId: string,
-          clientSecret: string,
-          cb: (err: Error | null, client?: IAuthClient | false) => void,
-        ) => {
-          try {
-            const client = await this.verifier(clientId, clientSecret);
-            if (!client) {
-              throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
-            } else if (
-              !client.clientSecret ||
-              client.clientSecret !== clientSecret
-            ) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.ClientVerificationFailed,
-              );
-            }
-            cb(null, client);
-          } catch (err) {
-            cb(err);
-          }
-        },
-      );
     }
   }
 }

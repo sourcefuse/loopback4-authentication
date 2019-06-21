@@ -2,8 +2,9 @@
 // Node module: @loopback/authentication
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
-import {HttpErrors, Request} from '@loopback/rest';
+import {HttpErrors, Request, Response} from '@loopback/rest';
 import {Strategy} from 'passport';
+
 const passportRequestMixin = require('passport/lib/http/request');
 
 /**
@@ -28,7 +29,11 @@ export class StrategyAdapter<T> {
    *     3. authenticate using the strategy
    * @param request The incoming request.
    */
-  authenticate(request: Request): Promise<T> {
+  authenticate(
+    request: Request,
+    response?: Response,
+    options?: Object,
+  ): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       // mix-in passport additions like req.logIn and req.logOut
       for (const key in passportRequestMixin) {
@@ -40,22 +45,27 @@ export class StrategyAdapter<T> {
       const strategy = Object.create(this.strategy);
 
       // add success state handler to strategy instance
-      strategy.success = function(t: T) {
+      strategy.success = (t: T) => {
         resolve(t);
       };
 
       // add failure state handler to strategy instance
-      strategy.fail = function(challenge: string) {
+      strategy.fail = (challenge: string) => {
         reject(new HttpErrors.Unauthorized(challenge));
       };
 
       // add error state handler to strategy instance
-      strategy.error = function(error: string) {
+      strategy.error = (error: string) => {
         reject(new HttpErrors.Unauthorized(error));
       };
 
+      strategy.redirect = (url: string) => {
+        response && response.redirect(url, 302);
+        resolve();
+      };
+
       // authenticate
-      strategy.authenticate(request);
+      strategy.authenticate(request, options);
     });
   }
 }

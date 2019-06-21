@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "passport": "^0.4.0",
+    "passport-google-oauth20": "^2.0.0",
     "passport-http-bearer": "^1.0.1",
     "passport-local": "^1.0.0",
     "passport-oauth2-client-password": "^0.1.2"
@@ -67,9 +68,11 @@
     "@types/express": "^4.17.0",
     "@types/node": "^10.14.8",
     "@types/passport": "^1.0.0",
+    "@types/passport-google-oauth20": "^2.0.1",
     "@types/passport-http-bearer": "^1.0.33",
     "@types/passport-local": "^1.0.33",
     "@types/passport-oauth2-client-password": "^0.1.2",
+    "lodash": "^4.17.11",
     "tslint": "^5.18.0",
     "typescript": "^3.5.2"
   }
