@@ -60,7 +60,9 @@ export class StrategyAdapter<T> {
       };
 
       strategy.redirect = (url: string) => {
-        response && response.redirect(url, 302);
+        if (response) {
+          response.redirect(url, 302);
+        }
         resolve();
       };
 
