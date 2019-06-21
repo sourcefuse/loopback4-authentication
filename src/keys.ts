@@ -9,6 +9,8 @@ import {
   IAuthUser,
 } from './types';
 
+export * from './strategies/keys';
+
 /**
  * Binding keys used by this component.
  */

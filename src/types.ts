@@ -4,6 +4,7 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import {Request, Response} from '@loopback/rest';
+export * from './strategies/types';
 
 export interface IAuthClient {
   clientId: string;
