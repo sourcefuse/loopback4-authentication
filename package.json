@@ -13,17 +13,16 @@
     "node": ">=8.9"
   },
   "scripts": {
-    "build:apidocs": "lb-apidocs",
-    "build": "lb-tsc es2017 --outDir dist",
+    "build": "lb-tsc --outDir dist",
     "build:watch": "lb-tsc --watch",
     "clean": "lb-clean dist",
-    "lint": "npm run prettier:check && npm run tslint",
-    "lint:fix": "npm run tslint:fix && npm run prettier:fix",
+    "lint": "npm run prettier:check && npm run eslint",
+    "lint:fix": "npm run eslint:fix && npm run prettier:fix",
     "prettier:cli": "lb-prettier \"**/*.ts\" \"**/*.js\"",
     "prettier:check": "npm run prettier:cli -- -l",
     "prettier:fix": "npm run prettier:cli -- --write",
-    "tslint": "lb-tslint",
-    "tslint:fix": "npm run tslint -- --fix",
+    "eslint": "lb-eslint --report-unused-disable-directives .",
+    "eslint:fix": "npm run eslint -- --fix",
     "pretest": "npm run clean && npm run build",
     "test": "lb-mocha --allow-console-logs \"dist/__tests__\"",
     "posttest": "npm run lint",
@@ -45,10 +44,10 @@
     "!*/__tests__"
   ],
   "peerDependencies": {
-    "@loopback/boot": "^1.4.0",
-    "@loopback/context": "^1.19.0",
-    "@loopback/core": "^1.8.1",
-    "@loopback/rest": "^1.15.0"
+    "@loopback/boot": "^1.4.4",
+    "@loopback/context": "^1.20.2",
+    "@loopback/core": "^1.8.5",
+    "@loopback/rest": "^1.16.3"
   },
   "dependencies": {
     "passport": "^0.4.0",
@@ -58,14 +57,15 @@
     "passport-oauth2-client-password": "^0.1.2"
   },
   "devDependencies": {
-    "@loopback/boot": "^1.4.2",
-    "@loopback/build": "^1.7.1",
-    "@loopback/context": "^1.20.0",
-    "@loopback/core": "^1.8.3",
-    "@loopback/rest": "^1.16.1",
-    "@loopback/testlab": "^1.6.1",
+    "@loopback/boot": "^1.4.4",
+    "@loopback/build": "^2.0.3",
+    "@loopback/context": "^1.20.2",
+    "@loopback/core": "^1.8.5",
+    "@loopback/rest": "^1.16.3",
+    "@loopback/testlab": "^1.6.3",
     "@loopback/tslint-config": "^2.1.0",
     "@types/express": "^4.17.0",
+    "@types/lodash": "^4.14.135",
     "@types/node": "^10.14.8",
     "@types/passport": "^1.0.0",
     "@types/passport-google-oauth20": "^2.0.1",

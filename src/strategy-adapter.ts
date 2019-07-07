@@ -37,7 +37,7 @@ export class StrategyAdapter<T> {
     return new Promise<T>((resolve, reject) => {
       // mix-in passport additions like req.logIn and req.logOut
       for (const key in passportRequestMixin) {
-        // tslint:disable-next-line:no-any
+        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
         (request as any)[key] = passportRequestMixin[key];
       }
 

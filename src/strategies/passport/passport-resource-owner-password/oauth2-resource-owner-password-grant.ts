@@ -1,4 +1,4 @@
-/* tslint:disable:no-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as passport from 'passport';
 
 export namespace Oauth2ResourceOwnerPassword {
@@ -30,8 +30,8 @@ export namespace Oauth2ResourceOwnerPassword {
   export class Strategy extends passport.Strategy {
     constructor(verify: VerifyFunction);
     constructor(
-      options: StrategyOptionsWithRequestInterface,
-      verify: VerifyFunctionWithRequest | VerifyFunction,
+      options: StrategyOptionsWithRequestInterface | VerifyFunction,
+      verify?: VerifyFunctionWithRequest | VerifyFunction,
     );
     constructor(
       options: StrategyOptionsWithRequestInterface | VerifyFunction,
