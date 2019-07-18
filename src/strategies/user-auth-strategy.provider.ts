@@ -24,7 +24,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     private readonly getLocalStrategyVerifier: LocalPasswordStrategyFactory,
     @inject(Strategies.Passport.BEARER_STRATEGY_FACTORY)
     private readonly getBearerStrategyVerifier: BearerStrategyFactory,
-    @inject(Strategies.Passport.BEARER_STRATEGY_FACTORY)
+    @inject(Strategies.Passport.RESOURCE_OWNER_STRATEGY_FACTORY)
     private readonly getResourceOwnerVerifier: ResourceOwnerPasswordStrategyFactory,
     @inject(Strategies.Passport.GOOGLE_OAUTH2_STRATEGY_FACTORY)
     private readonly getGoogleAuthVerifier: GoogleAuthStrategyFactory,

@@ -6,6 +6,7 @@ import {IAuthClient, IAuthUser} from '../../../types';
 import {Strategies} from '../../keys';
 import {VerifyFunction} from '../../types';
 import {Oauth2ResourceOwnerPassword} from './oauth2-resource-owner-password-grant';
+import {isEmpty} from 'lodash';
 
 export interface ResourceOwnerPasswordStrategyFactory {
   (
@@ -50,7 +51,7 @@ export class ResourceOwnerPasswordStrategyFactoryProvider
               password,
               req,
             );
-            if (!userInfo) {
+            if (!userInfo || isEmpty(userInfo)) {
               throw new HttpErrors.Unauthorized(
                 AuthErrorKeys.InvalidCredentials,
               );
@@ -81,7 +82,7 @@ export class ResourceOwnerPasswordStrategyFactoryProvider
               username,
               password,
             );
-            if (!userInfo) {
+            if (!userInfo || isEmpty(userInfo)) {
               throw new HttpErrors.Unauthorized(
                 AuthErrorKeys.InvalidCredentials,
               );

@@ -6,6 +6,7 @@ import {AuthErrorKeys} from '../../../error-keys';
 import {IAuthUser} from '../../../types';
 import {Strategies} from '../../keys';
 import {VerifyFunction} from '../../types';
+import {isEmpty} from 'lodash';
 
 export interface LocalPasswordStrategyFactory {
   (
@@ -53,7 +54,7 @@ export class LocalPasswordStrategyFactoryProvider
           }
         },
       );
-    } else if (!!options) {
+    } else if (!!options && !isEmpty(options)) {
       return new PassportLocal.Strategy(
         options,
         async (
