@@ -13,7 +13,7 @@
     "node": ">=8.9"
   },
   "scripts": {
-    "build": "lb-tsc ",
+    "build": "lb-tsc --outDir dist",
     "build:watch": "lb-tsc --watch",
     "clean": "lb-clean dist",
     "coverage": "nyc --reporter=html npm run test",

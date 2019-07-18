@@ -93,7 +93,7 @@ describe('Bearer-token strategy', () => {
       @get('/auth/bearer/callback')
       @authenticate(STRATEGY.BEARER, {passReqToCallback: true})
       async test() {
-        return await this.user;
+        return this.user;
       }
     }
 
@@ -122,7 +122,7 @@ describe('Bearer-token strategy', () => {
       @get('/auth/bearer/no-callback')
       @authenticate(STRATEGY.BEARER, {passReqToCallback: false})
       async test() {
-        return await this.user;
+        return this.user;
       }
     }
 
@@ -164,7 +164,7 @@ describe('Bearer-token strategy', () => {
       @get('/auth/bearer/no-user')
       @authenticate(STRATEGY.BEARER)
       async test() {
-        return await this.user;
+        return this.user;
       }
     }
 
@@ -190,7 +190,7 @@ describe('Bearer-token strategy', () => {
       @get('/auth/bearer/no-user-with-callback')
       @authenticate(STRATEGY.BEARER, {passReqToCallback: true})
       async test() {
-        return await this.user;
+        return this.user;
       }
     }
 
@@ -216,7 +216,7 @@ describe('Bearer-token strategy', () => {
       @get('/auth/bearer/no-user-when-callback-false')
       @authenticate(STRATEGY.BEARER, {passReqToCallback: false})
       async test() {
-        return await this.user;
+        return this.user;
       }
     }
 
@@ -269,7 +269,7 @@ describe('integration test when no provider was implemented', () => {
       @get('/auth/bearer/no-verifier')
       @authenticate(STRATEGY.BEARER, {passReqToCallback: false})
       async test() {
-        return await this.user;
+        return this.user;
       }
     }
 
