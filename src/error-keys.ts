@@ -6,7 +6,7 @@ export const enum AuthErrorKeys {
   ClientVerificationFailed = 'Client Verification Failed',
   ClientSecretMissing = 'Client Secret Missing',
   ClientUserMissing = 'Client User Missing',
-  InvalidCredentials = 'Invalid redentials',
+  InvalidCredentials = 'Invalid Credentials',
   UnknownError = 'Unknown Error',
   WrongPassword = 'Incorrect Password',
 }
