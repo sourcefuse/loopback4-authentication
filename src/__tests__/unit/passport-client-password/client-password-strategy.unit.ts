@@ -1,10 +1,8 @@
 import {IAuthClient} from '../../../types';
 import {
-  BearerStrategyFactory,
   ClientPasswordStrategyFactoryProvider,
   ClientPasswordStrategyFactory,
 } from '../../../strategies';
-import * as PassportBearer from 'passport-http-bearer';
 import {expect} from '@loopback/testlab';
 
 /**
@@ -14,7 +12,7 @@ describe('getting client-password strategy with options', () => {
   it('should return strategy by passing options and passReqToCallback as true', async () => {
     const strategyVerifier: ClientPasswordStrategyFactory = await getStrategy();
 
-    const options: PassportBearer.IStrategyOptions = {
+    const options = {
       scope: '',
       realm: '',
       passReqToCallback: true,
@@ -31,7 +29,7 @@ describe('getting client-password strategy with options', () => {
   it('should return strategy by passing options and passReqToCallback as false', async () => {
     const strategyVerifier: ClientPasswordStrategyFactory = await getStrategy();
 
-    const options: PassportBearer.IStrategyOptions = {
+    const options = {
       scope: '',
       realm: '',
       passReqToCallback: false,

@@ -9,7 +9,7 @@ import {expect} from '@loopback/testlab';
 /**
  * Testing to get bearer strategy from providers
  */
-describe('getting strategy with options', () => {
+describe('getting bearer token strategy with options', () => {
   it('should return strategy by passing options and passReqToCallback as true', async () => {
     const strategyVerifier: BearerStrategyFactory = await getStrategy();
 

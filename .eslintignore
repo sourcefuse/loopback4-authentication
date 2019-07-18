@@ -2,3 +2,4 @@ node_modules/
 dist/
 coverage/
 api-docs/
+src/__tests__/

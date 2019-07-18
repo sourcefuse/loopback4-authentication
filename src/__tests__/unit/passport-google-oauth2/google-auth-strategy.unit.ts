@@ -6,9 +6,6 @@ import {
   GoogleAuthStrategyFactory,
 } from '../../../strategies/passport/passport-google-oauth2';
 
-/**
- * Testing to get bearer strategy from providers
- */
 describe('getting google-auth strategy with options', () => {
   it('should return strategy by passing options and passReqToCallback as true', async () => {
     const strategyVerifier: GoogleAuthStrategyFactory = await getStrategy();
@@ -49,17 +46,6 @@ describe('getting google-auth strategy with options', () => {
       .to.have.property('authenticate')
       .which.is.a.Function();
   });
-
-  // it('should return strategy without options', async () => {
-  //   const strategyVerifier: GoogleAuthStrategyFactory = await getStrategy();
-
-  //   const clientPasswordStrategyVerifier = strategyVerifier();
-
-  //   expect(clientPasswordStrategyVerifier).to.have.property('name');
-  //   expect(clientPasswordStrategyVerifier)
-  //     .to.have.property('authenticate')
-  //     .which.is.a.Function();
-  // });
 });
 
 async function getStrategy() {
@@ -74,7 +60,7 @@ function verifierBearer(
   accessToken: string,
   refreshToken: string,
   profile: GoogleStrategy.Profile,
-): Promise<IAuthUser> {
+): Promise<IAuthUser | null> {
   const userToPass: IAuthUser = {
     id: 1,
     username: 'xyz',
