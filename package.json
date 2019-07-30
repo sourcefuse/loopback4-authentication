@@ -13,9 +13,9 @@
     "node": ">=8.9"
   },
   "scripts": {
-    "build": "lb-tsc ",
+    "build": "npm run clean && lb-tsc",
     "build:watch": "lb-tsc --watch",
-    "clean": "lb-clean dist",
+    "clean": "lb-clean dist *.tsbuildinfo",
     "coverage": "nyc --reporter=html npm run test",
     "lint": "npm run prettier:check && npm run eslint",
     "lint:fix": "npm run eslint:fix && npm run prettier:fix",
@@ -24,7 +24,7 @@
     "prettier:fix": "npm run prettier:cli -- --write",
     "eslint": "lb-eslint --report-unused-disable-directives .",
     "eslint:fix": "npm run eslint -- --fix",
-    "pretest": "npm run clean && npm run build",
+    "pretest": "npm run build",
     "test": "lb-mocha --allow-console-logs \"dist/__tests__\"",
     "posttest": "npm run lint",
     "test:dev": "lb-mocha --allow-console-logs dist/__tests__/**/*.js && npm run posttest",
@@ -60,7 +60,7 @@
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^0.1.3",
     "@loopback/boot": "^1.4.4",
-    "@loopback/build": "^2.0.3",
+    "@loopback/build": "^2.0.5",
     "@loopback/context": "^1.20.2",
     "@loopback/core": "^1.8.5",
     "@loopback/rest": "^1.16.3",
