@@ -5,6 +5,7 @@ import {ResourceOwnerPasswordStrategyFactory} from './passport/passport-resource
 import {ClientPasswordStrategyFactory} from './passport/passport-client-password/client-password-strategy-factory-provider';
 import {GoogleAuthStrategyFactoryProvider} from './passport/passport-google-oauth2';
 import {VerifyFunction} from './passport';
+import {AzureADAuthStrategyFactoryProvider} from './passport/passport-azure-ad/azuread-auth-strategy-factory-provider';
 
 export namespace Strategies {
   export namespace Passport {
@@ -47,5 +48,13 @@ export namespace Strategies {
     export const GOOGLE_OAUTH2_VERIFIER = BindingKey.create<
       VerifyFunction.GoogleAuthFn
     >('sf.passport.verifier.googleOauth2');
+
+    // Passport-azure-ad strategy
+    export const AZURE_AD_STRATEGY_FACTORY = BindingKey.create<
+      AzureADAuthStrategyFactoryProvider
+    >('sf.passport.strategyFactory.azureAd');
+    export const AZURE_AD_VERIFIER = BindingKey.create<
+      VerifyFunction.AzureADAuthFn
+    >('sf.passport.verifier.azureAd');
   }
 }

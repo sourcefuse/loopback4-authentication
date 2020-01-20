@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "passport": "^0.4.0",
+    "passport-azure-ad": "^4.2.1",
     "passport-google-oauth20": "^2.0.0",
     "passport-http-bearer": "^1.0.1",
     "passport-local": "^1.0.0",
@@ -70,6 +71,7 @@
     "@types/lodash": "^4.14.135",
     "@types/node": "^10.14.8",
     "@types/passport": "^1.0.0",
+    "@types/passport-azure-ad": "^4.0.3",
     "@types/passport-google-oauth20": "^2.0.1",
     "@types/passport-http-bearer": "^1.0.33",
     "@types/passport-local": "^1.0.33",

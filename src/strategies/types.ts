@@ -1,5 +1,6 @@
 import {Request} from '@loopback/rest';
 import * as GoogleStrategy from 'passport-google-oauth20';
+import * as AzureADStrategy from 'passport-azure-ad';
 
 import {IAuthClient, IAuthUser} from '../types';
 
@@ -39,6 +40,14 @@ export namespace VerifyFunction {
       accessToken: string,
       refreshToken: string,
       profile: GoogleStrategy.Profile,
+      req?: Request,
+    ): Promise<IAuthUser | null>;
+  }
+
+  export interface AzureADAuthFn {
+    (
+      profile: AzureADStrategy.IProfile,
+      done: AzureADStrategy.VerifyCallback,
       req?: Request,
     ): Promise<IAuthUser | null>;
   }
