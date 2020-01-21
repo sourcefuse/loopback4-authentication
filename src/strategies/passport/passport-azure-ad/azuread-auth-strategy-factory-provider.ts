@@ -1,11 +1,12 @@
 import {inject, Provider} from '@loopback/core';
 import {HttpErrors, Request} from '@loopback/rest';
-import * as AzureADStrategy from 'passport-azure-ad';
 
 import {AuthErrorKeys} from '../../../error-keys';
 import {Strategies} from '../../keys';
 import {VerifyFunction} from '../../types';
 import {
+  IProfile,
+  VerifyCallback,
   OIDCStrategy,
   IOIDCStrategyOptionWithRequest,
   IOIDCStrategyOptionWithoutRequest,
@@ -34,11 +35,7 @@ export class AzureADAuthStrategyFactoryProvider
     if (options && options.passReqToCallback === true) {
       return new OIDCStrategy(
         options,
-        async (
-          req: Request,
-          profile: AzureADStrategy.IProfile,
-          done: AzureADStrategy.VerifyCallback,
-        ) => {
+        async (req: Request, profile: IProfile, done: VerifyCallback) => {
           if (!profile.oid) {
             return done(new Error('No oid found'), null);
           }
@@ -59,10 +56,7 @@ export class AzureADAuthStrategyFactoryProvider
     } else {
       return new OIDCStrategy(
         options,
-        async (
-          profile: AzureADStrategy.IProfile,
-          done: AzureADStrategy.VerifyCallback,
-        ) => {
+        async (profile: IProfile, done: VerifyCallback) => {
           if (!profile.oid) {
             return done(new Error('No oid found'), null);
           }
