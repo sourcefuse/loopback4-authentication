@@ -2,13 +2,13 @@ import {Client, createClientForHandler, expect} from '@loopback/testlab';
 import {RestServer} from '@loopback/rest';
 import {Application, inject} from '@loopback/core';
 import {post, requestBody} from '@loopback/openapi-v3';
-import {authenticate} from '../../../decorators';
+import {authenticateUser} from '../../../decorators';
 import {STRATEGY} from '../../../strategy-name.enum';
 import {getApp} from '../helpers/helpers';
 import {MyAuthenticationSequence} from '../../fixtures/sequences/authentication.sequence';
 import {Strategies} from '../../../strategies/keys';
 import {LocalVerifyProvider} from '../../fixtures/providers/local-password.provider';
-import {AuthenticationBindings} from '../../../keys';
+import {ExtAuthenticationBindings} from '../../../keys';
 import {IAuthUser} from '../../../types';
 
 /**
@@ -24,7 +24,7 @@ describe('Local passport strategy', () => {
   it('should return 422 bad request when no user data is passed', async () => {
     class TestController {
       @post('/auth/local/no-user-data-passed')
-      @authenticate(STRATEGY.LOCAL)
+      @authenticateUser(STRATEGY.LOCAL)
       test(@requestBody() body: {username: string; password: string}) {
         return 'test successful';
       }
@@ -40,12 +40,12 @@ describe('Local passport strategy', () => {
   it('should return status 200 for no options', async () => {
     class TestController {
       constructor(
-        @inject(AuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
+        @inject(ExtAuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
         private readonly user: IAuthUser | undefined,
       ) {}
 
       @post('/auth/local/no-options')
-      @authenticate(STRATEGY.LOCAL)
+      @authenticateUser(STRATEGY.LOCAL)
       test(@requestBody() body: {username: string; password: string}) {
         return this.user;
       }
@@ -68,12 +68,12 @@ describe('Local passport strategy', () => {
   it('should return the user credentials are sent via body and options are passed with passRequestCallback true', async () => {
     class TestController {
       constructor(
-        @inject(AuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
+        @inject(ExtAuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
         private readonly user: IAuthUser | undefined,
       ) {}
 
       @post('/auth/local/pass-req-callback-true')
-      @authenticate(STRATEGY.LOCAL, {passReqToCallback: true})
+      @authenticateUser(STRATEGY.LOCAL, {passReqToCallback: true})
       async test(@requestBody() body: {username: string; password: string}) {
         return this.user;
       }
@@ -96,12 +96,12 @@ describe('Local passport strategy', () => {
   it('should return the user which was passed via body and options are passed with passRequestCallback false', async () => {
     class TestController {
       constructor(
-        @inject(AuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
+        @inject(ExtAuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
         private readonly user: IAuthUser | undefined,
       ) {}
 
       @post('/auth/local/pass-req-callback-false')
-      @authenticate(STRATEGY.LOCAL, {passReqToCallback: false})
+      @authenticateUser(STRATEGY.LOCAL, {passReqToCallback: false})
       async test(@requestBody() body: {username: string; password: string}) {
         return this.user;
       }
@@ -118,12 +118,12 @@ describe('Local passport strategy', () => {
   it('should return 401 when provider returns null', async () => {
     class TestController {
       constructor(
-        @inject(AuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
+        @inject(ExtAuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
         private readonly user: IAuthUser | undefined,
       ) {}
 
       @post('/auth/local/null-user')
-      @authenticate(STRATEGY.LOCAL)
+      @authenticateUser(STRATEGY.LOCAL)
       async test(@requestBody() body: {username: string; password: string}) {
         return body;
       }
@@ -171,7 +171,7 @@ describe('Local strategy with no verifier', () => {
       };
 
       @post('/auth/local/no-verifier')
-      @authenticate(STRATEGY.LOCAL, {passReqToCallback: false})
+      @authenticateUser(STRATEGY.LOCAL, {passReqToCallback: false})
       async test(@requestBody() body: {username: string; password: string}) {
         return body;
       }

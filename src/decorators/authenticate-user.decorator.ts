@@ -9,7 +9,7 @@ import {USER_AUTHENTICATION_METADATA_KEY} from '../keys';
 import {AuthenticationMetadata} from '../types';
 
 /**
- * `@authenticate` decorator for adding authentication to controller methods
+ * `@authenticateUser` decorator for adding authentication to controller methods
  *
  * @param strategyName  Name of the Strategy. Use Strategy enum
  * like `Strategy.LOCAL`
@@ -22,7 +22,7 @@ import {AuthenticationMetadata} from '../types';
  * It can be used to setup `state` parameters based on request for google-auth,
  * for example.
  */
-export function authenticate(
+export function authenticateUser(
   strategyName: string,
   options?: Object,
   authOptions?: (req: Request) => Object,
@@ -32,7 +32,7 @@ export function authenticate(
     {
       strategy: strategyName,
       options: options || {},
-      authOptions: authOptions,
+      authOptions,
     },
   );
 }

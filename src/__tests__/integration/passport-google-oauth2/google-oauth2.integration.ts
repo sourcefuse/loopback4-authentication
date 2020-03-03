@@ -2,7 +2,7 @@ import {Client, createClientForHandler} from '@loopback/testlab';
 import {RestServer} from '@loopback/rest';
 import {Application, Provider} from '@loopback/core';
 import {get} from '@loopback/openapi-v3';
-import {authenticate} from '../../../decorators';
+import {authenticateUser} from '../../../decorators';
 import {STRATEGY} from '../../../strategy-name.enum';
 import {getApp} from '../helpers/helpers';
 import {MyAuthenticationSequence} from '../../fixtures/sequences/authentication.sequence';
@@ -22,7 +22,7 @@ describe('getting google oauth2 strategy with options', () => {
   it('should return 200 when client id is passed and passReqToCallback is set true', async () => {
     class TestController {
       @get('/test')
-      @authenticate(STRATEGY.GOOGLE_OAUTH2, {
+      @authenticateUser(STRATEGY.GOOGLE_OAUTH2, {
         clientID: 'string',
         clientSecret: 'string',
         passReqToCallback: true,

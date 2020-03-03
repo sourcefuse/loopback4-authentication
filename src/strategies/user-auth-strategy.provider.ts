@@ -1,10 +1,22 @@
-import {inject, Provider, ValueOrPromise} from '@loopback/context';
+import {
+  AuthenticationBindings,
+  AuthenticationStrategy,
+} from '@loopback/authentication';
+import {
+  BindingScope,
+  Getter,
+  inject,
+  Provider,
+  ValueOrPromise,
+} from '@loopback/context';
+import {extensionPoint, extensions} from '@loopback/core';
 import {Strategy} from 'passport';
 import * as GoogleStrategy from 'passport-google-oauth20';
 import * as PassportBearer from 'passport-http-bearer';
 import * as PassportLocal from 'passport-local';
 
-import {AuthenticationBindings} from '../keys';
+import {ExtAuthenticationBindings} from '../keys';
+import {ExtStrategyAdapter} from '../strategy-adapter';
 import {STRATEGY} from '../strategy-name.enum';
 import {AuthenticationMetadata} from '../types';
 import {Strategies} from './keys';
@@ -16,9 +28,16 @@ import {
   ResourceOwnerPasswordStrategyFactory,
 } from './passport/passport-resource-owner-password';
 
-export class AuthStrategyProvider implements Provider<Strategy | undefined> {
+@extensionPoint(
+  AuthenticationBindings.AUTHENTICATION_STRATEGY_EXTENSION_POINT_NAME,
+  {scope: BindingScope.TRANSIENT},
+)
+export class AuthStrategyProvider
+  implements Provider<AuthenticationStrategy | undefined> {
   constructor(
-    @inject(AuthenticationBindings.USER_METADATA)
+    @extensions()
+    private readonly authenticationStrategies: Getter<AuthenticationStrategy[]>,
+    @inject(ExtAuthenticationBindings.USER_METADATA)
     private readonly metadata: AuthenticationMetadata,
     @inject(Strategies.Passport.LOCAL_STRATEGY_FACTORY)
     private readonly getLocalStrategyVerifier: LocalPasswordStrategyFactory,
@@ -30,28 +49,52 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     private readonly getGoogleAuthVerifier: GoogleAuthStrategyFactory,
   ) {}
 
-  value(): ValueOrPromise<Strategy | undefined> {
+  value(): ValueOrPromise<AuthenticationStrategy | undefined> {
     if (!this.metadata) {
       return undefined;
     }
 
     const name = this.metadata.strategy;
     if (name === STRATEGY.LOCAL) {
-      return this.getLocalStrategyVerifier(this.metadata.options as
-        | PassportLocal.IStrategyOptions
-        | PassportLocal.IStrategyOptionsWithRequest);
+      return this.convertToAuthStrategy(
+        this.getLocalStrategyVerifier(this.metadata.options as
+          | PassportLocal.IStrategyOptions
+          | PassportLocal.IStrategyOptionsWithRequest),
+        name,
+      );
     } else if (name === STRATEGY.BEARER) {
-      return this.getBearerStrategyVerifier(this.metadata
-        .options as PassportBearer.IStrategyOptions);
+      return this.convertToAuthStrategy(
+        this.getBearerStrategyVerifier(this.metadata
+          .options as PassportBearer.IStrategyOptions),
+        name,
+      );
     } else if (name === STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT) {
-      return this.getResourceOwnerVerifier(this.metadata
-        .options as Oauth2ResourceOwnerPassword.StrategyOptionsWithRequestInterface);
+      return this.convertToAuthStrategy(
+        this.getResourceOwnerVerifier(this.metadata
+          .options as Oauth2ResourceOwnerPassword.StrategyOptionsWithRequestInterface),
+        name,
+      );
     } else if (name === STRATEGY.GOOGLE_OAUTH2) {
-      return this.getGoogleAuthVerifier(this.metadata.options as
-        | GoogleStrategy.StrategyOptions
-        | GoogleStrategy.StrategyOptionsWithRequest);
+      return this.convertToAuthStrategy(
+        this.getGoogleAuthVerifier(this.metadata.options as
+          | GoogleStrategy.StrategyOptions
+          | GoogleStrategy.StrategyOptionsWithRequest),
+        name,
+      );
     } else {
       return Promise.reject(`The strategy ${name} is not available.`);
     }
+  }
+
+  convertToAuthStrategy(
+    strategy: Strategy,
+    name: string,
+  ): AuthenticationStrategy {
+    return new ExtStrategyAdapter(strategy, name);
+  }
+
+  async findAuthenticationStrategy(name: string) {
+    const strategies = await this.authenticationStrategies();
+    return strategies.find(a => a.name === name);
   }
 }

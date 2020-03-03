@@ -8,7 +8,7 @@ import {STRATEGY} from '../../../strategy-name.enum';
 import {getApp} from '../helpers/helpers';
 import {MyAuthenticationSequence} from '../../fixtures/sequences/authentication.sequence';
 import {Strategies} from '../../../strategies/keys';
-import {AuthenticationBindings} from '../../../keys';
+import {ExtAuthenticationBindings} from '../../../keys';
 import {ClientPasswordVerifyProvider} from '../../fixtures/providers/passport-client.provider';
 
 describe('Client-password strategy', () => {
@@ -21,7 +21,7 @@ describe('Client-password strategy', () => {
   it('should return status 200 when options.passRequestToCallback is set true', async () => {
     class TestController {
       constructor(
-        @inject(AuthenticationBindings.CURRENT_CLIENT) // tslint:disable-next-line: no-shadowed-variable
+        @inject(ExtAuthenticationBindings.CURRENT_CLIENT) // tslint:disable-next-line: no-shadowed-variable
         private readonly client: IAuthClient | undefined,
       ) {}
 
@@ -48,7 +48,7 @@ describe('Client-password strategy', () => {
   it('should return status 200 when options.passRequestToCallback is set false', async () => {
     class TestController {
       constructor(
-        @inject(AuthenticationBindings.CURRENT_CLIENT) // tslint:disable-next-line: no-shadowed-variable
+        @inject(ExtAuthenticationBindings.CURRENT_CLIENT) // tslint:disable-next-line: no-shadowed-variable
         private readonly client: IAuthClient | undefined,
       ) {}
 
@@ -75,7 +75,7 @@ describe('Client-password strategy', () => {
   it('should return status 401 when options.passRequestToCallback is set true', async () => {
     class TestController {
       constructor(
-        @inject(AuthenticationBindings.CURRENT_CLIENT) // tslint:disable-next-line: no-shadowed-variable
+        @inject(ExtAuthenticationBindings.CURRENT_CLIENT) // tslint:disable-next-line: no-shadowed-variable
         private readonly client: IAuthClient | undefined,
       ) {}
 
@@ -101,7 +101,7 @@ describe('Client-password strategy', () => {
   it('should return status 401 when options.passRequestToCallback is set false', async () => {
     class TestController {
       constructor(
-        @inject(AuthenticationBindings.CURRENT_CLIENT) // tslint:disable-next-line: no-shadowed-variable
+        @inject(ExtAuthenticationBindings.CURRENT_CLIENT) // tslint:disable-next-line: no-shadowed-variable
         private readonly client: IAuthClient | undefined,
       ) {}
 
@@ -154,7 +154,7 @@ describe('integration test for client-password and no verifier', () => {
   it('should return status 401 as this strategy is not implemented', async () => {
     class TestController {
       constructor(
-        @inject(AuthenticationBindings.CURRENT_CLIENT) // tslint:disable-next-line: no-shadowed-variable
+        @inject(ExtAuthenticationBindings.CURRENT_CLIENT) // tslint:disable-next-line: no-shadowed-variable
         private readonly client: IAuthClient | undefined,
       ) {}
 

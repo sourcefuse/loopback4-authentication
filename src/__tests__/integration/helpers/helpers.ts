@@ -1,5 +1,5 @@
 import {Application} from '@loopback/core';
-import {AuthenticationComponent} from '../../../component';
+import {ExtAuthenticationComponent} from '../../../component';
 import {RestComponent} from '@loopback/rest';
 
 /**
@@ -7,7 +7,7 @@ import {RestComponent} from '@loopback/rest';
  */
 export function getApp(): Application {
   const app = new Application();
-  app.component(AuthenticationComponent);
+  app.component(ExtAuthenticationComponent);
   app.component(RestComponent);
   return app;
 }

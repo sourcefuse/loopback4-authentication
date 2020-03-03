@@ -1,8 +1,8 @@
 import {Component, ProviderMap} from '@loopback/core';
 
-import {AuthenticationBindings} from './keys';
+import {ExtAuthenticationBindings} from './keys';
 import {
-  AuthenticateActionProvider,
+  UserAuthenticateActionProvider,
   AuthMetadataProvider,
   ClientAuthenticateActionProvider,
   ClientAuthMetadataProvider,
@@ -25,16 +25,19 @@ import {
   GoogleAuthVerifyProvider,
 } from './strategies/passport/passport-google-oauth2';
 
-export class AuthenticationComponent implements Component {
+export class ExtAuthenticationComponent implements Component {
   constructor() {
     this.providers = {
-      [AuthenticationBindings.USER_AUTH_ACTION.key]: AuthenticateActionProvider,
-      [AuthenticationBindings.CLIENT_AUTH_ACTION
+      [ExtAuthenticationBindings.USER_AUTH_ACTION
+        .key]: UserAuthenticateActionProvider,
+      [ExtAuthenticationBindings.CLIENT_AUTH_ACTION
         .key]: ClientAuthenticateActionProvider,
-      [AuthenticationBindings.USER_METADATA.key]: AuthMetadataProvider,
-      [AuthenticationBindings.CLIENT_METADATA.key]: ClientAuthMetadataProvider,
-      [AuthenticationBindings.USER_STRATEGY.key]: AuthStrategyProvider,
-      [AuthenticationBindings.CLIENT_STRATEGY.key]: ClientAuthStrategyProvider,
+      [ExtAuthenticationBindings.USER_METADATA.key]: AuthMetadataProvider,
+      [ExtAuthenticationBindings.CLIENT_METADATA
+        .key]: ClientAuthMetadataProvider,
+      [ExtAuthenticationBindings.USER_STRATEGY.key]: AuthStrategyProvider,
+      [ExtAuthenticationBindings.CLIENT_STRATEGY
+        .key]: ClientAuthStrategyProvider,
 
       // Strategy function factories
       [Strategies.Passport.LOCAL_STRATEGY_FACTORY

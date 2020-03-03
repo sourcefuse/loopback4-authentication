@@ -5,6 +5,7 @@
 
 import {Request, Response} from '@loopback/rest';
 export * from './strategies/types';
+import {AuthenticateFn, AuthenticationMetadata} from '@loopback/authentication';
 
 export interface IAuthClient {
   clientId: string;
@@ -18,7 +19,7 @@ export interface IAuthUser {
   password?: string;
 }
 
-export interface AuthenticationMetadata {
+export interface AuthenticationMetadata extends AuthenticationMetadata {
   strategy: string;
   options?: Object;
   authOptions?: (req: Request) => Object;
@@ -28,7 +29,7 @@ export interface AuthenticationMetadata {
  * interface definition of a function which accepts a request
  * and returns an authenticated user
  */
-export interface AuthenticateFn<T> {
+export interface AuthenticateFn<T> extends AuthenticateFn {
   (request: Request, response?: Response): Promise<T>;
 }
 

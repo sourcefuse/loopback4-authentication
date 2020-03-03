@@ -4,8 +4,11 @@
 // License text available at https://opensource.org/licenses/MIT
 import {HttpErrors, Request, Response} from '@loopback/rest';
 import {Strategy} from 'passport';
+import {StrategyAdapter} from '@loopback/authentication-passport';
+import {UserProfile} from '@loopback/authentication';
 
 const passportRequestMixin = require('passport/lib/http/request');
+const redirectStatus = 302;
 
 /**
  * Adapter class to invoke passport-strategy
@@ -15,12 +18,14 @@ const passportRequestMixin = require('passport/lib/http/request');
  *   3. provides state methods to the strategy instance
  * see: https://github.com/jaredhanson/passport
  */
-export class StrategyAdapter<T> {
+export class ExtStrategyAdapter<T extends UserProfile> extends StrategyAdapter {
   /**
-   * @param strategy instance of a class which implements a passport-strategy;
+   * @param strategyExt instance of a class which implements a passport-strategy;
    * @description http://passportjs.org/
    */
-  constructor(private readonly strategy: Strategy) {}
+  constructor(private readonly strategyExt: Strategy, name: string) {
+    super(strategyExt, name);
+  }
 
   /**
    * The function to invoke the contained passport strategy.
@@ -42,7 +47,7 @@ export class StrategyAdapter<T> {
       }
 
       // create a prototype chain of an instance of a passport strategy
-      const strategy = Object.create(this.strategy);
+      const strategy = Object.create(this.strategyExt);
 
       // add success state handler to strategy instance
       strategy.success = (t: T) => {
@@ -61,7 +66,7 @@ export class StrategyAdapter<T> {
 
       strategy.redirect = (url: string) => {
         if (response) {
-          response.redirect(url, 302);
+          response.redirect(url, redirectStatus);
         }
         resolve();
       };

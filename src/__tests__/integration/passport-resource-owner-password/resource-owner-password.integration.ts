@@ -2,13 +2,13 @@ import {Client, createClientForHandler, expect} from '@loopback/testlab';
 import {RestServer} from '@loopback/rest';
 import {Application, inject} from '@loopback/core';
 import {post, requestBody} from '@loopback/openapi-v3';
-import {authenticate} from '../../../decorators';
+import {authenticateUser} from '../../../decorators';
 import {STRATEGY} from '../../../strategy-name.enum';
 import {getApp} from '../helpers/helpers';
 import {MyAuthenticationSequence} from '../../fixtures/sequences/authentication.sequence';
 import {Strategies} from '../../../strategies/keys';
 import {ResourceOwnerVerifyProvider} from '../../fixtures/providers/resource-owner.provider';
-import {AuthenticationBindings} from '../../../keys';
+import {ExtAuthenticationBindings} from '../../../keys';
 import {IAuthUser} from '../../../types';
 
 describe('Resource-owner-password strategy', () => {
@@ -21,7 +21,7 @@ describe('Resource-owner-password strategy', () => {
   it('should return 422 bad request when no user data is sent', async () => {
     class TestController {
       @post('/auth/resource-owner-pass')
-      @authenticate(STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT)
+      @authenticateUser(STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT)
       test(@requestBody() body: {username: string; password: string}) {
         return 'test successful';
       }
@@ -38,12 +38,12 @@ describe('Resource-owner-password strategy', () => {
   it('should return status 200 for no options', async () => {
     class TestController {
       constructor(
-        @inject(AuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
+        @inject(ExtAuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
         private readonly user: IAuthUser | undefined,
       ) {}
 
       @post('/auth/resource-owner-pass/no-options')
-      @authenticate(STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT)
+      @authenticateUser(STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT)
       test(@requestBody()
       body: {
         username: string;
@@ -76,12 +76,12 @@ describe('Resource-owner-password strategy', () => {
   it('should return the user credentials are sent via body and options are passed with passRequestCallback true', async () => {
     class TestController {
       constructor(
-        @inject(AuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
+        @inject(ExtAuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
         private readonly user: IAuthUser | undefined,
       ) {}
 
       @post('/auth/resource-owner/passReqToCallback')
-      @authenticate(STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT, {
+      @authenticateUser(STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT, {
         passReqToCallback: true,
       })
       async test(@requestBody()
@@ -116,12 +116,12 @@ describe('Resource-owner-password strategy', () => {
   it('should return the user which was passed via body and options are passed with passRequestCallback false', async () => {
     class TestController {
       constructor(
-        @inject(AuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
+        @inject(ExtAuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
         private readonly user: IAuthUser | undefined,
       ) {}
 
       @post('/auth/resource-owner/passReqToCallback-false')
-      @authenticate(STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT, {
+      @authenticateUser(STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT, {
         passReqToCallback: false,
       })
       async test(@requestBody()
@@ -156,7 +156,7 @@ describe('Resource-owner-password strategy', () => {
   it('should return the user passed via verifier when no options are passed', async () => {
     class TestController {
       @post('/test')
-      @authenticate(STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT)
+      @authenticateUser(STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT)
       async test(@requestBody()
       body: {
         username: string;
@@ -215,7 +215,7 @@ describe('Resource-owner strategy with no verifier', () => {
       };
 
       @post('/test')
-      @authenticate(STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT)
+      @authenticateUser(STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT)
       async test(@requestBody()
       body: {
         username: string;

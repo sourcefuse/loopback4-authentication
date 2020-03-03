@@ -14,7 +14,7 @@ export * from './strategies/keys';
 /**
  * Binding keys used by this component.
  */
-export namespace AuthenticationBindings {
+export namespace ExtAuthenticationBindings {
   export const USER_STRATEGY = BindingKey.create<Strategy | undefined>(
     'sf.userAuthentication.strategy',
   );

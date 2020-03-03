@@ -9,7 +9,7 @@ import {
   Send,
   SequenceHandler,
 } from '@loopback/rest';
-import {AuthenticateFn, AuthenticationBindings} from '../../../';
+import {AuthenticateFn, ExtAuthenticationBindings} from '../../../';
 import {IAuthUser, IAuthClient} from '../../../types';
 const SequenceActions = RestBindings.SequenceActions;
 
@@ -21,11 +21,11 @@ export class MyAuthenticationSequence implements SequenceHandler {
     @inject(SequenceActions.INVOKE_METHOD) protected invoke: InvokeMethod,
     @inject(SequenceActions.SEND) protected send: Send,
     @inject(SequenceActions.REJECT) protected reject: Reject,
-    @inject(AuthenticationBindings.CLIENT_AUTH_ACTION)
+    @inject(ExtAuthenticationBindings.CLIENT_AUTH_ACTION)
     protected authenticateClientRequest: AuthenticateFn<
       IAuthClient | undefined
     >,
-    @inject(AuthenticationBindings.USER_AUTH_ACTION)
+    @inject(ExtAuthenticationBindings.USER_AUTH_ACTION)
     protected authenticateRequest: AuthenticateFn<IAuthUser | undefined>,
   ) {}
 

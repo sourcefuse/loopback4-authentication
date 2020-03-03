@@ -3,23 +3,23 @@ import {HttpErrors, Request, Response} from '@loopback/rest';
 import {Strategy} from 'passport';
 
 import {AuthErrorKeys} from '../error-keys';
-import {AuthenticationBindings} from '../keys';
-import {StrategyAdapter} from '../strategy-adapter';
+import {ExtAuthenticationBindings} from '../keys';
+import {ExtStrategyAdapter} from '../strategy-adapter';
 import {AuthenticateFn, IAuthUser, AuthenticationMetadata} from '../types';
 
-export class AuthenticateActionProvider
+export class UserAuthenticateActionProvider
   implements Provider<AuthenticateFn<IAuthUser | undefined>> {
   constructor(
-    @inject.getter(AuthenticationBindings.USER_STRATEGY)
+    @inject.getter(ExtAuthenticationBindings.USER_STRATEGY)
     readonly getStrategy: Getter<Strategy>,
-    @inject.getter(AuthenticationBindings.USER_METADATA)
+    @inject.getter(ExtAuthenticationBindings.USER_METADATA)
     private readonly getMetadata: Getter<AuthenticationMetadata>,
-    @inject.setter(AuthenticationBindings.CURRENT_USER)
+    @inject.setter(ExtAuthenticationBindings.CURRENT_USER)
     readonly setCurrentUser: Setter<IAuthUser | undefined>,
   ) {}
 
   value(): AuthenticateFn<IAuthUser | undefined> {
-    return (request, response) => this.action(request, response);
+    return (request: Request, response) => this.action(request, response);
   }
 
   async action(
@@ -43,7 +43,7 @@ export class AuthenticateActionProvider
       // Fetch options using creator function added with decorator definition
       authOpts = metadata.authOptions(request);
     }
-    const strategyAdapter = new StrategyAdapter<IAuthUser>(strategy);
+    const strategyAdapter = new ExtStrategyAdapter<IAuthUser>(strategy);
     const user: IAuthUser = await strategyAdapter.authenticate(
       request,
       response,

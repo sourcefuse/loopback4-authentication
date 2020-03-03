@@ -3,12 +3,12 @@ import {expect, Client, createClientForHandler} from '@loopback/testlab';
 import {RestServer} from '@loopback/rest';
 import {Application, inject} from '@loopback/core';
 import {get} from '@loopback/openapi-v3';
-import {authenticate} from '../../../decorators';
+import {authenticateUser} from '../../../decorators';
 import {STRATEGY} from '../../../strategy-name.enum';
 import {getApp} from '../helpers/helpers';
 import {MyAuthenticationSequence} from '../../fixtures/sequences/authentication.sequence';
 import {Strategies} from '../../../strategies/keys';
-import {AuthenticationBindings} from '../../../keys';
+import {ExtAuthenticationBindings} from '../../../keys';
 import {BearerTokenVerifyProvider} from '../../fixtures/providers/bearer-passport.provider';
 
 /**
@@ -24,7 +24,7 @@ describe('Bearer-token strategy', () => {
   it('should return 401 when token is not passed', async () => {
     class BearerNoTokenController {
       @get('/auth/bearer/no-token')
-      @authenticate(STRATEGY.BEARER)
+      @authenticateUser(STRATEGY.BEARER)
       test() {
         return 'test successful';
       }
@@ -40,7 +40,7 @@ describe('Bearer-token strategy', () => {
   it('should return status 200 when token is passed', async () => {
     class BearerTokenController {
       @get('/auth/bearer/token')
-      @authenticate(STRATEGY.BEARER)
+      @authenticateUser(STRATEGY.BEARER)
       test() {
         return 'test successful';
       }
@@ -57,12 +57,12 @@ describe('Bearer-token strategy', () => {
   it('should return the user passed via verifier when no options are passed', async () => {
     class BearerNoOptionsController {
       constructor(
-        @inject(AuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
+        @inject(ExtAuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
         private readonly user: IAuthUser | undefined,
       ) {}
 
       @get('/auth/bearer/no-options')
-      @authenticate(STRATEGY.BEARER)
+      @authenticateUser(STRATEGY.BEARER)
       async test() {
         return this.user;
       }
@@ -82,7 +82,7 @@ describe('Bearer-token strategy', () => {
   it('should return the user passed via verifier and options are passed with passRequestCallback true', async () => {
     class BearerForCallbackController {
       constructor(
-        @inject(AuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
+        @inject(ExtAuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
         private readonly user: IAuthUser | undefined,
       ) {}
 
@@ -91,7 +91,7 @@ describe('Bearer-token strategy', () => {
       };
 
       @get('/auth/bearer/callback')
-      @authenticate(STRATEGY.BEARER, {passReqToCallback: true})
+      @authenticateUser(STRATEGY.BEARER, {passReqToCallback: true})
       async test() {
         return this.user;
       }
@@ -111,7 +111,7 @@ describe('Bearer-token strategy', () => {
   it('should return the user passed via verifier and options are passed with passRequestCallback false', async () => {
     class BearerNoCallbackController {
       constructor(
-        @inject(AuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
+        @inject(ExtAuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
         private readonly user: IAuthUser | undefined,
       ) {}
 
@@ -120,7 +120,7 @@ describe('Bearer-token strategy', () => {
       };
 
       @get('/auth/bearer/no-callback')
-      @authenticate(STRATEGY.BEARER, {passReqToCallback: false})
+      @authenticateUser(STRATEGY.BEARER, {passReqToCallback: false})
       async test() {
         return this.user;
       }
@@ -140,7 +140,7 @@ describe('Bearer-token strategy', () => {
   it('should return status 401 as Bearer is not sent in token', async () => {
     class NoBearerInTokenController {
       @get('/auth/bearer/no-bearer-in-token')
-      @authenticate(STRATEGY.BEARER)
+      @authenticateUser(STRATEGY.BEARER)
       test() {
         return 'test successful';
       }
@@ -157,12 +157,12 @@ describe('Bearer-token strategy', () => {
   it('should return error as no user was returned from provider', async () => {
     class BearerNoUserController {
       constructor(
-        @inject(AuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
+        @inject(ExtAuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
         private readonly user: IAuthUser | undefined,
       ) {}
 
       @get('/auth/bearer/no-user')
-      @authenticate(STRATEGY.BEARER)
+      @authenticateUser(STRATEGY.BEARER)
       async test() {
         return this.user;
       }
@@ -179,7 +179,7 @@ describe('Bearer-token strategy', () => {
   it('should return error when passRequestCallback is true and provider is not returning user', async () => {
     class BearerNoUserFromCallbackController {
       constructor(
-        @inject(AuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
+        @inject(ExtAuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
         private readonly user: IAuthUser | undefined,
       ) {}
 
@@ -188,7 +188,7 @@ describe('Bearer-token strategy', () => {
       };
 
       @get('/auth/bearer/no-user-with-callback')
-      @authenticate(STRATEGY.BEARER, {passReqToCallback: true})
+      @authenticateUser(STRATEGY.BEARER, {passReqToCallback: true})
       async test() {
         return this.user;
       }
@@ -205,7 +205,7 @@ describe('Bearer-token strategy', () => {
   it('should return error when options are passed with passRequestCallback false and provider does not return user', async () => {
     class BearerCallbackFalseController {
       constructor(
-        @inject(AuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
+        @inject(ExtAuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
         private readonly user: IAuthUser | undefined,
       ) {}
 
@@ -214,7 +214,7 @@ describe('Bearer-token strategy', () => {
       };
 
       @get('/auth/bearer/no-user-when-callback-false')
-      @authenticate(STRATEGY.BEARER, {passReqToCallback: false})
+      @authenticateUser(STRATEGY.BEARER, {passReqToCallback: false})
       async test() {
         return this.user;
       }
@@ -258,7 +258,7 @@ describe('integration test when no provider was implemented', () => {
   it('should return error as the verifier is not implemented', async () => {
     class BearerNoVerifierController {
       constructor(
-        @inject(AuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
+        @inject(ExtAuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
         private readonly user: IAuthUser | undefined,
       ) {}
 
@@ -267,7 +267,7 @@ describe('integration test when no provider was implemented', () => {
       };
 
       @get('/auth/bearer/no-verifier')
-      @authenticate(STRATEGY.BEARER, {passReqToCallback: false})
+      @authenticateUser(STRATEGY.BEARER, {passReqToCallback: false})
       async test() {
         return this.user;
       }
