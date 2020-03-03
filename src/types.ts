@@ -32,8 +32,8 @@ export interface AuthenticateFn<T> {
   (request: Request, response?: Response): Promise<T>;
 }
 
-export interface ClientAuthCode<T extends IAuthUser> {
+export interface ClientAuthCode<T extends IAuthUser, ID = number> {
   clientId: string;
-  userId?: number;
+  userId?: ID;
   user?: T;
 }
