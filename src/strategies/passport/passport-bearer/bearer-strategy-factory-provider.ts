@@ -20,15 +20,16 @@ export class BearerStrategyFactoryProvider
   ) {}
 
   value(): BearerStrategyFactory {
-    return options => this.getBearerStrategyVerifier(options);
+    return (options) => this.getBearerStrategyVerifier(options);
   }
 
   getBearerStrategyVerifier(
     options?: PassportBearer.IStrategyOptions,
   ): PassportBearer.Strategy {
-    if (options && options.passReqToCallback) {
+    if (options?.passReqToCallback) {
       return new PassportBearer.Strategy(
         options,
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           req: Request,
           token: string,
@@ -48,6 +49,8 @@ export class BearerStrategyFactoryProvider
     } else if (!!options && !isEmpty(options)) {
       return new PassportBearer.Strategy(
         options,
+
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           token: string,
           cb: (err: Error | null, user?: IAuthUser | false) => void,
@@ -65,6 +68,7 @@ export class BearerStrategyFactoryProvider
       );
     } else {
       return new PassportBearer.Strategy(
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           token: string,
           cb: (err: Error | null, user?: IAuthUser | false) => void,

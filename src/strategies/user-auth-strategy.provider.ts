@@ -1,6 +1,7 @@
 import {inject, Provider, ValueOrPromise} from '@loopback/context';
 import {Strategy} from 'passport';
 import * as GoogleStrategy from 'passport-google-oauth20';
+import * as AzureADAuthStrategy from 'passport-azure-ad';
 import * as PassportBearer from 'passport-http-bearer';
 import * as PassportLocal from 'passport-local';
 
@@ -15,6 +16,7 @@ import {
   Oauth2ResourceOwnerPassword,
   ResourceOwnerPasswordStrategyFactory,
 } from './passport/passport-resource-owner-password';
+import {AzureADAuthStrategyFactory} from './passport/passport-azure-ad';
 
 export class AuthStrategyProvider implements Provider<Strategy | undefined> {
   constructor(
@@ -28,6 +30,8 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     private readonly getResourceOwnerVerifier: ResourceOwnerPasswordStrategyFactory,
     @inject(Strategies.Passport.GOOGLE_OAUTH2_STRATEGY_FACTORY)
     private readonly getGoogleAuthVerifier: GoogleAuthStrategyFactory,
+    @inject(Strategies.Passport.AZURE_AD_STRATEGY_FACTORY)
+    private readonly getAzureADAuthVerifier: AzureADAuthStrategyFactory,
   ) {}
 
   value(): ValueOrPromise<Strategy | undefined> {
@@ -37,19 +41,32 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
 
     const name = this.metadata.strategy;
     if (name === STRATEGY.LOCAL) {
-      return this.getLocalStrategyVerifier(this.metadata.options as
-        | PassportLocal.IStrategyOptions
-        | PassportLocal.IStrategyOptionsWithRequest);
+      return this.getLocalStrategyVerifier(
+        this.metadata.options as
+          | PassportLocal.IStrategyOptions
+          | PassportLocal.IStrategyOptionsWithRequest,
+      );
     } else if (name === STRATEGY.BEARER) {
-      return this.getBearerStrategyVerifier(this.metadata
-        .options as PassportBearer.IStrategyOptions);
+      return this.getBearerStrategyVerifier(
+        this.metadata.options as PassportBearer.IStrategyOptions,
+      );
     } else if (name === STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT) {
-      return this.getResourceOwnerVerifier(this.metadata
-        .options as Oauth2ResourceOwnerPassword.StrategyOptionsWithRequestInterface);
+      return this.getResourceOwnerVerifier(
+        this.metadata
+          .options as Oauth2ResourceOwnerPassword.StrategyOptionsWithRequestInterface,
+      );
     } else if (name === STRATEGY.GOOGLE_OAUTH2) {
-      return this.getGoogleAuthVerifier(this.metadata.options as
-        | GoogleStrategy.StrategyOptions
-        | GoogleStrategy.StrategyOptionsWithRequest);
+      return this.getGoogleAuthVerifier(
+        this.metadata.options as
+          | GoogleStrategy.StrategyOptions
+          | GoogleStrategy.StrategyOptionsWithRequest,
+      );
+    } else if (name === STRATEGY.AZURE_AD) {
+      return this.getAzureADAuthVerifier(
+        this.metadata.options as
+          | AzureADAuthStrategy.IOIDCStrategyOptionWithRequest
+          | AzureADAuthStrategy.IOIDCStrategyOptionWithoutRequest,
+      );
     } else {
       return Promise.reject(`The strategy ${name} is not available.`);
     }

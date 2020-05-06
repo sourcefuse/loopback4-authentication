@@ -78,7 +78,7 @@ function verifierResourceOwner(
     clientSecret: 'secret',
   };
 
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     if (userToPass) {
       resolve({user: userToPass, client: clientToPass});
     }

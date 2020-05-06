@@ -1,6 +1,6 @@
 import {Provider} from '@loopback/context';
 import {HttpErrors, Request} from '@loopback/rest';
-import * as GoogleStrategy from 'passport-google-oauth20';
+import * as AzureADStrategy from 'passport-azure-ad';
 
 import {VerifyFunction} from '../../types';
 
@@ -9,20 +9,18 @@ import {VerifyFunction} from '../../types';
  *
  * It will just throw an error saying Not Implemented
  */
-export class GoogleAuthVerifyProvider
-  implements Provider<VerifyFunction.GoogleAuthFn> {
+export class AzureADAuthVerifyProvider
+  implements Provider<VerifyFunction.AzureADAuthFn> {
   constructor() {}
 
-  value(): VerifyFunction.GoogleAuthFn {
+  value(): VerifyFunction.AzureADAuthFn {
     return async (
-      accessToken: string,
-      refreshToken: string,
-      profile: GoogleStrategy.Profile,
-      cb: GoogleStrategy.VerifyCallback,
+      profile: AzureADStrategy.IProfile,
+      done: AzureADStrategy.VerifyCallback,
       req?: Request,
     ) => {
       throw new HttpErrors.NotImplemented(
-        `VerifyFunction.GoogleAuthFn is not implemented`,
+        `VerifyFunction.AzureADAuthFn is not implemented`,
       );
     };
   }

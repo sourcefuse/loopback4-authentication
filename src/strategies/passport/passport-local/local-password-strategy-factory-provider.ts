@@ -24,7 +24,7 @@ export class LocalPasswordStrategyFactoryProvider
   ) {}
 
   value(): LocalPasswordStrategyFactory {
-    return options => this.getLocalStrategyVerifier(options);
+    return (options) => this.getLocalStrategyVerifier(options);
   }
 
   getLocalStrategyVerifier(
@@ -32,9 +32,10 @@ export class LocalPasswordStrategyFactoryProvider
       | PassportLocal.IStrategyOptions
       | PassportLocal.IStrategyOptionsWithRequest,
   ): PassportLocal.Strategy {
-    if (options && options.passReqToCallback) {
+    if (options?.passReqToCallback) {
       return new PassportLocal.Strategy(
         options,
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           req: Request,
           username: string,
@@ -57,6 +58,7 @@ export class LocalPasswordStrategyFactoryProvider
     } else if (!!options && !isEmpty(options)) {
       return new PassportLocal.Strategy(
         options,
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           username: string,
           password: string,
@@ -77,6 +79,7 @@ export class LocalPasswordStrategyFactoryProvider
       );
     } else {
       return new PassportLocal.Strategy(
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           username: string,
           password: string,

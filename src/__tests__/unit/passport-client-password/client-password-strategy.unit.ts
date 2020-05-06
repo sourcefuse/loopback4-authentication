@@ -72,7 +72,7 @@ function verifierBearer(
     clientSecret: clientSecret,
   };
 
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     if (clientToPass) {
       resolve(clientToPass);
     }

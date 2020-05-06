@@ -44,13 +44,15 @@ describe('Resource-owner-password strategy', () => {
 
       @post('/auth/resource-owner-pass/no-options')
       @authenticate(STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT)
-      test(@requestBody()
-      body: {
-        username: string;
-        password: string;
-        client_id: string;
-        client_secret: string;
-      }) {
+      test(
+        @requestBody()
+        body: {
+          username: string;
+          password: string;
+          client_id: string;
+          client_secret: string;
+        },
+      ) {
         return this.user;
       }
     }
@@ -84,13 +86,15 @@ describe('Resource-owner-password strategy', () => {
       @authenticate(STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT, {
         passReqToCallback: true,
       })
-      async test(@requestBody()
-      body: {
-        username: string;
-        password: string;
-        client_id: string;
-        client_secret: string;
-      }) {
+      async test(
+        @requestBody()
+        body: {
+          username: string;
+          password: string;
+          client_id: string;
+          client_secret: string;
+        },
+      ) {
         return this.user;
       }
     }
@@ -124,13 +128,15 @@ describe('Resource-owner-password strategy', () => {
       @authenticate(STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT, {
         passReqToCallback: false,
       })
-      async test(@requestBody()
-      body: {
-        username: string;
-        password: string;
-        client_id: string;
-        client_secret: string;
-      }) {
+      async test(
+        @requestBody()
+        body: {
+          username: string;
+          password: string;
+          client_id: string;
+          client_secret: string;
+        },
+      ) {
         return this.user;
       }
     }
@@ -157,13 +163,15 @@ describe('Resource-owner-password strategy', () => {
     class TestController {
       @post('/test')
       @authenticate(STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT)
-      async test(@requestBody()
-      body: {
-        username: string;
-        password: string;
-        client_id: string;
-        client_secret: string;
-      }) {
+      async test(
+        @requestBody()
+        body: {
+          username: string;
+          password: string;
+          client_id: string;
+          client_secret: string;
+        },
+      ) {
         return body;
       }
     }
@@ -216,13 +224,15 @@ describe('Resource-owner strategy with no verifier', () => {
 
       @post('/test')
       @authenticate(STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT)
-      async test(@requestBody()
-      body: {
-        username: string;
-        password: string;
-        client_id: string;
-        client_secret: string;
-      }) {
+      async test(
+        @requestBody()
+        body: {
+          username: string;
+          password: string;
+          client_id: string;
+          client_secret: string;
+        },
+      ) {
         return body;
       }
     }

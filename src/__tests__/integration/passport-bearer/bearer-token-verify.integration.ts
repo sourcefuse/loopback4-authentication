@@ -32,9 +32,7 @@ describe('Bearer-token strategy', () => {
 
     app.controller(BearerNoTokenController);
 
-    await whenIMakeRequestTo(server)
-      .get('/auth/bearer/no-token')
-      .expect(401);
+    await whenIMakeRequestTo(server).get('/auth/bearer/no-token').expect(401);
   });
 
   it('should return status 200 when token is passed', async () => {

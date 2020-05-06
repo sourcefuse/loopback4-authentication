@@ -31,7 +31,7 @@ export function authenticate(
     USER_AUTHENTICATION_METADATA_KEY,
     {
       strategy: strategyName,
-      options: options || {},
+      options: options ?? {},
       authOptions: authOptions,
     },
   );
