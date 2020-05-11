@@ -25,6 +25,11 @@ import {
   GoogleAuthVerifyProvider,
 } from './strategies/passport/passport-google-oauth2';
 
+import {
+  AzureADAuthStrategyFactoryProvider,
+  AzureADAuthVerifyProvider,
+} from './strategies/passport/passport-azure-ad';
+
 export class AuthenticationComponent implements Component {
   constructor() {
     this.providers = {
@@ -47,6 +52,8 @@ export class AuthenticationComponent implements Component {
         .key]: ResourceOwnerPasswordStrategyFactoryProvider,
       [Strategies.Passport.GOOGLE_OAUTH2_STRATEGY_FACTORY
         .key]: GoogleAuthStrategyFactoryProvider,
+      [Strategies.Passport.AZURE_AD_STRATEGY_FACTORY
+        .key]: AzureADAuthStrategyFactoryProvider,
 
       // Verifier functions
       [Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER
@@ -59,6 +66,7 @@ export class AuthenticationComponent implements Component {
         .key]: ResourceOwnerVerifyProvider,
       [Strategies.Passport.GOOGLE_OAUTH2_VERIFIER
         .key]: GoogleAuthVerifyProvider,
+      [Strategies.Passport.AZURE_AD_VERIFIER.key]: AzureADAuthVerifyProvider,
     };
   }
 

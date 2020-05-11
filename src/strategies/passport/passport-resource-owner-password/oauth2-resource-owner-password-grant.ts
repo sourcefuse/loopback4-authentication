@@ -55,9 +55,9 @@ export namespace Oauth2ResourceOwnerPassword {
     authenticate(req: any, options?: {}): void {
       if (
         !req.body ||
-        (!req.body['client_id'] ||
-          !req.body['username'] ||
-          !req.body['password'])
+        !req.body['client_id'] ||
+        !req.body['username'] ||
+        !req.body['password']
       ) {
         this.fail();
         return;

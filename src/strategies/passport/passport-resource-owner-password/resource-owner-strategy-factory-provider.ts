@@ -22,15 +22,16 @@ export class ResourceOwnerPasswordStrategyFactoryProvider
   ) {}
 
   value(): ResourceOwnerPasswordStrategyFactory {
-    return options => this.getResourceOwnerVerifier(options);
+    return (options) => this.getResourceOwnerVerifier(options);
   }
 
   getResourceOwnerVerifier(
     options?: Oauth2ResourceOwnerPassword.StrategyOptionsWithRequestInterface,
   ): Oauth2ResourceOwnerPassword.Strategy {
-    if (options && options.passReqToCallback) {
+    if (options?.passReqToCallback) {
       return new Oauth2ResourceOwnerPassword.Strategy(
         options,
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           req: Request,
           clientId: string,
@@ -64,6 +65,7 @@ export class ResourceOwnerPasswordStrategyFactoryProvider
       );
     } else {
       return new Oauth2ResourceOwnerPassword.Strategy(
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           clientId: string,
           clientSecret: string,

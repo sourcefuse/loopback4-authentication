@@ -81,11 +81,13 @@ describe('Client-password strategy', () => {
 
       @post('/test')
       @authenticateClient(STRATEGY.CLIENT_PASSWORD, {passReqToCallback: true})
-      async test(@requestBody()
-      body: {
-        client_id: string;
-        client_secret: string;
-      }) {
+      async test(
+        @requestBody()
+        body: {
+          client_id: string;
+          client_secret: string;
+        },
+      ) {
         return this.client;
       }
     }
@@ -107,11 +109,13 @@ describe('Client-password strategy', () => {
 
       @post('/test')
       @authenticateClient(STRATEGY.CLIENT_PASSWORD, {passReqToCallback: false})
-      async test(@requestBody()
-      body: {
-        client_id: string;
-        client_secret: string;
-      }) {
+      async test(
+        @requestBody()
+        body: {
+          client_id: string;
+          client_secret: string;
+        },
+      ) {
         return this.client;
       }
     }
@@ -160,11 +164,13 @@ describe('integration test for client-password and no verifier', () => {
 
       @post('/test')
       @authenticateClient(STRATEGY.CLIENT_PASSWORD, {passReqToCallback: true})
-      test(@requestBody()
-      body: {
-        client_id: string;
-        client_secret: string;
-      }) {
+      test(
+        @requestBody()
+        body: {
+          client_id: string;
+          client_secret: string;
+        },
+      ) {
         return this.client;
       }
     }

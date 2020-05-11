@@ -12,7 +12,7 @@ export function authenticateClient(strategyName: string, options?: Object) {
     CLIENT_AUTHENTICATION_METADATA_KEY,
     {
       strategy: strategyName,
-      options: options || {},
+      options: options ?? {},
     },
   );
 }

@@ -34,9 +34,7 @@ describe('getting google oauth2 strategy with options', () => {
 
     app.controller(TestController);
 
-    await whenIMakeRequestTo(server)
-      .get('/test')
-      .expect(200);
+    await whenIMakeRequestTo(server).get('/test').expect(200);
   });
 
   function whenIMakeRequestTo(restServer: RestServer): Client {
@@ -69,6 +67,7 @@ class GoogleAuthVerifyProvider
       accessToken: string,
       refreshToken: string,
       profile: GoogleStrategy.Profile,
+      cd: GoogleStrategy.VerifyCallback,
       req?: Request,
     ) => {
       return userWithoutReqObj;

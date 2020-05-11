@@ -1,19 +1,17 @@
 import {Provider} from '@loopback/core';
 import {VerifyFunction} from '../../../strategies';
-import * as GoogleStrategy from 'passport-google-oauth20';
+import * as AzureADAuthStrategy from 'passport-azure-ad';
 import {IAuthUser} from '../../../types';
 import {Request} from '@loopback/rest';
 
 export class BearerTokenVerifyProvider
-  implements Provider<VerifyFunction.GoogleAuthFn> {
+  implements Provider<VerifyFunction.AzureADAuthFn> {
   constructor() {}
 
   value() {
     return async (
-      accessToken: string,
-      refreshToken: string,
-      profile: GoogleStrategy.Profile,
-      cb: GoogleStrategy.VerifyCallback,
+      profile: AzureADAuthStrategy.IProfile,
+      done: AzureADAuthStrategy.VerifyCallback,
       req?: Request,
     ) => {
       const userToPass: IAuthUser = {

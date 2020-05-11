@@ -17,7 +17,7 @@ export class ClientAuthenticateActionProvider
   ) {}
 
   value(): AuthenticateFn<IAuthClient | undefined> {
-    return request => this.action(request);
+    return (request) => this.action(request);
   }
 
   async action(request: Request): Promise<IAuthClient | undefined> {

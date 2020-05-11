@@ -21,15 +21,17 @@ export class ClientPasswordStrategyFactoryProvider
   ) {}
 
   value(): ClientPasswordStrategyFactory {
-    return options => this.getClientPasswordVerifier(options);
+    return (options) => this.getClientPasswordVerifier(options);
   }
 
   getClientPasswordVerifier(
     options?: ClientPasswordStrategy.StrategyOptionsWithRequestInterface,
   ): ClientPasswordStrategy.Strategy {
-    if (options && options.passReqToCallback) {
+    if (options?.passReqToCallback) {
       return new ClientPasswordStrategy.Strategy(
         options,
+
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           req: Request,
           clientId: string,
@@ -56,6 +58,7 @@ export class ClientPasswordStrategyFactoryProvider
       );
     } else {
       return new ClientPasswordStrategy.Strategy(
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           clientId: string,
           clientSecret: string,

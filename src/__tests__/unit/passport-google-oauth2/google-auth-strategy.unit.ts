@@ -67,7 +67,7 @@ function verifierBearer(
     password: 'pass',
   };
 
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     if (userToPass) {
       resolve(userToPass);
     }

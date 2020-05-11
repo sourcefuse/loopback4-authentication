@@ -39,7 +39,7 @@ export class AuthenticateActionProvider
     // to be passed on to authenticate method of strategy
     const metadata = await this.getMetadata();
     let authOpts;
-    if (metadata && metadata.authOptions) {
+    if (metadata?.authOptions) {
       // Fetch options using creator function added with decorator definition
       authOpts = metadata.authOptions(request);
     }

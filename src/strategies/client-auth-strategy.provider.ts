@@ -24,8 +24,9 @@ export class ClientAuthStrategyProvider
 
     const name = this.clientMetadata.strategy;
     if (name === STRATEGY.CLIENT_PASSWORD) {
-      return this.getClientPasswordVerifier(this.clientMetadata
-        .options as StrategyOptionsWithRequestInterface);
+      return this.getClientPasswordVerifier(
+        this.clientMetadata.options as StrategyOptionsWithRequestInterface,
+      );
     } else {
       return Promise.reject(`The strategy ${name} is not available.`);
     }
