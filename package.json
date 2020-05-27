@@ -83,5 +83,8 @@
     "ts-node": "^8.10.1",
     "tslint": "^6.1.2",
     "typescript": "~3.9.3"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   }
 }
