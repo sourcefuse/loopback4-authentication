@@ -3,8 +3,7 @@
   "extends": "@loopback/build/config/tsconfig.common.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist",
-    "target": "es2017"
+    "outDir": "dist"
   },
   "include": ["src"]
 }

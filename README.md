@@ -4,7 +4,7 @@
 
 [![Node version](https://img.shields.io/node/v/loopback4-authentication.svg?style=flat-square)](https://nodejs.org/en/download/)
 [![Dependencies Status](https://img.shields.io/david/sourcefuse/loopback4-authentication.svg?style=flat-square&label=Dependencies)](https://github.com/sourcefuse/loopback4-authentication)
-[![Loopback Core Version](https://img.shields.io/npm/dependency-version/loopback4-authentication/dev/@loopback/core.svg?color=dark%20green&style=flat-square)](https://github.com/strongloop/loopback-next)
+[![Loopback Core Version](https://img.shields.io/npm/dependency-version/loopback4-authentication/@loopback/core.svg?color=dark%20green&style=flat-square)](https://github.com/strongloop/loopback-next)
 [![Loopback Build Version](https://img.shields.io/npm/dependency-version/loopback4-authentication/dev/@loopback/build.svg?color=dark%20green&style=flat-square)](https://github.com/strongloop/loopback-next/tree/master/packages/build)
 
 [![npm vulnerabilities](https://img.shields.io/snyk/vulnerabilities/npm/loopback4-authentication.svg?label=npm%20vulnerabilities&style=flat-square)](https://www.npmjs.com/package/loopback4-authentication)
@@ -305,7 +305,7 @@ export class BearerTokenVerifyProvider
   ) {}
 
   value(): VerifyFunction.BearerFn {
-    return async token => {
+    return async (token) => {
       const user = verify(token, process.env.JWT_SECRET as string, {
         issuer: process.env.JWT_ISSUER,
       }) as User;
