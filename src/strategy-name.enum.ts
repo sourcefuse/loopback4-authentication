@@ -5,4 +5,5 @@ export const enum STRATEGY {
   OAUTH2_RESOURCE_OWNER_GRANT = 'OAuth2 resource owner grant',
   GOOGLE_OAUTH2 = 'Google Oauth 2.0',
   AZURE_AD = 'Azure AD',
+  KEYCLOAK = 'keycloak',
 }

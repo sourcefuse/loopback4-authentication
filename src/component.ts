@@ -9,26 +9,23 @@ import {
 } from './providers';
 import {
   AuthStrategyProvider,
-  ClientAuthStrategyProvider,
-  ClientPasswordVerifyProvider,
-  LocalPasswordVerifyProvider,
-  BearerTokenVerifyProvider,
-  ResourceOwnerVerifyProvider,
-  LocalPasswordStrategyFactoryProvider,
-  ClientPasswordStrategyFactoryProvider,
-  BearerStrategyFactoryProvider,
-  ResourceOwnerPasswordStrategyFactoryProvider,
-} from './strategies';
-import {Strategies} from './strategies/keys';
-import {
-  GoogleAuthStrategyFactoryProvider,
-  GoogleAuthVerifyProvider,
-} from './strategies/passport/passport-google-oauth2';
-
-import {
   AzureADAuthStrategyFactoryProvider,
   AzureADAuthVerifyProvider,
-} from './strategies/passport/passport-azure-ad';
+  BearerStrategyFactoryProvider,
+  BearerTokenVerifyProvider,
+  ClientAuthStrategyProvider,
+  ClientPasswordStrategyFactoryProvider,
+  ClientPasswordVerifyProvider,
+  GoogleAuthStrategyFactoryProvider,
+  GoogleAuthVerifyProvider,
+  KeycloakStrategyFactoryProvider,
+  KeycloakVerifyProvider,
+  LocalPasswordStrategyFactoryProvider,
+  LocalPasswordVerifyProvider,
+  ResourceOwnerPasswordStrategyFactoryProvider,
+  ResourceOwnerVerifyProvider,
+} from './strategies';
+import {Strategies} from './strategies/keys';
 
 export class AuthenticationComponent implements Component {
   constructor() {
@@ -54,6 +51,8 @@ export class AuthenticationComponent implements Component {
         .key]: GoogleAuthStrategyFactoryProvider,
       [Strategies.Passport.AZURE_AD_STRATEGY_FACTORY
         .key]: AzureADAuthStrategyFactoryProvider,
+      [Strategies.Passport.KEYCLOAK_STRATEGY_FACTORY
+        .key]: KeycloakStrategyFactoryProvider,
 
       // Verifier functions
       [Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER
@@ -67,6 +66,7 @@ export class AuthenticationComponent implements Component {
       [Strategies.Passport.GOOGLE_OAUTH2_VERIFIER
         .key]: GoogleAuthVerifyProvider,
       [Strategies.Passport.AZURE_AD_VERIFIER.key]: AzureADAuthVerifyProvider,
+      [Strategies.Passport.KEYCLOAK_VERIFIER.key]: KeycloakVerifyProvider,
     };
   }
 

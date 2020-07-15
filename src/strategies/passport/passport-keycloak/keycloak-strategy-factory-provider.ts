@@ -21,11 +21,11 @@ export class KeycloakStrategyFactoryProvider
   ) {}
 
   value(): KeycloakStrategyFactory {
-    return (options) => this.getGoogleAuthStrategyVerifier(options);
+    return (options) => this.getKeycloakAuthStrategyVerifier(options);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getGoogleAuthStrategyVerifier(options: any): typeof KeycloakStrategy {
+  getKeycloakAuthStrategyVerifier(options: any): typeof KeycloakStrategy {
     return new KeycloakStrategy(
       options,
       async (

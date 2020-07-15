@@ -17,6 +17,7 @@ import {
   ResourceOwnerPasswordStrategyFactory,
 } from './passport/passport-resource-owner-password';
 import {AzureADAuthStrategyFactory} from './passport/passport-azure-ad';
+import {KeycloakStrategyFactory} from './passport';
 
 export class AuthStrategyProvider implements Provider<Strategy | undefined> {
   constructor(
@@ -32,6 +33,8 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     private readonly getGoogleAuthVerifier: GoogleAuthStrategyFactory,
     @inject(Strategies.Passport.AZURE_AD_STRATEGY_FACTORY)
     private readonly getAzureADAuthVerifier: AzureADAuthStrategyFactory,
+    @inject(Strategies.Passport.KEYCLOAK_STRATEGY_FACTORY)
+    private readonly getKeycloakVerifier: KeycloakStrategyFactory,
   ) {}
 
   value(): ValueOrPromise<Strategy | undefined> {
@@ -67,6 +70,8 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
           | AzureADAuthStrategy.IOIDCStrategyOptionWithRequest
           | AzureADAuthStrategy.IOIDCStrategyOptionWithoutRequest,
       );
+    } else if (name === STRATEGY.KEYCLOAK) {
+      return this.getKeycloakVerifier(this.metadata.options);
     } else {
       return Promise.reject(`The strategy ${name} is not available.`);
     }
