@@ -1,6 +1,6 @@
 {
   "name": "loopback4-authentication",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "A loopback-next extension for authentication feature. Oauth strategies supported.",
   "keywords": [
     "loopback-extension",
