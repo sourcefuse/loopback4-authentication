@@ -46,12 +46,12 @@
   ],
   "peerDependencies": {
     "@loopback/boot": "^2.1.2",
-    "@loopback/context": "^3.6.0",
-    "@loopback/core": "^2.4.2",
     "@loopback/rest": "^3.3.2"
   },
   "dependencies": {
-    "@loopback/core": "^2.7.0",
+    "@exlinc/keycloak-passport": "^1.0.2",
+    "@loopback/context": "^3.9.2",
+    "@loopback/core": "^2.9.1",
     "passport": "^0.4.1",
     "passport-azure-ad": "^4.2.1",
     "passport-google-oauth20": "^2.0.0",
@@ -63,7 +63,6 @@
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@loopback/boot": "^2.3.1",
     "@loopback/build": "^5.4.1",
-    "@loopback/context": "^3.8.1",
     "@loopback/metadata": "^2.1.5",
     "@loopback/rest": "^5.0.1",
     "@loopback/testlab": "^3.1.5",
@@ -77,7 +76,7 @@
     "@types/passport-http-bearer": "^1.0.35",
     "@types/passport-local": "^1.0.33",
     "@types/passport-oauth2-client-password": "^0.1.2",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "nyc": "^15.0.1",
     "source-map-support": "^0.5.19",
     "ts-node": "^8.10.1",

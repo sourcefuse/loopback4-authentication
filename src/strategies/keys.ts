@@ -4,8 +4,9 @@ import {BearerStrategyFactory} from './passport/passport-bearer';
 import {ResourceOwnerPasswordStrategyFactory} from './passport/passport-resource-owner-password';
 import {ClientPasswordStrategyFactory} from './passport/passport-client-password/client-password-strategy-factory-provider';
 import {GoogleAuthStrategyFactoryProvider} from './passport/passport-google-oauth2';
-import {VerifyFunction} from './passport';
+import {KeycloakStrategyFactoryProvider} from './passport/passport-keycloak';
 import {AzureADAuthStrategyFactoryProvider} from './passport/passport-azure-ad';
+import {VerifyFunction} from './types';
 
 export namespace Strategies {
   export namespace Passport {
@@ -55,5 +56,13 @@ export namespace Strategies {
     export const AZURE_AD_VERIFIER = BindingKey.create<
       VerifyFunction.AzureADAuthFn
     >('sf.passport.verifier.azureAd');
+
+    // Passport-keycloak strategy
+    export const KEYCLOAK_STRATEGY_FACTORY = BindingKey.create<
+      KeycloakStrategyFactoryProvider
+    >('sf.passport.strategyFactory.keycloak');
+    export const KEYCLOAK_VERIFIER = BindingKey.create<
+      VerifyFunction.KeycloakAuthFn
+    >('sf.passport.verifier.keycloak');
   }
 }

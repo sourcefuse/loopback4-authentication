@@ -52,4 +52,24 @@ export namespace VerifyFunction {
       req?: Request,
     ): Promise<IAuthUser | null>;
   }
+
+  export interface KeycloakAuthFn {
+    (
+      accessToken: string,
+      refreshToken: string,
+      profile: KeycloakProfile,
+      cb: (err?: string | Error, user?: IAuthUser) => void,
+    ): Promise<IAuthUser | null>;
+  }
+}
+
+export interface KeycloakProfile {
+  keycloakId: string;
+  fullName: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  avatar: string;
+  realm: string;
 }
