@@ -1089,7 +1089,6 @@ For accessing the authenticated AuthUser model reference, you can inject the CUR
   @inject.getter(AuthenticationBindings.CURRENT_USER)
   private readonly getCurrentUser: Getter<User>,
 ```
-
 ### Instagram Oauth 2
 
 First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
@@ -1384,7 +1383,6 @@ After this, you can use decorator to apply auth to controller functions wherever
     }
   }
 ```
-
 Please note above that we are creating two new APIs for instagram auth. The first one is for UI clients to hit. We are authenticating client as well, then passing the details to the instagram auth. Then, the actual authentication is done by instagram authorization url, which redirects to the second API we created after success. The first API method body is empty as we do not need to handle its response. The instagram auth provider in this package will do the redirection for you automatically.
 
 For accessing the authenticated AuthUser model reference, you can inject the CURRENT_USER provider, provided by the extension, which is populated by the auth action sequence above.
@@ -1732,7 +1730,6 @@ this.bind(VerifyBindings.BEARER_SIGNUP_VERIFY_PROVIDER).toProvider(
 ### Https proxy support for keycloak and google auth
 
 If a https proxy agent is needed for keycloak and google auth, just add an environment variable named `HTTPS_PROXY` or `https_proxy` with proxy url as value. It will add that proxy agent to the request.
-
 ## Feedback
 
 If you've noticed a bug or have a question or have a feature request, [search the issue tracker](https://github.com/sourcefuse/loopback4-authentication/issues) to see if someone else in the community has already created a ticket.
