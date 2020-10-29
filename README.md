@@ -112,7 +112,7 @@ Create CRUD repository for the above model. Use loopback CLI.
 lb4 repository
 ```
 
-Add the verifier function for the strategy. You need to create a provider for the same. You can add your application specific business logic for client auth here. Here is simple example.
+Add the verifier function for the strategy. You need to create a provider for the same strategy. You can add your application specific business logic for client auth here. Here is simple example.
 
 ```ts
 import {Provider} from '@loopback/context';
@@ -305,7 +305,7 @@ export class BearerTokenVerifyProvider
   ) {}
 
   value(): VerifyFunction.BearerFn {
-    return async (token) => {
+    return async token => {
       const user = verify(token, process.env.JWT_SECRET as string, {
         issuer: process.env.JWT_ISSUER,
       }) as User;
