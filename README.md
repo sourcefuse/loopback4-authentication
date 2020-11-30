@@ -23,6 +23,7 @@ It provides support for four passport based strategies.
 3. [passport-local](https://github.com/jaredhanson/passport-local) - Passport strategy for authenticating with a username and password. This module lets you authenticate using a username and password in your Node.js applications.
 4. [passport-oauth2-resource-owner-password](https://www.npmjs.com/package/passport-oauth2-resource-owner-password) - OAuth 2.0 resource owner password authentication strategy for Passport. This module lets you authenticate requests containing resource owner credentials in the request body, as [defined](http://tools.ietf.org/html/draft-ietf-oauth-v2-27#section-1.3.3) by the OAuth 2.0 specification.
 5. [passport-google-oauth2](https://github.com/jaredhanson/passport-google-oauth2) - Passport strategy for authenticating with Google using the Google OAuth 2.0 API. This module lets you authenticate using Google in your Node.js applications.
+6. [keycloak-passport](https://github.com/exlinc/keycloak-passport) - Passport strategy for authenticating with Keycloak. This library offers a production-ready and maintained Keycloak Passport connector.
 
 You can use one or more strategies of the above in your application. For each of the strategy (only which you use), you just need to provide your own verifier function, making it easily configurable. Rest of the strategy implementation intricacies is handled by extension.
 
@@ -1075,6 +1076,319 @@ After this, you can use decorator to apply auth to controller functions wherever
 ```
 
 Please note above that we are creating two new APIs for google auth. The first one is for UI clients to hit. We are authenticating client as well, then passing the details to the google auth. Then, the actual authentication is done by google authorization url, which redirects to the second API we created after success. The first API method body is empty as we do not need to handle its response. The google auth provider in this package will do the redirection for you automatically.
+
+For accessing the authenticated AuthUser model reference, you can inject the CURRENT_USER provider, provided by the extension, which is populated by the auth action sequence above.
+
+```ts
+  @inject.getter(AuthenticationBindings.CURRENT_USER)
+  private readonly getCurrentUser: Getter<User>,
+```
+
+### Keycloak
+
+First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
+
+```ts
+@model({
+  name: 'users',
+})
+export class User extends Entity implements IAuthUser {
+  @property({
+    type: 'number',
+    id: true,
+  })
+  id?: number;
+
+  @property({
+    type: 'string',
+    required: true,
+    name: 'first_name',
+  })
+  firstName: string;
+
+  @property({
+    type: 'string',
+    name: 'last_name',
+  })
+  lastName: string;
+
+  @property({
+    type: 'string',
+    name: 'middle_name',
+  })
+  middleName?: string;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
+  username: string;
+
+  @property({
+    type: 'string',
+  })
+  email?: string;
+
+  // Auth provider - 'keycloak'
+  @property({
+    type: 'string',
+    required: true,
+    name: 'auth_provider',
+  })
+  authProvider: string;
+
+  // Id from external provider
+  @property({
+    type: 'string',
+    name: 'auth_id',
+  })
+  authId?: string;
+
+  @property({
+    type: 'string',
+    name: 'auth_token',
+  })
+  authToken?: string;
+
+  @property({
+    type: 'string',
+  })
+  password?: string;
+
+  constructor(data?: Partial<User>) {
+    super(data);
+  }
+}
+```
+
+Create CRUD repository for the above model. Use loopback CLI.
+
+```sh
+lb4 repository
+```
+
+Add the verifier function for the strategy. You need to create a provider for the same. You can add your application specific business logic for client auth here. Here is a simple example.
+
+```ts
+import {Provider, inject} from '@loopback/context';
+import {repository} from '@loopback/repository';
+import {HttpErrors} from '@loopback/rest';
+import {
+  AuthErrorKeys,
+  IAuthUser,
+  VerifyFunction,
+} from 'loopback4-authentication';
+
+import {UserCredentialsRepository, UserRepository} from '../../../repositories';
+import {AuthUser} from '../models/auth-user.model';
+
+export class KeycloakVerifyProvider
+  implements Provider<VerifyFunction.KeycloakAuthFn> {
+  constructor(
+    @repository(UserRepository)
+    public userRepository: UserRepository,
+    @repository(UserCredentialsRepository)
+    public userCredsRepository: UserCredentialsRepository,
+  ) {}
+
+  value(): VerifyFunction.KeycloakAuthFn {
+    return async (accessToken, refreshToken, profile) => {
+      let user: IAuthUser | null = await this.userRepository.findOne({
+        where: {
+          email: profile.email,
+        },
+      });
+      if (!user) {
+        throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
+      }
+      const creds = await this.userCredsRepository.findOne({
+        where: {
+          userId: user.id as string,
+        },
+      });
+      if (
+        !creds ||
+        creds.authProvider !== 'keycloak' ||
+        creds.authId !== profile.keycloakId
+      ) {
+        throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
+      }
+
+      const authUser: AuthUser = new AuthUser({
+        ...user,
+        id: user.id as string,
+      });
+      authUser.permissions = [];
+      authUser.externalAuthToken = accessToken;
+      authUser.externalRefreshToken = refreshToken;
+      return authUser;
+    };
+  }
+}
+```
+
+Please note the Verify function type _VerifyFunction.KeycloakAuthFn_
+
+Now bind this provider to the application in application.ts.
+
+```ts
+import {AuthenticationComponent, Strategies} from 'loopback4-authentication';
+```
+
+```ts
+// Add authentication component
+this.component(AuthenticationComponent);
+// Customize authentication verify handlers
+this.bind(Strategies.Passport.KEYCLOAK_VERIFIER).toProvider(
+  KeycloakVerifyProvider,
+);
+```
+
+Finally, add the authenticate function as a sequence action to sequence.ts.
+
+```ts
+export class MySequence implements SequenceHandler {
+  /**
+   * Optional invoker for registered middleware in a chain.
+   * To be injected via SequenceActions.INVOKE_MIDDLEWARE.
+   */
+  @inject(SequenceActions.INVOKE_MIDDLEWARE, {optional: true})
+  protected invokeMiddleware: InvokeMiddleware = () => false;
+
+  constructor(
+    @inject(SequenceActions.FIND_ROUTE) protected findRoute: FindRoute,
+    @inject(SequenceActions.PARSE_PARAMS) protected parseParams: ParseParams,
+    @inject(SequenceActions.INVOKE_METHOD) protected invoke: InvokeMethod,
+    @inject(SequenceActions.SEND) public send: Send,
+    @inject(SequenceActions.REJECT) public reject: Reject,
+    @inject(AuthenticationBindings.USER_AUTH_ACTION)
+    protected authenticateRequest: AuthenticateFn<AuthUser>,
+  ) {}
+
+  async handle(context: RequestContext) {
+    try {
+      const {request, response} = context;
+
+      const route = this.findRoute(request);
+      const args = await this.parseParams(request, route);
+      request.body = args[args.length - 1];
+      const authUser: AuthUser = await this.authenticateRequest(
+        request,
+        response,
+      );
+      const result = await this.invoke(route, args);
+      this.send(response, result);
+    } catch (err) {
+      this.reject(context, err);
+    }
+  }
+}
+```
+
+After this, you can use decorator to apply auth to controller functions wherever needed. See below.
+
+```ts
+@authenticateClient(STRATEGY.CLIENT_PASSWORD)
+  @authenticate(
+    STRATEGY.KEYCLOAK,
+    {
+      host: process.env.KEYCLOAK_HOST,
+      realm: process.env.KEYCLOAK_REALM, //'Tenant1',
+      clientID: process.env.KEYCLOAK_CLIENT_ID, //'onboarding',
+      clientSecret: process.env.KEYCLOAK_CLIENT_SECRET, //'e607fd75-adc8-4af7-9f03-c9e79a4b8b72',
+      callbackURL: process.env.KEYCLOAK_CALLBACK_URL, //'http://localhost:3001/auth/keycloak-auth-redirect',
+      authorizationURL: `${process.env.KEYCLOAK_HOST}/auth/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/auth`,
+      tokenURL: `${process.env.KEYCLOAK_HOST}/auth/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/token`,
+      userInfoURL: `${process.env.KEYCLOAK_HOST}/auth/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/userinfo`,
+    },
+    keycloakQueryGen,
+  )
+  @authorize({permissions: ['*']})
+  @get('/auth/keycloak', {
+    responses: {
+      [STATUS_CODE.OK]: {
+        description: 'Keycloak Token Response',
+        content: {
+          [CONTENT_TYPE.JSON]: {
+            schema: {'x-ts-type': TokenResponse},
+          },
+        },
+      },
+    },
+  })
+  async loginViaKeycloak(
+    @param.query.string('client_id')
+    clientId?: string,
+    @param.query.string('client_secret')
+    clientSecret?: string,
+  ): Promise<void> {}
+
+  @authenticate(
+    STRATEGY.KEYCLOAK,
+    {
+      host: process.env.KEYCLOAK_HOST,
+      realm: process.env.KEYCLOAK_REALM,
+      clientID: process.env.KEYCLOAK_CLIENT_ID,
+      clientSecret: process.env.KEYCLOAK_CLIENT_SECRET,
+      callbackURL: process.env.KEYCLOAK_CALLBACK_URL,
+      authorizationURL: `${process.env.KEYCLOAK_HOST}/auth/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/auth`,
+      tokenURL: `${process.env.KEYCLOAK_HOST}/auth/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/token`,
+      userInfoURL: `${process.env.KEYCLOAK_HOST}/auth/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/userinfo`,
+    },
+    keycloakQueryGen,
+  )
+  @authorize({permissions: ['*']})
+  @get('/auth/keycloak-auth-redirect', {
+    responses: {
+      [STATUS_CODE.OK]: {
+        description: 'Keycloak Redirect Token Response',
+        content: {
+          [CONTENT_TYPE.JSON]: {
+            schema: {'x-ts-type': TokenResponse},
+          },
+        },
+      },
+    },
+  })
+  async keycloakCallback(
+    @param.query.string('code') code: string,
+    @param.query.string('state') state: string,
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+  ): Promise<void> {
+    const clientId = new URLSearchParams(state).get('client_id');
+    if (!clientId || !this.user) {
+      throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
+    }
+    const client = await this.authClientRepository.findOne({
+      where: {
+        clientId,
+      },
+    });
+    if (!client || !client.redirectUrl) {
+      throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
+    }
+    try {
+      const codePayload: ClientAuthCode<User, typeof User.prototype.id> = {
+        clientId,
+        user: this.user,
+      };
+      const token = jwt.sign(codePayload, client.secret, {
+        expiresIn: client.authCodeExpiration,
+        audience: clientId,
+        subject: this.user.username,
+        issuer: process.env.JWT_ISSUER,
+      });
+      response.redirect(
+        `${client.redirectUrl}?code=${token}&user=${this.user.username}`,
+      );
+    } catch (error) {
+      this.logger.error(error);
+      throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
+    }
+  }
+```
+
+Please note above that we are creating two new APIs for keycloak auth. The first one is for UI clients to hit. We are authenticating client as well, then passing the details to the keycloak auth. Then, the actual authentication is done by keycloak authorization url, which redirects to the second API we created after success. The first API method body is empty as we do not need to handle its response. The keycloak auth provider in this package will do the redirection for you automatically.
 
 For accessing the authenticated AuthUser model reference, you can inject the CURRENT_USER provider, provided by the extension, which is populated by the auth action sequence above.
 
