@@ -4,4 +4,8 @@ module.exports = {
     'no-extra-boolean-cast': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
   },
+  parserOptions: {
+    project: './tsconfig.json',
+    tsconfigRootDir: __dirname,
+  },
 };
