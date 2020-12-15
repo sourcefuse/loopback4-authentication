@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/naming-convention */
+
 import {Client, createClientForHandler, expect} from '@loopback/testlab';
 import {RestServer} from '@loopback/rest';
 import {Application, inject} from '@loopback/core';
@@ -64,8 +66,8 @@ describe('Resource-owner-password strategy', () => {
       .send({
         username: 'username',
         password: 'password',
-        client_id: 'client id', // eslint-disable-line
-        client_secret: 'client secret', // eslint-disable-line
+        client_id: 'client id',
+        client_secret: 'client secret',
       })
       .expect(200);
 
@@ -106,8 +108,8 @@ describe('Resource-owner-password strategy', () => {
       .send({
         username: 'user name',
         password: 'password',
-        client_id: 'client id', // eslint-disable-line
-        client_secret: 'client secret', // eslint-disable-line
+        client_id: 'client id',
+        client_secret: 'client secret',
       })
       .expect(200);
 
@@ -148,8 +150,8 @@ describe('Resource-owner-password strategy', () => {
       .send({
         username: 'name',
         password: 'password',
-        client_id: 'client id', // eslint-disable-line
-        client_secret: 'client secret', // eslint-disable-line
+        client_id: 'client id',
+        client_secret: 'client secret',
       })
       .expect(200);
 
@@ -183,8 +185,8 @@ describe('Resource-owner-password strategy', () => {
       .send({
         username: '',
         password: 'password',
-        client_id: '', // eslint-disable-line
-        client_secret: 'client secret', // eslint-disable-line
+        client_id: '',
+        client_secret: 'client secret',
       })
       .expect(401);
   });
@@ -244,8 +246,8 @@ describe('Resource-owner strategy with no verifier', () => {
       .send({
         username: 'username',
         password: 'password',
-        client_id: 'client id', // eslint-disable-line
-        client_secret: 'client secret', // eslint-disable-line
+        client_id: 'client id',
+        client_secret: 'client secret',
       })
       .expect(401);
   });

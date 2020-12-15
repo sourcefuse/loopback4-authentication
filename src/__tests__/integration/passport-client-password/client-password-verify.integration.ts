@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/naming-convention */
+
 import {IAuthClient} from '../../../types';
 import {Client, createClientForHandler, expect} from '@loopback/testlab';
 import {RestServer} from '@loopback/rest';
@@ -36,7 +38,7 @@ describe('Client-password strategy', () => {
 
     const client = await whenIMakeRequestTo(server)
       .post('/test')
-      .send({client_id: 'some id', client_secret: 'some secret'}) // eslint-disable-line
+      .send({client_id: 'some id', client_secret: 'some secret'})
       .expect(200);
 
     expect(client.body).to.have.property('clientId');
@@ -63,7 +65,7 @@ describe('Client-password strategy', () => {
 
     const client = await whenIMakeRequestTo(server)
       .post('/test')
-      .send({client_id: 'some id', client_secret: 'some secret'}) // eslint-disable-line
+      .send({client_id: 'some id', client_secret: 'some secret'})
       .expect(200);
 
     expect(client.body).to.have.property('clientId');
@@ -96,7 +98,7 @@ describe('Client-password strategy', () => {
 
     await whenIMakeRequestTo(server)
       .post('/test')
-      .send({client_id: '', client_secret: 'some secret'}) // eslint-disable-line
+      .send({client_id: '', client_secret: 'some secret'})
       .expect(401);
   });
 
@@ -124,7 +126,7 @@ describe('Client-password strategy', () => {
 
     await whenIMakeRequestTo(server)
       .post('/test')
-      .send({client_id: '', client_secret: 'some secret'}) // eslint-disable-line
+      .send({client_id: '', client_secret: 'some secret'})
       .expect(401);
   });
 
@@ -179,7 +181,7 @@ describe('integration test for client-password and no verifier', () => {
 
     await whenIMakeRequestTo(server)
       .post('/test')
-      .send({client_id: 'some id', client_secret: 'some secret'}) // eslint-disable-line
+      .send({client_id: 'some id', client_secret: 'some secret'})
       .expect(401);
   });
 
