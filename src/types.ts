@@ -3,9 +3,9 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import { BindingKey } from '@loopback/core';
-import { Request, Response } from '@loopback/rest';
-import { VerifyFunction } from './strategies';
+import {BindingKey} from '@loopback/core';
+import {Request, Response} from '@loopback/rest';
+import {VerifyFunction} from './strategies';
 export * from './strategies/types';
 
 export interface IAuthClient {

@@ -1,16 +1,16 @@
-import { inject, Provider } from '@loopback/core';
-import { HttpErrors, Request } from '@loopback/rest';
+import {inject, Provider} from '@loopback/core';
+import {HttpErrors, Request} from '@loopback/rest';
 import * as ClientPasswordStrategy from 'passport-oauth2-client-password';
 
-import { AuthErrorKeys } from '../../../error-keys';
-import { IAuthClient } from '../../../types';
-import { Strategies } from '../../keys';
-import { VerifyFunction } from '../../types';
+import {AuthErrorKeys} from '../../../error-keys';
+import {IAuthClient} from '../../../types';
+import {Strategies} from '../../keys';
+import {VerifyFunction} from '../../types';
 
 export interface ClientPasswordStrategyFactory {
   (
     options?: ClientPasswordStrategy.StrategyOptionsWithRequestInterface,
-    verifierPassed?: VerifyFunction.OauthClientPasswordFn
+    verifierPassed?: VerifyFunction.OauthClientPasswordFn,
   ): ClientPasswordStrategy.Strategy;
 }
 
@@ -19,15 +19,16 @@ export class ClientPasswordStrategyFactoryProvider
   constructor(
     @inject(Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER)
     private readonly verifier: VerifyFunction.OauthClientPasswordFn,
-  ) { }
+  ) {}
 
   value(): ClientPasswordStrategyFactory {
-    return (options, verifier) => this.getClientPasswordVerifier(options, verifier);
+    return (options, verifier) =>
+      this.getClientPasswordVerifier(options, verifier);
   }
 
   getClientPasswordVerifier(
     options?: ClientPasswordStrategy.StrategyOptionsWithRequestInterface,
-    verifierPassed?: VerifyFunction.OauthClientPasswordFn
+    verifierPassed?: VerifyFunction.OauthClientPasswordFn,
   ): ClientPasswordStrategy.Strategy {
     const verifyFn = verifierPassed ?? this.verifier;
     if (options?.passReqToCallback) {

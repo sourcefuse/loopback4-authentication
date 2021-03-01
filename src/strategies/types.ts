@@ -1,24 +1,16 @@
-import { Request } from '@loopback/rest';
+import {Request} from '@loopback/rest';
 import * as GoogleStrategy from 'passport-google-oauth20';
 import * as AzureADStrategy from 'passport-azure-ad';
 
-import { IAuthClient, IAuthUser } from '../types';
+import {IAuthClient, IAuthUser} from '../types';
 
 export namespace VerifyFunction {
   export interface OauthClientPasswordFn<T = IAuthClient> {
-    (
-      clientId: string,
-      clientSecret: string,
-      req?: Request,
-    ): Promise<T | null>;
+    (clientId: string, clientSecret: string, req?: Request): Promise<T | null>;
   }
 
   export interface LocalPasswordFn<T = IAuthUser> {
-    (
-      username: string,
-      password: string,
-      req?: Request,
-    ): Promise<T | null>;
+    (username: string, password: string, req?: Request): Promise<T | null>;
   }
 
   export interface BearerFn<T = IAuthUser> {
@@ -32,7 +24,7 @@ export namespace VerifyFunction {
       username: string,
       password: string,
       req?: Request,
-    ): Promise<{ client: T; user: S } | null>;
+    ): Promise<{client: T; user: S} | null>;
   }
 
   export interface GoogleAuthFn<T = IAuthUser> {
@@ -62,10 +54,10 @@ export namespace VerifyFunction {
     ): Promise<T | null>;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   export interface GenericAuthFn<T = any> {
-    (
-      ...params: any
-    ): Promise<T>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (...params: any): Promise<T>;
   }
 }
 

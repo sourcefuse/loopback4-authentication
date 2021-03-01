@@ -1,15 +1,18 @@
-import { inject, Provider } from '@loopback/core';
-import { HttpErrors, Request } from '@loopback/rest';
+import {inject, Provider} from '@loopback/core';
+import {HttpErrors, Request} from '@loopback/rest';
 import * as PassportBearer from 'passport-http-bearer';
 
-import { AuthErrorKeys } from '../../../error-keys';
-import { IAuthUser } from '../../../types';
-import { Strategies } from '../../keys';
-import { VerifyFunction } from '../../types';
-import { isEmpty } from 'lodash';
+import {AuthErrorKeys} from '../../../error-keys';
+import {IAuthUser} from '../../../types';
+import {Strategies} from '../../keys';
+import {VerifyFunction} from '../../types';
+import {isEmpty} from 'lodash';
 
 export interface BearerStrategyFactory {
-  (options?: PassportBearer.IStrategyOptions, verifierPassed?: VerifyFunction.BearerFn): PassportBearer.Strategy;
+  (
+    options?: PassportBearer.IStrategyOptions,
+    verifierPassed?: VerifyFunction.BearerFn,
+  ): PassportBearer.Strategy;
 }
 
 export class BearerStrategyFactoryProvider
@@ -17,15 +20,16 @@ export class BearerStrategyFactoryProvider
   constructor(
     @inject(Strategies.Passport.BEARER_TOKEN_VERIFIER)
     private readonly verifierBearer: VerifyFunction.BearerFn,
-  ) { }
+  ) {}
 
   value(): BearerStrategyFactory {
-    return (options, verifier) => this.getBearerStrategyVerifier(options, verifier);
+    return (options, verifier) =>
+      this.getBearerStrategyVerifier(options, verifier);
   }
 
   getBearerStrategyVerifier(
     options?: PassportBearer.IStrategyOptions,
-    verifierPassed?: VerifyFunction.BearerFn
+    verifierPassed?: VerifyFunction.BearerFn,
   ): PassportBearer.Strategy {
     const verifyFn = verifierPassed ?? this.verifierBearer;
     if (options?.passReqToCallback) {

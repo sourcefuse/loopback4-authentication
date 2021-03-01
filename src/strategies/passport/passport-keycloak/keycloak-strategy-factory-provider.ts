@@ -1,16 +1,19 @@
-import { inject, Provider } from '@loopback/core';
-import { HttpErrors } from '@loopback/rest';
+import {inject, Provider} from '@loopback/core';
+import {HttpErrors} from '@loopback/rest';
 
-import { AuthErrorKeys } from '../../../error-keys';
-import { IAuthUser } from '../../../types';
-import { Strategies } from '../../keys';
-import { KeycloakProfile, VerifyFunction } from '../../types';
+import {AuthErrorKeys} from '../../../error-keys';
+import {IAuthUser} from '../../../types';
+import {Strategies} from '../../keys';
+import {KeycloakProfile, VerifyFunction} from '../../types';
 
 export const KeycloakStrategy = require('@exlinc/keycloak-passport');
 
 export interface KeycloakStrategyFactory {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (options: any, verifierPassed?: VerifyFunction.KeycloakAuthFn): typeof KeycloakStrategy;
+  (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    options: any,
+    verifierPassed?: VerifyFunction.KeycloakAuthFn,
+  ): typeof KeycloakStrategy;
 }
 
 export class KeycloakStrategyFactoryProvider
@@ -18,14 +21,18 @@ export class KeycloakStrategyFactoryProvider
   constructor(
     @inject(Strategies.Passport.KEYCLOAK_VERIFIER)
     private readonly verifierKeycloak: VerifyFunction.KeycloakAuthFn,
-  ) { }
+  ) {}
 
   value(): KeycloakStrategyFactory {
-    return (options, verifier) => this.getKeycloakAuthStrategyVerifier(options, verifier);
+    return (options, verifier) =>
+      this.getKeycloakAuthStrategyVerifier(options, verifier);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getKeycloakAuthStrategyVerifier(options: any, verifierPassed?: VerifyFunction.KeycloakAuthFn): typeof KeycloakStrategy {
+  getKeycloakAuthStrategyVerifier(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    options: any,
+    verifierPassed?: VerifyFunction.KeycloakAuthFn,
+  ): typeof KeycloakStrategy {
     const verifyFn = verifierPassed ?? this.verifierKeycloak;
     return new KeycloakStrategy(
       options,
@@ -36,12 +43,7 @@ export class KeycloakStrategyFactoryProvider
         cb: (err?: string | Error, user?: IAuthUser) => void,
       ) => {
         try {
-          const user = await verifyFn(
-            accessToken,
-            refreshToken,
-            profile,
-            cb,
-          );
+          const user = await verifyFn(accessToken, refreshToken, profile, cb);
           if (!user) {
             throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
           }
