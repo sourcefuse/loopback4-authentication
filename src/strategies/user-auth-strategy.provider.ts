@@ -44,6 +44,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
       return undefined;
     }
 
+    //check if custom verifier binding is provided in the metadata
     let verifier;
     if (this.metadata.verifier) {
       verifier = await this.ctx.get(this.metadata.verifier);
