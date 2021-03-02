@@ -18,8 +18,7 @@ export namespace VerifyFunction {
     (token: string, req?: Request): Promise<T | null>;
   }
 
-  export interface ResourceOwnerPasswordFn<T = IAuthClient, S = IAuthUser>
-    extends GenericAuthFn<T> {
+  export interface ResourceOwnerPasswordFn<T = IAuthClient, S = IAuthUser> {
     (
       clientId: string,
       clientSecret: string,
@@ -59,7 +58,7 @@ export namespace VerifyFunction {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   export interface GenericAuthFn<T = any> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (...params: any): Promise<T>;
+    (...params: any): Promise<T | null>;
   }
 }
 

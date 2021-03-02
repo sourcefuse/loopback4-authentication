@@ -13,7 +13,7 @@ export class BearerTokenVerifyProvider
   constructor() {}
 
   value(): VerifyFunction.BearerFn {
-    return async (token) => {
+    return async (token: string) => {
       throw new HttpErrors.NotImplemented(
         `VerifyFunction.BearerFn is not implemented`,
       );

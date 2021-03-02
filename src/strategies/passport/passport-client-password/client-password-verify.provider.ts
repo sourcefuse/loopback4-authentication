@@ -13,7 +13,7 @@ export class ClientPasswordVerifyProvider
   constructor() {}
 
   value(): VerifyFunction.OauthClientPasswordFn {
-    return async (clientId, clientSecret) => {
+    return async (clientId: string, clientSecret: string) => {
       throw new HttpErrors.NotImplemented(
         `VerifyFunction.OauthClientPasswordFn is not implemented`,
       );
