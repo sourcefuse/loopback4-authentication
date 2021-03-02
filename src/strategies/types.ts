@@ -5,19 +5,21 @@ import * as AzureADStrategy from 'passport-azure-ad';
 import {IAuthClient, IAuthUser} from '../types';
 
 export namespace VerifyFunction {
-  export interface OauthClientPasswordFn<T = IAuthClient> {
+  export interface OauthClientPasswordFn<T = IAuthClient>
+    extends GenericAuthFn<T> {
     (clientId: string, clientSecret: string, req?: Request): Promise<T | null>;
   }
 
-  export interface LocalPasswordFn<T = IAuthUser> {
+  export interface LocalPasswordFn<T = IAuthUser> extends GenericAuthFn<T> {
     (username: string, password: string, req?: Request): Promise<T | null>;
   }
 
-  export interface BearerFn<T = IAuthUser> {
+  export interface BearerFn<T = IAuthUser> extends GenericAuthFn<T> {
     (token: string, req?: Request): Promise<T | null>;
   }
 
-  export interface ResourceOwnerPasswordFn<T = IAuthClient, S = IAuthUser> {
+  export interface ResourceOwnerPasswordFn<T = IAuthClient, S = IAuthUser>
+    extends GenericAuthFn<T> {
     (
       clientId: string,
       clientSecret: string,
@@ -27,7 +29,7 @@ export namespace VerifyFunction {
     ): Promise<{client: T; user: S} | null>;
   }
 
-  export interface GoogleAuthFn<T = IAuthUser> {
+  export interface GoogleAuthFn<T = IAuthUser> extends GenericAuthFn<T> {
     (
       accessToken: string,
       refreshToken: string,
@@ -37,7 +39,7 @@ export namespace VerifyFunction {
     ): Promise<T | null>;
   }
 
-  export interface AzureADAuthFn<T = IAuthUser> {
+  export interface AzureADAuthFn<T = IAuthUser> extends GenericAuthFn<T> {
     (
       profile: AzureADStrategy.IProfile,
       done: AzureADStrategy.VerifyCallback,
@@ -45,7 +47,7 @@ export namespace VerifyFunction {
     ): Promise<T | null>;
   }
 
-  export interface KeycloakAuthFn<T = IAuthUser> {
+  export interface KeycloakAuthFn<T = IAuthUser> extends GenericAuthFn<T> {
     (
       accessToken: string,
       refreshToken: string,
