@@ -4,11 +4,11 @@ import {
   MetadataInspector,
   MethodDecoratorFactory,
 } from '@loopback/context';
-import { Request } from '@loopback/rest';
+import {Request} from '@loopback/rest';
 
-import { USER_AUTHENTICATION_METADATA_KEY } from '../keys';
-import { VerifyFunction } from '../strategies';
-import { AuthenticationMetadata } from '../types';
+import {USER_AUTHENTICATION_METADATA_KEY} from '../keys';
+import {VerifyFunction} from '../strategies';
+import {AuthenticationMetadata} from '../types';
 
 /**
  * `@authenticate` decorator for adding authentication to controller methods
