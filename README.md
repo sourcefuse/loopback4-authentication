@@ -1396,6 +1396,27 @@ For accessing the authenticated AuthUser model reference, you can inject the CUR
   @inject.getter(AuthenticationBindings.CURRENT_USER)
   private readonly getCurrentUser: Getter<User>,
 ```
+### Custom Verifier for Individual Routes
+
+For providing a custom verifier for a particular route, you can pass a binding key for a verifier provider as the fourth parameter of the authenticate decorator.
+Note - The key VerifyBindings.BEARER_SIGNUP_VERIFY_PROVIDER can be any custom key, it just be bound to a verify function provider.
+
+```ts
+  @authenticate(
+    STRATEGY.BEARER,
+    undefined, //options
+    undefined, //authOptions
+    VerifyBindings.BEARER_SIGNUP_VERIFY_PROVIDER,
+  )
+```
+
+And binding this key to a verifier in the application.ts
+
+```ts
+    this.bind(VerifyBindings.BEARER_SIGNUP_VERIFY_PROVIDER).toProvider(
+      LocalPreSignupProvider as Constructor<Provider<PreSignupFn>>,
+    );
+```
 
 ## Feedback
 
