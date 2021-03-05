@@ -1,4 +1,5 @@
 import {
+  BindingKey,
   Constructor,
   MetadataInspector,
   MethodDecoratorFactory,
@@ -6,6 +7,7 @@ import {
 import {Request} from '@loopback/rest';
 
 import {USER_AUTHENTICATION_METADATA_KEY} from '../keys';
+import {VerifyFunction} from '../strategies';
 import {AuthenticationMetadata} from '../types';
 
 /**
@@ -15,6 +17,7 @@ import {AuthenticationMetadata} from '../types';
  * like `Strategy.LOCAL`
  * @param options       Extra options to be passed on
  * while instantiating strategy specific class
+ * @param verifier    Binding key for a custom verifier
  * @param authOptions   Extra options to be passed on to `authenticate` method
  * of the strategy.
  * This is a creator function which should return an object with options.
@@ -26,6 +29,7 @@ export function authenticate(
   strategyName: string,
   options?: Object,
   authOptions?: (req: Request) => Object,
+  verifier?: BindingKey<VerifyFunction.GenericAuthFn>,
 ) {
   return MethodDecoratorFactory.createDecorator<AuthenticationMetadata>(
     USER_AUTHENTICATION_METADATA_KEY,
@@ -33,6 +37,7 @@ export function authenticate(
       strategy: strategyName,
       options: options ?? {},
       authOptions: authOptions,
+      verifier,
     },
   );
 }

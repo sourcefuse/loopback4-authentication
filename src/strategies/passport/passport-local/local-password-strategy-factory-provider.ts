@@ -13,6 +13,7 @@ export interface LocalPasswordStrategyFactory {
     options?:
       | PassportLocal.IStrategyOptions
       | PassportLocal.IStrategyOptionsWithRequest,
+    verifierPassed?: VerifyFunction.LocalPasswordFn,
   ): PassportLocal.Strategy;
 }
 
@@ -24,14 +25,17 @@ export class LocalPasswordStrategyFactoryProvider
   ) {}
 
   value(): LocalPasswordStrategyFactory {
-    return (options) => this.getLocalStrategyVerifier(options);
+    return (options, verifier) =>
+      this.getLocalStrategyVerifier(options, verifier);
   }
 
   getLocalStrategyVerifier(
     options?:
       | PassportLocal.IStrategyOptions
       | PassportLocal.IStrategyOptionsWithRequest,
+    verifierPassed?: VerifyFunction.LocalPasswordFn,
   ): PassportLocal.Strategy {
+    const verifyFn = verifierPassed ?? this.verifierLocal;
     if (options?.passReqToCallback) {
       return new PassportLocal.Strategy(
         options,
@@ -43,7 +47,7 @@ export class LocalPasswordStrategyFactoryProvider
           cb: (err: Error | null, user?: IAuthUser | false) => void,
         ) => {
           try {
-            const user = await this.verifierLocal(username, password, req);
+            const user = await verifyFn(username, password, req);
             if (!user) {
               throw new HttpErrors.Unauthorized(
                 AuthErrorKeys.InvalidCredentials,
@@ -65,7 +69,7 @@ export class LocalPasswordStrategyFactoryProvider
           cb: (err: Error | null, user?: IAuthUser | false) => void,
         ) => {
           try {
-            const user = await this.verifierLocal(username, password);
+            const user = await verifyFn(username, password);
             if (!user) {
               throw new HttpErrors.Unauthorized(
                 AuthErrorKeys.InvalidCredentials,
@@ -86,11 +90,7 @@ export class LocalPasswordStrategyFactoryProvider
           cb: (err: Error | null, user?: IAuthUser | false) => void,
         ) => {
           try {
-            const user = await this.verifierLocal(
-              username,
-              password,
-              undefined,
-            );
+            const user = await verifyFn(username, password, undefined);
             if (!user) {
               throw new HttpErrors.Unauthorized(
                 AuthErrorKeys.InvalidCredentials,

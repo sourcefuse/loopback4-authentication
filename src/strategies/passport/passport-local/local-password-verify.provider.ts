@@ -13,7 +13,7 @@ export class LocalPasswordVerifyProvider
   constructor() {}
 
   value(): VerifyFunction.LocalPasswordFn {
-    return async (username, password) => {
+    return async (username: string, password: string) => {
       throw new HttpErrors.NotImplemented(
         `VerifyFunction.LocalPasswordFn is not implemented`,
       );

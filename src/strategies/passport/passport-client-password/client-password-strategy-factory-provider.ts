@@ -10,6 +10,7 @@ import {VerifyFunction} from '../../types';
 export interface ClientPasswordStrategyFactory {
   (
     options?: ClientPasswordStrategy.StrategyOptionsWithRequestInterface,
+    verifierPassed?: VerifyFunction.OauthClientPasswordFn,
   ): ClientPasswordStrategy.Strategy;
 }
 
@@ -21,12 +22,15 @@ export class ClientPasswordStrategyFactoryProvider
   ) {}
 
   value(): ClientPasswordStrategyFactory {
-    return (options) => this.getClientPasswordVerifier(options);
+    return (options, verifier) =>
+      this.getClientPasswordVerifier(options, verifier);
   }
 
   getClientPasswordVerifier(
     options?: ClientPasswordStrategy.StrategyOptionsWithRequestInterface,
+    verifierPassed?: VerifyFunction.OauthClientPasswordFn,
   ): ClientPasswordStrategy.Strategy {
+    const verifyFn = verifierPassed ?? this.verifier;
     if (options?.passReqToCallback) {
       return new ClientPasswordStrategy.Strategy(
         options,
@@ -39,7 +43,7 @@ export class ClientPasswordStrategyFactoryProvider
           cb: (err: Error | null, client?: IAuthClient | false) => void,
         ) => {
           try {
-            const client = await this.verifier(clientId, clientSecret, req);
+            const client = await verifyFn(clientId, clientSecret, req);
             if (!client) {
               throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
             } else if (
@@ -65,7 +69,7 @@ export class ClientPasswordStrategyFactoryProvider
           cb: (err: Error | null, client?: IAuthClient | false) => void,
         ) => {
           try {
-            const client = await this.verifier(clientId, clientSecret);
+            const client = await verifyFn(clientId, clientSecret);
             if (!client) {
               throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
             } else if (

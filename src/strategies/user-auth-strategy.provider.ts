@@ -1,4 +1,4 @@
-import {inject, Provider, ValueOrPromise} from '@loopback/context';
+import {Context, inject, Provider} from '@loopback/core';
 import {Strategy} from 'passport';
 import * as GoogleStrategy from 'passport-google-oauth20';
 import * as AzureADAuthStrategy from 'passport-azure-ad';
@@ -18,6 +18,7 @@ import {
 } from './passport/passport-resource-owner-password';
 import {AzureADAuthStrategyFactory} from './passport/passport-azure-ad';
 import {KeycloakStrategyFactory} from './passport';
+import {VerifyFunction} from './types';
 
 export class AuthStrategyProvider implements Provider<Strategy | undefined> {
   constructor(
@@ -35,11 +36,20 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     private readonly getAzureADAuthVerifier: AzureADAuthStrategyFactory,
     @inject(Strategies.Passport.KEYCLOAK_STRATEGY_FACTORY)
     private readonly getKeycloakVerifier: KeycloakStrategyFactory,
+    @inject.context() private readonly ctx: Context,
   ) {}
 
-  value(): ValueOrPromise<Strategy | undefined> {
+  async value(): Promise<Strategy | undefined> {
     if (!this.metadata) {
       return undefined;
+    }
+
+    //check if custom verifier binding is provided in the metadata
+    let verifier;
+    if (this.metadata.verifier) {
+      verifier = await this.ctx.get<VerifyFunction.GenericAuthFn>(
+        this.metadata.verifier,
+      );
     }
 
     const name = this.metadata.strategy;
@@ -48,30 +58,38 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
         this.metadata.options as
           | PassportLocal.IStrategyOptions
           | PassportLocal.IStrategyOptionsWithRequest,
+        verifier as VerifyFunction.LocalPasswordFn,
       );
     } else if (name === STRATEGY.BEARER) {
       return this.getBearerStrategyVerifier(
         this.metadata.options as PassportBearer.IStrategyOptions,
+        verifier as VerifyFunction.BearerFn,
       );
     } else if (name === STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT) {
       return this.getResourceOwnerVerifier(
         this.metadata
           .options as Oauth2ResourceOwnerPassword.StrategyOptionsWithRequestInterface,
+        verifier as VerifyFunction.ResourceOwnerPasswordFn,
       );
     } else if (name === STRATEGY.GOOGLE_OAUTH2) {
       return this.getGoogleAuthVerifier(
         this.metadata.options as
           | GoogleStrategy.StrategyOptions
           | GoogleStrategy.StrategyOptionsWithRequest,
+        verifier as VerifyFunction.GoogleAuthFn,
       );
     } else if (name === STRATEGY.AZURE_AD) {
       return this.getAzureADAuthVerifier(
         this.metadata.options as
           | AzureADAuthStrategy.IOIDCStrategyOptionWithRequest
           | AzureADAuthStrategy.IOIDCStrategyOptionWithoutRequest,
+        verifier as VerifyFunction.AzureADAuthFn,
       );
     } else if (name === STRATEGY.KEYCLOAK) {
-      return this.getKeycloakVerifier(this.metadata.options);
+      return this.getKeycloakVerifier(
+        this.metadata.options,
+        verifier as VerifyFunction.KeycloakAuthFn,
+      );
     } else {
       return Promise.reject(`The strategy ${name} is not available.`);
     }

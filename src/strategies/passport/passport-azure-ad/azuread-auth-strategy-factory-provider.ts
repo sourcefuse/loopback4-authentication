@@ -15,6 +15,7 @@ import {
 export interface AzureADAuthStrategyFactory {
   (
     options: IOIDCStrategyOptionWithoutRequest | IOIDCStrategyOptionWithRequest,
+    verifierPassed?: VerifyFunction.AzureADAuthFn,
   ): OIDCStrategy;
 }
 
@@ -26,12 +27,15 @@ export class AzureADAuthStrategyFactoryProvider
   ) {}
 
   value(): AzureADAuthStrategyFactory {
-    return (options) => this.getAzureADAuthStrategyVerifier(options);
+    return (options, verifier) =>
+      this.getAzureADAuthStrategyVerifier(options, verifier);
   }
 
   getAzureADAuthStrategyVerifier(
     options: IOIDCStrategyOptionWithoutRequest | IOIDCStrategyOptionWithRequest,
+    verifierPassed?: VerifyFunction.AzureADAuthFn,
   ): OIDCStrategy {
+    const verifyFn = verifierPassed ?? this.verifierAzureADAuth;
     if (options && options.passReqToCallback === true) {
       return new OIDCStrategy(
         options,
@@ -43,7 +47,7 @@ export class AzureADAuthStrategyFactoryProvider
           }
 
           try {
-            const user = await this.verifierAzureADAuth(profile, done, req);
+            const user = await verifyFn(profile, done, req);
             if (!user) {
               throw new HttpErrors.Unauthorized(
                 AuthErrorKeys.InvalidCredentials,
@@ -66,7 +70,7 @@ export class AzureADAuthStrategyFactoryProvider
           }
 
           try {
-            const user = await this.verifierAzureADAuth(profile, done);
+            const user = await verifyFn(profile, done);
             if (!user) {
               throw new HttpErrors.Unauthorized(
                 AuthErrorKeys.InvalidCredentials,

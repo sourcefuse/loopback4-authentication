@@ -11,6 +11,7 @@ import {isEmpty} from 'lodash';
 export interface ResourceOwnerPasswordStrategyFactory {
   (
     options?: Oauth2ResourceOwnerPassword.StrategyOptionsWithRequestInterface,
+    verifierPassed?: VerifyFunction.ResourceOwnerPasswordFn,
   ): Oauth2ResourceOwnerPassword.Strategy;
 }
 
@@ -22,12 +23,15 @@ export class ResourceOwnerPasswordStrategyFactoryProvider
   ) {}
 
   value(): ResourceOwnerPasswordStrategyFactory {
-    return (options) => this.getResourceOwnerVerifier(options);
+    return (options, verifier) =>
+      this.getResourceOwnerVerifier(options, verifier);
   }
 
   getResourceOwnerVerifier(
     options?: Oauth2ResourceOwnerPassword.StrategyOptionsWithRequestInterface,
+    verifierPassed?: VerifyFunction.ResourceOwnerPasswordFn,
   ): Oauth2ResourceOwnerPassword.Strategy {
+    const verifyFn = verifierPassed ?? this.verifierResourceOwner;
     if (options?.passReqToCallback) {
       return new Oauth2ResourceOwnerPassword.Strategy(
         options,
@@ -45,7 +49,7 @@ export class ResourceOwnerPasswordStrategyFactoryProvider
           ) => void,
         ) => {
           try {
-            const userInfo = await this.verifierResourceOwner(
+            const userInfo = await verifyFn(
               clientId,
               clientSecret,
               username,
@@ -78,7 +82,7 @@ export class ResourceOwnerPasswordStrategyFactoryProvider
           ) => void,
         ) => {
           try {
-            const userInfo = await this.verifierResourceOwner(
+            const userInfo = await verifyFn(
               clientId,
               clientSecret,
               username,

@@ -9,7 +9,10 @@ import {VerifyFunction} from '../../types';
 import {isEmpty} from 'lodash';
 
 export interface BearerStrategyFactory {
-  (options?: PassportBearer.IStrategyOptions): PassportBearer.Strategy;
+  (
+    options?: PassportBearer.IStrategyOptions,
+    verifierPassed?: VerifyFunction.BearerFn,
+  ): PassportBearer.Strategy;
 }
 
 export class BearerStrategyFactoryProvider
@@ -20,12 +23,15 @@ export class BearerStrategyFactoryProvider
   ) {}
 
   value(): BearerStrategyFactory {
-    return (options) => this.getBearerStrategyVerifier(options);
+    return (options, verifier) =>
+      this.getBearerStrategyVerifier(options, verifier);
   }
 
   getBearerStrategyVerifier(
     options?: PassportBearer.IStrategyOptions,
+    verifierPassed?: VerifyFunction.BearerFn,
   ): PassportBearer.Strategy {
+    const verifyFn = verifierPassed ?? this.verifierBearer;
     if (options?.passReqToCallback) {
       return new PassportBearer.Strategy(
         options,
@@ -36,7 +42,7 @@ export class BearerStrategyFactoryProvider
           cb: (err: Error | null, user?: IAuthUser | false) => void,
         ) => {
           try {
-            const user = await this.verifierBearer(token, req);
+            const user = await verifyFn(token, req);
             if (!user) {
               throw new HttpErrors.Unauthorized(AuthErrorKeys.TokenInvalid);
             }
@@ -56,7 +62,7 @@ export class BearerStrategyFactoryProvider
           cb: (err: Error | null, user?: IAuthUser | false) => void,
         ) => {
           try {
-            const user = await this.verifierBearer(token);
+            const user = await verifyFn(token);
             if (!user) {
               throw new HttpErrors.Unauthorized(AuthErrorKeys.TokenInvalid);
             }
@@ -74,7 +80,7 @@ export class BearerStrategyFactoryProvider
           cb: (err: Error | null, user?: IAuthUser | false) => void,
         ) => {
           try {
-            const user = await this.verifierBearer(token);
+            const user = await verifyFn(token);
             if (!user) {
               throw new HttpErrors.Unauthorized(
                 AuthErrorKeys.InvalidCredentials,
