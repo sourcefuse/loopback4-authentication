@@ -99,6 +99,7 @@ export class GoogleAuthStrategyFactoryProvider
     return strategy;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _setupProxy(strategy: any) {
     // Setup proxy if any
     let httpsProxyAgent;
