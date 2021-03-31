@@ -1,5 +1,6 @@
 import {inject, Provider} from '@loopback/core';
 import {HttpErrors} from '@loopback/rest';
+import {HttpsProxyAgent} from 'https-proxy-agent';
 
 import {AuthErrorKeys} from '../../../error-keys';
 import {IAuthUser} from '../../../types';
@@ -34,7 +35,7 @@ export class KeycloakStrategyFactoryProvider
     verifierPassed?: VerifyFunction.KeycloakAuthFn,
   ): typeof KeycloakStrategy {
     const verifyFn = verifierPassed ?? this.verifierKeycloak;
-    return new KeycloakStrategy(
+    const strategy = new KeycloakStrategy(
       options,
       async (
         accessToken: string,
@@ -53,5 +54,20 @@ export class KeycloakStrategyFactoryProvider
         }
       },
     );
+
+    this._setupProxy(strategy);
+    return strategy;
+  }
+
+  private _setupProxy(strategy: any) {
+    // Setup proxy if any
+    let httpsProxyAgent;
+    if (process.env['https_proxy']) {
+      httpsProxyAgent = new HttpsProxyAgent(process.env['https_proxy']);
+      strategy._oauth2.setAgent(httpsProxyAgent);
+    } else if (process.env['HTTPS_PROXY']) {
+      httpsProxyAgent = new HttpsProxyAgent(process.env['HTTPS_PROXY']);
+      strategy._oauth2.setAgent(httpsProxyAgent);
+    }
   }
 }

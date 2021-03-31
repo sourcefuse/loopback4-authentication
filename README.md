@@ -306,7 +306,7 @@ export class BearerTokenVerifyProvider
   ) {}
 
   value(): VerifyFunction.BearerFn {
-    return async token => {
+    return async (token) => {
       const user = verify(token, process.env.JWT_SECRET as string, {
         issuer: process.env.JWT_ISSUER,
       }) as User;
@@ -1396,6 +1396,7 @@ For accessing the authenticated AuthUser model reference, you can inject the CUR
   @inject.getter(AuthenticationBindings.CURRENT_USER)
   private readonly getCurrentUser: Getter<User>,
 ```
+
 ### Custom Verifier for Individual Routes
 
 For providing a custom verifier for a particular route, you can pass a binding key for a verifier provider as the fourth parameter of the authenticate decorator.
@@ -1413,10 +1414,14 @@ Note - The key VerifyBindings.BEARER_SIGNUP_VERIFY_PROVIDER can be any custom ke
 And binding this key to a verifier in the application.ts
 
 ```ts
-    this.bind(VerifyBindings.BEARER_SIGNUP_VERIFY_PROVIDER).toProvider(
-      LocalPreSignupProvider as Constructor<Provider<PreSignupFn>>,
-    );
+this.bind(VerifyBindings.BEARER_SIGNUP_VERIFY_PROVIDER).toProvider(
+  LocalPreSignupProvider as Constructor<Provider<PreSignupFn>>,
+);
 ```
+
+### Https proxy support for keycloak and google auth
+
+If a https proxy agent is needed for keycloak and google auth, just add an environment variable named `HTTPS_PROXY` or `https_proxy` with proxy url as value. It will add that proxy agent to the request.
 
 ## Feedback
 

@@ -1,18 +1,19 @@
 import {inject, Provider} from '@loopback/core';
 import {HttpErrors, Request} from '@loopback/rest';
-
-//import * as GoogleStrategy from 'passport-google-oauth20';
+import {HttpsProxyAgent} from 'https-proxy-agent';
 import {
+  Profile,
   Strategy,
   StrategyOptions,
   StrategyOptionsWithRequest,
-  Profile,
   VerifyCallback,
 } from 'passport-google-oauth20';
+
 import {AuthErrorKeys} from '../../../error-keys';
 import {Strategies} from '../../keys';
 import {VerifyFunction} from '../../types';
 
+//import * as GoogleStrategy from 'passport-google-oauth20';
 export interface GoogleAuthStrategyFactory {
   (
     options: StrategyOptions | StrategyOptionsWithRequest,
@@ -37,8 +38,9 @@ export class GoogleAuthStrategyFactoryProvider
     verifierPassed?: VerifyFunction.GoogleAuthFn,
   ): Strategy {
     const verifyFn = verifierPassed ?? this.verifierGoogleAuth;
+    let strategy;
     if (options && options.passReqToCallback === true) {
-      return new Strategy(
+      strategy = new Strategy(
         options,
 
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -69,7 +71,7 @@ export class GoogleAuthStrategyFactoryProvider
         },
       );
     } else {
-      return new Strategy(
+      strategy = new Strategy(
         options,
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
@@ -91,6 +93,21 @@ export class GoogleAuthStrategyFactoryProvider
           }
         },
       );
+    }
+
+    this._setupProxy(strategy);
+    return strategy;
+  }
+
+  private _setupProxy(strategy: any) {
+    // Setup proxy if any
+    let httpsProxyAgent;
+    if (process.env['https_proxy']) {
+      httpsProxyAgent = new HttpsProxyAgent(process.env['https_proxy']);
+      strategy._oauth2.setAgent(httpsProxyAgent);
+    } else if (process.env['HTTPS_PROXY']) {
+      httpsProxyAgent = new HttpsProxyAgent(process.env['HTTPS_PROXY']);
+      strategy._oauth2.setAgent(httpsProxyAgent);
     }
   }
 }
