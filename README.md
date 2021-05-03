@@ -306,7 +306,10 @@ export class BearerTokenVerifyProvider
   ) {}
 
   value(): VerifyFunction.BearerFn {
-    return async (token) => {
+    return async token => {
+      if (token && (await  this.revokedTokenRepository.get(token))) {
+        throw  new  HttpErrors.Unauthorized('Token Revoked');
+      }
       const user = verify(token, process.env.JWT_SECRET as string, {
         issuer: process.env.JWT_ISSUER,
       }) as User;
@@ -315,6 +318,7 @@ export class BearerTokenVerifyProvider
   }
 }
 ```
+The above example has an import and injection of a RevokedTokenRepository, which could be used to keep track of revoked tokens in a datasource like Redis. You can find an implementation of this repository [here](https://github.com/sourcefuse/loopback4-starter/blob/master/src/repositories/revoked-token.repository.ts) and the Redis datasource [here](https://github.com/sourcefuse/loopback4-starter/blob/master/src/datasources/redis.datasource.ts).
 
 Please note the Verify function type _VerifyFunction.BearerFn_
 
