@@ -1,8 +1,14 @@
 import {Request} from '@loopback/rest';
 import * as GoogleStrategy from 'passport-google-oauth20';
 import * as AzureADStrategy from 'passport-azure-ad';
-
+import * as InstagramStrategy from 'passport-instagram';
 import {IAuthClient, IAuthUser} from '../types';
+
+export type VerifyCallback = (
+  err?: string | Error | null,
+  user?: Express.User,
+  info?: any,
+) => void;
 
 export namespace VerifyFunction {
   export interface OauthClientPasswordFn<T = IAuthClient>
@@ -52,6 +58,17 @@ export namespace VerifyFunction {
       refreshToken: string,
       profile: KeycloakProfile,
       cb: (err?: string | Error, user?: IAuthUser) => void,
+    ): Promise<T | null>;
+  }
+
+  export interface InstagramAuthFn<T = IAuthUser>
+    extends VerifyFunction.GenericAuthFn<T> {
+    (
+      accessToken: string,
+      refreshToken: string,
+      profile: InstagramStrategy.Profile,
+      cb: VerifyCallback,
+      req?: Request,
     ): Promise<T | null>;
   }
 
