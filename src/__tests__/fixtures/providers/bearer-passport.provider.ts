@@ -12,7 +12,7 @@ export class BearerTokenVerifyProvider
   implements Provider<VerifyFunction.BearerFn> {
   constructor() {}
 
-  value() {
+  value(): VerifyFunction.BearerFn {
     return async (token: string, req?: Request) => {
       if (token !== validToken) {
         return null;

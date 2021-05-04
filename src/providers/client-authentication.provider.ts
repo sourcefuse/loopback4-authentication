@@ -34,8 +34,10 @@ export class ClientAuthenticateActionProvider
     if (!request.body || !isObjectLike(request.body) || isEmpty(request.body)) {
       request.body = request.query;
     }
-    const client: IAuthClient = await strategyAdapter.authenticate(request);
-    this.setCurrentClient(client);
-    return client;
+    const client = await strategyAdapter.authenticate(request);
+    if (client) {
+      this.setCurrentClient(client);
+      return client;
+    }
   }
 }

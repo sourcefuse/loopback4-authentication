@@ -7,7 +7,7 @@ export class LocalVerifyProvider
   implements Provider<VerifyFunction.LocalPasswordFn> {
   constructor() {}
 
-  value() {
+  value(): VerifyFunction.LocalPasswordFn {
     return async (username: string, password: string, req?: Request) => {
       if (!username || !password) {
         return null;

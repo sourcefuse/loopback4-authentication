@@ -33,8 +33,8 @@ export class StrategyAdapter<T> {
     request: Request,
     response?: Response,
     options?: Object,
-  ): Promise<T> {
-    return new Promise<T>((resolve, reject) => {
+  ): Promise<T | void> {
+    return new Promise<T | void>((resolve, reject) => {
       // mix-in passport additions like req.logIn and req.logOut
       for (const key in passportRequestMixin) {
         /* eslint-disable-next-line @typescript-eslint/no-explicit-any */

@@ -12,7 +12,7 @@ export interface BearerStrategyFactory {
   (
     options?: PassportBearer.IStrategyOptions,
     verifierPassed?: VerifyFunction.BearerFn,
-  ): PassportBearer.Strategy;
+  ): PassportBearer.Strategy<VerifyFunction.BearerFn>;
 }
 
 export class BearerStrategyFactoryProvider
@@ -30,7 +30,7 @@ export class BearerStrategyFactoryProvider
   getBearerStrategyVerifier(
     options?: PassportBearer.IStrategyOptions,
     verifierPassed?: VerifyFunction.BearerFn,
-  ): PassportBearer.Strategy {
+  ): PassportBearer.Strategy<VerifyFunction.BearerFn> {
     const verifyFn = verifierPassed ?? this.verifierBearer;
     if (options?.passReqToCallback) {
       return new PassportBearer.Strategy(

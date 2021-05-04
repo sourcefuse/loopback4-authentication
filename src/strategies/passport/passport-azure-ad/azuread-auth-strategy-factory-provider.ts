@@ -59,7 +59,7 @@ export class AzureADAuthStrategyFactoryProvider
           }
         },
       );
-    } else {
+    } else if (options && options.passReqToCallback === false) {
       return new OIDCStrategy(
         options,
 
@@ -82,6 +82,8 @@ export class AzureADAuthStrategyFactoryProvider
           }
         },
       );
+    } else {
+      throw new Error('Invalid value for passReqToCallback');
     }
   }
 }

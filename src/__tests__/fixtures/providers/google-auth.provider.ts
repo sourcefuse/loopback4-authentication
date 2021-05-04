@@ -8,7 +8,7 @@ export class BearerTokenVerifyProvider
   implements Provider<VerifyFunction.GoogleAuthFn> {
   constructor() {}
 
-  value() {
+  value(): VerifyFunction.GoogleAuthFn {
     return async (
       accessToken: string,
       refreshToken: string,
