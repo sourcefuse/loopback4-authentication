@@ -16,7 +16,7 @@
 
 This is a loopback-next extension for adding authentication layer to a REST application in loopback 4.
 This extension is based on the implementation guidelines provided on official [@loopback/authentication](https://github.com/strongloop/loopback-next/blob/master/packages/authentication/README.md) page.
-It provides support for four passport based strategies.
+It provides support for seven passport based strategies.
 
 1. [passport-oauth2-client-password](https://github.com/jaredhanson/passport-oauth2-client-password) - OAuth 2.0 client password authentication strategy for Passport. This module lets you authenticate requests containing client credentials in the request body, as [defined](http://tools.ietf.org/html/draft-ietf-oauth-v2-27#section-2.3.1) by the OAuth 2.0 specification.
 2. [passport-http-bearer](https://github.com/jaredhanson/passport-http-bearer) - HTTP Bearer authentication strategy for Passport. This module lets you authenticate HTTP requests using bearer tokens, as specified by [RFC 6750](https://tools.ietf.org/html/rfc6750), in your Node.js applications.
@@ -24,6 +24,7 @@ It provides support for four passport based strategies.
 4. [passport-oauth2-resource-owner-password](https://www.npmjs.com/package/passport-oauth2-resource-owner-password) - OAuth 2.0 resource owner password authentication strategy for Passport. This module lets you authenticate requests containing resource owner credentials in the request body, as [defined](http://tools.ietf.org/html/draft-ietf-oauth-v2-27#section-1.3.3) by the OAuth 2.0 specification.
 5. [passport-google-oauth2](https://github.com/jaredhanson/passport-google-oauth2) - Passport strategy for authenticating with Google using the Google OAuth 2.0 API. This module lets you authenticate using Google in your Node.js applications.
 6. [keycloak-passport](https://github.com/exlinc/keycloak-passport) - Passport strategy for authenticating with Keycloak. This library offers a production-ready and maintained Keycloak Passport connector.
+7. [passport-instagram](https://github.com/jaredhanson/passport-instagram) - Passport strategy for authenticating with Instagram using the Instagram OAuth 2.0 API. This module lets you authenticate using Instagram in your Node.js applications.
 
 You can use one or more strategies of the above in your application. For each of the strategy (only which you use), you just need to provide your own verifier function, making it easily configurable. Rest of the strategy implementation intricacies is handled by extension.
 
