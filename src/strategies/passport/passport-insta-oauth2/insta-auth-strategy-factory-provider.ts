@@ -10,9 +10,7 @@ import {
 
 import {AuthErrorKeys} from 'loopback4-authentication';
 import {Strategies} from '../../keys';
-import {VerifyFunction} from '../../types';
-
-type VerifyCallback = (err?: string | Error | null, info?: any) => void;
+import {VerifyCallback, VerifyFunction} from '../../types';
 
 export interface InstagramAuthStrategyFactory {
   (
