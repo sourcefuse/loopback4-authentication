@@ -57,6 +57,7 @@
     "passport-azure-ad": "^4.2.1",
     "passport-google-oauth20": "^2.0.0",
     "passport-http-bearer": "^1.0.1",
+    "passport-instagram": "^1.0.0",
     "passport-local": "^1.0.0",
     "passport-oauth2-client-password": "^0.1.2"
   },
@@ -75,6 +76,7 @@
     "@types/passport-azure-ad": "^4.0.5",
     "@types/passport-google-oauth20": "^2.0.3",
     "@types/passport-http-bearer": "^1.0.35",
+    "@types/passport-instagram": "^1.0.1",
     "@types/passport-local": "^1.0.33",
     "@types/passport-oauth2-client-password": "^0.1.2",
     "lodash": "^4.17.20",

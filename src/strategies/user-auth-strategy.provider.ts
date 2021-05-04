@@ -4,6 +4,7 @@ import * as GoogleStrategy from 'passport-google-oauth20';
 import * as AzureADAuthStrategy from 'passport-azure-ad';
 import * as PassportBearer from 'passport-http-bearer';
 import * as PassportLocal from 'passport-local';
+import * as InstagramStrategy from 'passport-instagram';
 
 import {AuthenticationBindings} from '../keys';
 import {STRATEGY} from '../strategy-name.enum';
@@ -17,7 +18,10 @@ import {
   ResourceOwnerPasswordStrategyFactory,
 } from './passport/passport-resource-owner-password';
 import {AzureADAuthStrategyFactory} from './passport/passport-azure-ad';
-import {KeycloakStrategyFactory} from './passport';
+import {
+  InstagramAuthStrategyFactory,
+  KeycloakStrategyFactory,
+} from './passport';
 import {VerifyFunction} from './types';
 
 export class AuthStrategyProvider implements Provider<Strategy | undefined> {
@@ -37,6 +41,8 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     @inject(Strategies.Passport.KEYCLOAK_STRATEGY_FACTORY)
     private readonly getKeycloakVerifier: KeycloakStrategyFactory,
     @inject.context() private readonly ctx: Context,
+    @inject(Strategies.Passport.INSTAGRAM_OAUTH2_STRATEGY_FACTORY)
+    private readonly getInstagramAuthVerifier: InstagramAuthStrategyFactory,
   ) {}
 
   async value(): Promise<Strategy | undefined> {
@@ -89,6 +95,13 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
       return this.getKeycloakVerifier(
         this.metadata.options,
         verifier as VerifyFunction.KeycloakAuthFn,
+      );
+    } else if (name === STRATEGY.INSTAGRAM_OAUTH2) {
+      return this.getInstagramAuthVerifier(
+        this.metadata.options as
+          | InstagramStrategy.StrategyOption
+          | InstagramStrategy.StrategyOptionWithRequest,
+        verifier as VerifyFunction.InstagramAuthFn,
       );
     } else {
       return Promise.reject(`The strategy ${name} is not available.`);
