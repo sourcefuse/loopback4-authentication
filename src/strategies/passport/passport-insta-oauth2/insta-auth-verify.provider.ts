@@ -1,13 +1,7 @@
 import {Provider} from '@loopback/context';
 import {HttpErrors, Request} from '@loopback/rest';
 import * as InstagramStrategy from 'passport-instagram';
-type VerifyCallback = (
-  err?: string | Error | null,
-  user?: Express.User,
-  info?: any,
-) => void;
-
-import {VerifyFunction} from '../../types';
+import {VerifyCallback, VerifyFunction} from '../../types';
 /**
  * A provider for default implementation of VerifyFunction.LocalPasswordFn
  *

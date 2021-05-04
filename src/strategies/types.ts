@@ -2,9 +2,9 @@ import {Request} from '@loopback/rest';
 import * as GoogleStrategy from 'passport-google-oauth20';
 import * as AzureADStrategy from 'passport-azure-ad';
 import * as InstagramStrategy from 'passport-instagram';
-
 import {IAuthClient, IAuthUser} from '../types';
-type VerifyCallback = (
+
+export type VerifyCallback = (
   err?: string | Error | null,
   user?: Express.User,
   info?: any,
