@@ -18,6 +18,8 @@ import {
   ClientPasswordVerifyProvider,
   GoogleAuthStrategyFactoryProvider,
   GoogleAuthVerifyProvider,
+  InstagramAuthStrategyFactoryProvider,
+  InstagramAuthVerifyProvider,
   KeycloakStrategyFactoryProvider,
   KeycloakVerifyProvider,
   LocalPasswordStrategyFactoryProvider,
@@ -49,6 +51,8 @@ export class AuthenticationComponent implements Component {
         .key]: ResourceOwnerPasswordStrategyFactoryProvider,
       [Strategies.Passport.GOOGLE_OAUTH2_STRATEGY_FACTORY
         .key]: GoogleAuthStrategyFactoryProvider,
+      [Strategies.Passport.INSTAGRAM_OAUTH2_STRATEGY_FACTORY
+        .key]: InstagramAuthStrategyFactoryProvider,
       [Strategies.Passport.AZURE_AD_STRATEGY_FACTORY
         .key]: AzureADAuthStrategyFactoryProvider,
       [Strategies.Passport.KEYCLOAK_STRATEGY_FACTORY
@@ -65,6 +69,8 @@ export class AuthenticationComponent implements Component {
         .key]: ResourceOwnerVerifyProvider,
       [Strategies.Passport.GOOGLE_OAUTH2_VERIFIER
         .key]: GoogleAuthVerifyProvider,
+      [Strategies.Passport.INSTAGRAM_OAUTH2_VERIFIER
+        .key]: InstagramAuthVerifyProvider,
       [Strategies.Passport.AZURE_AD_VERIFIER.key]: AzureADAuthVerifyProvider,
       [Strategies.Passport.KEYCLOAK_VERIFIER.key]: KeycloakVerifyProvider,
     };

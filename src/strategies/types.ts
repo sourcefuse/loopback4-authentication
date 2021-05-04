@@ -7,6 +7,7 @@ import {IAuthClient, IAuthUser} from '../types';
 export type VerifyCallback = (
   err?: string | Error | null,
   user?: Express.User,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   info?: any,
 ) => void;
 
