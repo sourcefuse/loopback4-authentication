@@ -8,7 +8,7 @@ import {
   StrategyOptionWithRequest,
 } from 'passport-instagram';
 
-import {AuthErrorKeys} from 'loopback4-authentication';
+import {AuthErrorKeys} from '../../../error-keys';
 import {Strategies} from '../../keys';
 import {VerifyCallback, VerifyFunction} from '../../types';
 
