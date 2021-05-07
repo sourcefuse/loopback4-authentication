@@ -8,7 +8,7 @@ export class BearerTokenVerifyProvider
   implements Provider<VerifyFunction.AzureADAuthFn> {
   constructor() {}
 
-  value() {
+  value(): VerifyFunction.AzureADAuthFn {
     return async (
       profile: AzureADAuthStrategy.IProfile,
       done: AzureADAuthStrategy.VerifyCallback,

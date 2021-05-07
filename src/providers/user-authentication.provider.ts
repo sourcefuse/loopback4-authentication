@@ -44,12 +44,14 @@ export class AuthenticateActionProvider
       authOpts = metadata.authOptions(request);
     }
     const strategyAdapter = new StrategyAdapter<IAuthUser>(strategy);
-    const user: IAuthUser = await strategyAdapter.authenticate(
+    const user = await strategyAdapter.authenticate(
       request,
       response,
       authOpts,
     );
-    this.setCurrentUser(user);
-    return user;
+    if (user) {
+      this.setCurrentUser(user);
+      return user;
+    }
   }
 }
