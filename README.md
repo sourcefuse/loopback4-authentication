@@ -470,14 +470,18 @@ export class LocalPasswordVerifyProvider
   constructor(
     @repository(UserRepository)
     public userRepository: UserRepository,
-  ) {}
+  ) { }
 
   value(): VerifyFunction.LocalPasswordFn {
-    return async (username, password) => {
-      const user: User = new User(
-        await this.userRepository.verifyPassword(username, password),
-      );
-      return user;
+    return async (username: any, password: any) => {
+      try {
+        const user: AuthUser = new AuthUser(
+          await this.userRepository.verifyPassword(username, password),
+        );
+        return user;
+      } catch (error) {
+        throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials).message;
+      }
     };
   }
 }
