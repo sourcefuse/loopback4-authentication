@@ -23,6 +23,7 @@ import {
   KeycloakStrategyFactory,
 } from './passport';
 import {VerifyFunction} from './types';
+import { Keycloak } from './keycloak-type';
 
 export class AuthStrategyProvider implements Provider<Strategy | undefined> {
   constructor(
@@ -93,7 +94,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
       );
     } else if (name === STRATEGY.KEYCLOAK) {
       return this.getKeycloakVerifier(
-        this.metadata.options,
+        this.metadata.options as Keycloak.StrategyOptions,
         verifier as VerifyFunction.KeycloakAuthFn,
       );
     } else if (name === STRATEGY.INSTAGRAM_OAUTH2) {

@@ -3,6 +3,7 @@ import * as GoogleStrategy from 'passport-google-oauth20';
 import * as AzureADStrategy from 'passport-azure-ad';
 import * as InstagramStrategy from 'passport-instagram';
 import {IAuthClient, IAuthUser} from '../types';
+import {Keycloak} from './keycloak-type';
 
 export type VerifyCallback = (
   err?: string | Error | null,
@@ -57,7 +58,7 @@ export namespace VerifyFunction {
     (
       accessToken: string,
       refreshToken: string,
-      profile: KeycloakProfile,
+      profile: Keycloak.Profile,
       cb: (err?: string | Error, user?: IAuthUser) => void,
     ): Promise<T | null>;
   }
@@ -78,15 +79,4 @@ export namespace VerifyFunction {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (...params: any): Promise<T | null>;
   }
-}
-
-export interface KeycloakProfile {
-  keycloakId: string;
-  fullName: string;
-  firstName: string;
-  lastName: string;
-  username: string;
-  email: string;
-  avatar: string;
-  realm: string;
 }

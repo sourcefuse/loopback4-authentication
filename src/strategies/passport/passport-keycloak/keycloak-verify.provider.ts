@@ -1,7 +1,8 @@
 import {Provider} from '@loopback/context';
 import {HttpErrors} from '@loopback/rest';
 
-import {KeycloakProfile, VerifyFunction} from '../../types';
+import {VerifyFunction} from '../../types';
+import {Keycloak} from '../../keycloak-type';
 
 /**
  * A provider for default implementation of VerifyFunction.LocalPasswordFn
@@ -16,8 +17,8 @@ export class KeycloakVerifyProvider
     return async (
       accessToken: string,
       refreshToken: string,
-      profile: KeycloakProfile,
-      cb: (err?: string | Error, user?: KeycloakProfile) => void,
+      profile: Keycloak.Profile,
+      cb: (err?: string | Error, user?: Keycloak.Profile) => void,
     ) => {
       throw new HttpErrors.NotImplemented(
         `VerifyFunction.KeycloakAuthFn is not implemented`,
