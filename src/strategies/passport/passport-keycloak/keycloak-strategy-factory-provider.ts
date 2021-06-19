@@ -55,12 +55,59 @@ export class KeycloakStrategyFactoryProvider
       },
     );
 
+    // Override user profile fn of underlying library
+    strategy.userProfile = (
+      accessToken: string,
+      done: (err: unknown, userInfo?: unknown) => void,
+    ) => {
+      this._userProfileFn(strategy, accessToken, done);
+    };
+
     this._setupProxy(strategy);
     return strategy;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _setupProxy(strategy: any) {
+  private _userProfileFn(
+    strategy: typeof KeycloakStrategy,
+    accessToken: string,
+    done: (err: unknown, userInfo?: KeycloakProfile) => void,
+  ) {
+    // Credits - https://github.com/exlinc/keycloak-passport/blob/eaa3859f83619d8e349e87193fdf8acc3a3d0ba9/index.js#L28
+    strategy._oauth2._useAuthorizationHeaderForGET = true;
+    strategy._oauth2.get(
+      strategy.options.userInfoURL,
+      accessToken,
+      (err: unknown, body: string) => {
+        if (err) {
+          return done(err);
+        }
+
+        try {
+          const json = JSON.parse(body);
+          const email = json.email;
+          const userInfo: KeycloakProfile = {
+            keycloakId: json.sub,
+            fullName: json.name,
+            firstName: json.given_name,
+            lastName: json.family_name,
+            username: json.preferred_username,
+            email,
+            avatar: json.avatar,
+            realm: strategy.options.realm,
+            // add all attributes to userInfo
+            // overridden stuff
+            ...json,
+          };
+
+          done(null, userInfo);
+        } catch (e) {
+          done(e);
+        }
+      },
+    );
+  }
+
+  private _setupProxy(strategy: typeof KeycloakStrategy) {
     // Setup proxy if any
     let httpsProxyAgent;
     if (process.env['https_proxy']) {
