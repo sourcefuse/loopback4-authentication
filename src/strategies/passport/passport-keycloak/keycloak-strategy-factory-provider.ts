@@ -90,6 +90,7 @@ export class KeycloakStrategyFactoryProvider
             fullName: json.name,
             firstName: json.given_name,
             lastName: json.family_name,
+            middleName: json.middle_name,
             username: json.preferred_username,
             email,
             avatar: json.avatar,
@@ -98,6 +99,18 @@ export class KeycloakStrategyFactoryProvider
             // overridden stuff
             ...json,
           };
+
+          // Remove duplicate keys
+          for (const key of [
+            'sub',
+            'name',
+            'given_name',
+            'family_name',
+            'middle_name',
+            'preferred_username',
+          ]) {
+            delete userInfo[key];
+          }
 
           done(null, userInfo);
         } catch (e) {
