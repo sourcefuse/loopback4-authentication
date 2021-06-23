@@ -2,10 +2,10 @@
   "$schema": "http://json.schemastore.org/tsconfig",
   "extends": "@loopback/build/config/tsconfig.common.json",
   "compilerOptions": {
-    "typeRoots": ["./src/typings", "./node_modules/@types"],
+    "typeRoots": ["./src/typing", "./node_modules/@types"],
     "rootDir": "src",
     "outDir": "dist"
   },
-  "exclude": ["./src/typings", "./node_modules/@types"],
+  "exclude": ["./src/typing", "./node_modules/@types"],
   "include": ["src", ".eslintrc.js"]
 }
