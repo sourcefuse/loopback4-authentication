@@ -2,6 +2,8 @@ import {Request} from '@loopback/rest';
 import * as GoogleStrategy from 'passport-google-oauth20';
 import * as AzureADStrategy from 'passport-azure-ad';
 import * as InstagramStrategy from 'passport-instagram';
+import * as AppleStrategy from 'passport-apple';
+import {DecodedIdToken} from 'passport-apple';
 import {IAuthClient, IAuthUser} from '../types';
 
 export type VerifyCallback = (
@@ -69,6 +71,17 @@ export namespace VerifyFunction {
       refreshToken: string,
       profile: InstagramStrategy.Profile,
       cb: VerifyCallback,
+      req?: Request,
+    ): Promise<T | null>;
+  }
+
+  export interface AppleAuthFn<T = IAuthUser> extends GenericAuthFn<T> {
+    (
+      accessToken: string,
+      refreshToken: string,
+      decodedIdToken: DecodedIdToken,
+      profile: AppleStrategy.Profile,
+      cb: AppleStrategy.VerifyCallback,
       req?: Request,
     ): Promise<T | null>;
   }

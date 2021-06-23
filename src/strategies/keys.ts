@@ -8,6 +8,7 @@ import {KeycloakStrategyFactoryProvider} from './passport/passport-keycloak';
 import {AzureADAuthStrategyFactoryProvider} from './passport/passport-azure-ad';
 import {VerifyFunction} from './types';
 import {InstagramAuthStrategyFactoryProvider} from './passport';
+import { AppleAuthStrategyFactoryProvider } from './passport/passport-apple-oauth2';
 
 export namespace Strategies {
   export namespace Passport {
@@ -72,6 +73,14 @@ export namespace Strategies {
     );
     export const INSTAGRAM_OAUTH2_VERIFIER = BindingKey.create<VerifyFunction.InstagramAuthFn>(
       'sf.passport.verifier.instagramOauth2',
+    );
+
+    // Passport-apple-oauth2 strategy
+    export const APPLE_OAUTH2_STRATEGY_FACTORY = BindingKey.create<AppleAuthStrategyFactoryProvider>(
+      'sf.passport.strategyFactory.appleOauth2',
+    );
+    export const APPLE_OAUTH2_VERIFIER = BindingKey.create<VerifyFunction.AppleAuthFn>(
+      'sf.passport.verifier.appleOauth2',
     );
   }
 }
