@@ -5,6 +5,7 @@ import * as AzureADAuthStrategy from 'passport-azure-ad';
 import * as PassportBearer from 'passport-http-bearer';
 import * as PassportLocal from 'passport-local';
 import * as InstagramStrategy from 'passport-instagram';
+import * as AppleStrategy from 'passport-apple';
 
 import {AuthenticationBindings} from '../keys';
 import {STRATEGY} from '../strategy-name.enum';
@@ -19,6 +20,7 @@ import {
 } from './passport/passport-resource-owner-password';
 import {AzureADAuthStrategyFactory} from './passport/passport-azure-ad';
 import {
+  AppleAuthStrategyFactory,
   InstagramAuthStrategyFactory,
   KeycloakStrategyFactory,
 } from './passport';
@@ -43,6 +45,8 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     @inject.context() private readonly ctx: Context,
     @inject(Strategies.Passport.INSTAGRAM_OAUTH2_STRATEGY_FACTORY)
     private readonly getInstagramAuthVerifier: InstagramAuthStrategyFactory,
+    @inject(Strategies.Passport.APPLE_OAUTH2_STRATEGY_FACTORY)
+    private readonly getAppleAuthVerifier: AppleAuthStrategyFactory,
   ) {}
 
   async value(): Promise<Strategy | undefined> {
@@ -102,6 +106,13 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
           | InstagramStrategy.StrategyOption
           | InstagramStrategy.StrategyOptionWithRequest,
         verifier as VerifyFunction.InstagramAuthFn,
+      );
+    } else if (name === STRATEGY.APPLE_OAUTH2) {
+      return this.getAppleAuthVerifier(
+        this.metadata.options as
+          | AppleStrategy.AuthenticateOptions
+          | AppleStrategy.AuthenticateOptionsWithRequest,
+        verifier as VerifyFunction.AppleAuthFn,
       );
     } else {
       return Promise.reject(`The strategy ${name} is not available.`);
