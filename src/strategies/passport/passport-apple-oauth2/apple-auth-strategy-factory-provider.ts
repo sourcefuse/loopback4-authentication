@@ -7,7 +7,7 @@ import {
   AuthenticateOptions,
   AuthenticateOptionsWithRequest,
   VerifyCallback,
-  DecodedIdToken
+  DecodedIdToken,
 } from 'passport-apple';
 
 import {AuthErrorKeys} from '../../../error-keys';
@@ -87,7 +87,13 @@ export class AppleAuthStrategyFactoryProvider
           cb: VerifyCallback,
         ) => {
           try {
-            const user = await verifyFn(accessToken, refreshToken, decodedIdToken, profile, cb);
+            const user = await verifyFn(
+              accessToken,
+              refreshToken,
+              decodedIdToken,
+              profile,
+              cb,
+            );
             if (!user) {
               throw new HttpErrors.Unauthorized(
                 AuthErrorKeys.InvalidCredentials,

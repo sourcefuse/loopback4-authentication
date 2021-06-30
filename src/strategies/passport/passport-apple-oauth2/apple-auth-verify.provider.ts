@@ -6,11 +6,6 @@ import {DecodedIdToken} from 'passport-apple';
 
 import {VerifyFunction} from '../../types';
 
-/**
- * A provider for default implementation of VerifyFunction.LocalPasswordFn
- *
- * It will just throw an error saying Not Implemented
- */
 export class AppleAuthVerifyProvider
   implements Provider<VerifyFunction.AppleAuthFn> {
   constructor() {}

@@ -8,7 +8,7 @@ import {KeycloakStrategyFactoryProvider} from './passport/passport-keycloak';
 import {AzureADAuthStrategyFactoryProvider} from './passport/passport-azure-ad';
 import {VerifyFunction} from './types';
 import {InstagramAuthStrategyFactoryProvider} from './passport';
-import { AppleAuthStrategyFactoryProvider } from './passport/passport-apple-oauth2';
+import {AppleAuthStrategyFactoryProvider} from './passport/passport-apple-oauth2';
 
 export namespace Strategies {
   export namespace Passport {
