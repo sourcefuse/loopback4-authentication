@@ -125,8 +125,8 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     } else if (name === STRATEGY.FACEBOOK_OAUTH2) {
       return this.getFacebookAuthVerifier(
         this.metadata.options as
-        | FacebookStrategy.StrategyOptionWithRequest
-        | StratOptions,
+          | FacebookStrategy.StrategyOptionWithRequest
+          | StratOptions,
         verifier as VerifyFunction.FacebookAuthFn,
       );
     } else {

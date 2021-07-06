@@ -9,7 +9,7 @@ import {AzureADAuthStrategyFactoryProvider} from './passport/passport-azure-ad';
 import {VerifyFunction} from './types';
 import {InstagramAuthStrategyFactoryProvider} from './passport';
 import {AppleAuthStrategyFactoryProvider} from './passport/passport-apple-oauth2';
-import { FacebookAuthStrategyFactoryProvider } from './passport/passport-facebook-oauth2';
+import {FacebookAuthStrategyFactoryProvider} from './passport/passport-facebook-oauth2';
 
 export namespace Strategies {
   export namespace Passport {

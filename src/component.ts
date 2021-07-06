@@ -79,7 +79,8 @@ export class AuthenticationComponent implements Component {
         .key]: GoogleAuthVerifyProvider,
       [Strategies.Passport.INSTAGRAM_OAUTH2_VERIFIER
         .key]: InstagramAuthVerifyProvider,
-      [Strategies.Passport.FACEBOOK_OAUTH2_VERIFIER.key]: FacebookAuthVerifyProvider,
+      [Strategies.Passport.FACEBOOK_OAUTH2_VERIFIER
+        .key]: FacebookAuthVerifyProvider,
       [Strategies.Passport.APPLE_OAUTH2_VERIFIER.key]: AppleAuthVerifyProvider,
       [Strategies.Passport.AZURE_AD_VERIFIER.key]: AzureADAuthVerifyProvider,
       [Strategies.Passport.KEYCLOAK_VERIFIER.key]: KeycloakVerifyProvider,
