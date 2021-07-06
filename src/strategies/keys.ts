@@ -9,6 +9,7 @@ import {AzureADAuthStrategyFactoryProvider} from './passport/passport-azure-ad';
 import {VerifyFunction} from './types';
 import {InstagramAuthStrategyFactoryProvider} from './passport';
 import {AppleAuthStrategyFactoryProvider} from './passport/passport-apple-oauth2';
+import { FacebookAuthStrategyFactoryProvider } from './passport/passport-facebook-oauth2';
 
 export namespace Strategies {
   export namespace Passport {
@@ -73,6 +74,14 @@ export namespace Strategies {
     );
     export const INSTAGRAM_OAUTH2_VERIFIER = BindingKey.create<VerifyFunction.InstagramAuthFn>(
       'sf.passport.verifier.instagramOauth2',
+    );
+
+    // Passport-facebook startegy
+    export const FACEBOOK_OAUTH2_STRATEGY_FACTORY = BindingKey.create<FacebookAuthStrategyFactoryProvider>(
+      'sf.passport.strategyFactory.facebookOauth2',
+    );
+    export const FACEBOOK_OAUTH2_VERIFIER = BindingKey.create<VerifyFunction.FacebookAuthFn>(
+      'sf.passport.verifier.facebookOauth2',
     );
 
     // Passport-apple-oauth2 strategy
