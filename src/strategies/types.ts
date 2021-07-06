@@ -2,6 +2,7 @@ import {Request} from '@loopback/rest';
 import * as GoogleStrategy from 'passport-google-oauth20';
 import * as AzureADStrategy from 'passport-azure-ad';
 import * as InstagramStrategy from 'passport-instagram';
+import * as FacebookStrategy from 'passport-facebook';
 import * as AppleStrategy from 'passport-apple';
 import {DecodedIdToken} from 'passport-apple';
 import {IAuthClient, IAuthUser} from '../types';
@@ -70,6 +71,17 @@ export namespace VerifyFunction {
       accessToken: string,
       refreshToken: string,
       profile: InstagramStrategy.Profile,
+      cb: VerifyCallback,
+      req?: Request,
+    ): Promise<T | null>;
+  }
+
+  export interface FacebookAuthFn<T = IAuthUser>
+    extends VerifyFunction.GenericAuthFn<T> {
+    (
+      accessToken: string,
+      refreshToken: string,
+      profile: FacebookStrategy.Profile,
       cb: VerifyCallback,
       req?: Request,
     ): Promise<T | null>;
