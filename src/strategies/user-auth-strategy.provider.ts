@@ -5,6 +5,7 @@ import * as AzureADAuthStrategy from 'passport-azure-ad';
 import * as PassportBearer from 'passport-http-bearer';
 import * as PassportLocal from 'passport-local';
 import * as InstagramStrategy from 'passport-instagram';
+import * as FacebookStrategy from 'passport-facebook';
 import * as AppleStrategy from 'passport-apple';
 
 import {AuthenticationBindings} from '../keys';
@@ -23,8 +24,13 @@ import {
   AppleAuthStrategyFactory,
   InstagramAuthStrategyFactory,
   KeycloakStrategyFactory,
+  FacebookAuthStrategyFactory,
 } from './passport';
 import {VerifyFunction} from './types';
+
+interface ExtendedStrategyOption extends FacebookStrategy.StrategyOption {
+  passReqToCallback?: false;
+}
 
 export class AuthStrategyProvider implements Provider<Strategy | undefined> {
   constructor(
@@ -45,6 +51,8 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     @inject.context() private readonly ctx: Context,
     @inject(Strategies.Passport.INSTAGRAM_OAUTH2_STRATEGY_FACTORY)
     private readonly getInstagramAuthVerifier: InstagramAuthStrategyFactory,
+    @inject(Strategies.Passport.FACEBOOK_OAUTH2_STRATEGY_FACTORY)
+    private readonly getFacebookAuthVerifier: FacebookAuthStrategyFactory,
     @inject(Strategies.Passport.APPLE_OAUTH2_STRATEGY_FACTORY)
     private readonly getAppleAuthVerifier: AppleAuthStrategyFactory,
   ) {}
@@ -113,6 +121,13 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
           | AppleStrategy.AuthenticateOptions
           | AppleStrategy.AuthenticateOptionsWithRequest,
         verifier as VerifyFunction.AppleAuthFn,
+      );
+    } else if (name === STRATEGY.FACEBOOK_OAUTH2) {
+      return this.getFacebookAuthVerifier(
+        this.metadata.options as
+          | FacebookStrategy.StrategyOptionWithRequest
+          | ExtendedStrategyOption,
+        verifier as VerifyFunction.FacebookAuthFn,
       );
     } else {
       return Promise.reject(`The strategy ${name} is not available.`);

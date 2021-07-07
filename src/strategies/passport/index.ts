@@ -7,3 +7,4 @@ export * from './passport-google-oauth2';
 export * from './passport-azure-ad';
 export * from './passport-insta-oauth2';
 export * from './passport-apple-oauth2';
+export * from './passport-facebook-oauth2';

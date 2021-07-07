@@ -25,6 +25,8 @@ It provides support for seven passport based strategies.
 5. [passport-google-oauth2](https://github.com/jaredhanson/passport-google-oauth2) - Passport strategy for authenticating with Google using the Google OAuth 2.0 API. This module lets you authenticate using Google in your Node.js applications.
 6. [keycloak-passport](https://github.com/exlinc/keycloak-passport) - Passport strategy for authenticating with Keycloak. This library offers a production-ready and maintained Keycloak Passport connector.
 7. [passport-instagram](https://github.com/jaredhanson/passport-instagram) - Passport strategy for authenticating with Instagram using the Instagram OAuth 2.0 API. This module lets you authenticate using Instagram in your Node.js applications.
+8. [passport-apple](https://github.com/ananay/passport-apple) - Passport strategy for authenticating with Apple using the Apple OAuth 2.0 API. This module lets you authenticate using Apple in your Node.js applications.
+9. [passport-facebook](https://github.com/jaredhanson/passport-facebook) - Passport strategy for authenticating with Facebook using the Facebook OAuth 2.0 API. This module lets you authenticate using Facebook in your Node.js applications.
 
 You can use one or more strategies of the above in your application. For each of the strategy (only which you use), you just need to provide your own verifier function, making it easily configurable. Rest of the strategy implementation intricacies is handled by extension.
 
@@ -470,7 +472,7 @@ export class LocalPasswordVerifyProvider
   constructor(
     @repository(UserRepository)
     public userRepository: UserRepository,
-  ) { }
+  ) {}
 
   value(): VerifyFunction.LocalPasswordFn {
     return async (username: any, password: any) => {
@@ -480,7 +482,8 @@ export class LocalPasswordVerifyProvider
         );
         return user;
       } catch (error) {
-        throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials).message;
+        throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials)
+          .message;
       }
     };
   }
@@ -1390,6 +1393,616 @@ After this, you can use decorator to apply auth to controller functions wherever
 ```
 
 Please note above that we are creating two new APIs for instagram auth. The first one is for UI clients to hit. We are authenticating client as well, then passing the details to the instagram auth. Then, the actual authentication is done by instagram authorization url, which redirects to the second API we created after success. The first API method body is empty as we do not need to handle its response. The instagram auth provider in this package will do the redirection for you automatically.
+
+For accessing the authenticated AuthUser model reference, you can inject the CURRENT_USER provider, provided by the extension, which is populated by the auth action sequence above.
+
+```ts
+  @inject.getter(AuthenticationBindings.CURRENT_USER)
+  private readonly getCurrentUser: Getter<User>,
+```
+
+### Apple Oauth 2
+
+First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
+
+```ts
+@model({
+  name: 'users',
+})
+export class User extends Entity implements IAuthUser {
+  @property({
+    type: 'number',
+    id: true,
+  })
+  id?: number;
+
+  @property({
+    type: 'string',
+    required: true,
+    name: 'first_name',
+  })
+  firstName: string;
+
+  @property({
+    type: 'string',
+    name: 'last_name',
+  })
+  lastName: string;
+
+  @property({
+    type: 'string',
+    name: 'middle_name',
+  })
+  middleName?: string;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
+  username: string;
+
+  @property({
+    type: 'string',
+  })
+  email?: string;
+
+  // Auth provider - 'apple'
+  @property({
+    type: 'string',
+    required: true,
+    name: 'auth_provider',
+  })
+  authProvider: string;
+
+  // Id from external provider
+  @property({
+    type: 'string',
+    name: 'auth_id',
+  })
+  authId?: string;
+
+  @property({
+    type: 'string',
+    name: 'auth_token',
+  })
+  authToken?: string;
+
+  @property({
+    type: 'string',
+  })
+  password?: string;
+
+  constructor(data?: Partial<User>) {
+    super(data);
+  }
+}
+```
+
+Create CRUD repository for the above model. Use loopback CLI.
+
+```sh
+lb4 repository
+```
+
+Add the verifier function for the strategy. You need to create a provider for the same. You can add your application specific business logic for client auth here. Here is a simple example.
+
+```ts
+import {Provider} from '@loopback/context';
+import {repository} from '@loopback/repository';
+import {HttpErrors} from '@loopback/rest';
+import {AuthErrorKeys, VerifyFunction} from 'loopback4-authentication';
+
+import {Tenant} from '../../../models';
+import {UserCredentialsRepository, UserRepository} from '../../../repositories';
+import {AuthUser} from '../models/auth-user.model';
+
+export class AppleOauth2VerifyProvider
+  implements Provider<VerifyFunction.AppleAuthFn> {
+  constructor(
+    @repository(UserRepository)
+    public userRepository: UserRepository,
+    @repository(UserCredentialsRepository)
+    public userCredsRepository: UserCredentialsRepository,
+  ) {}
+
+  value(): VerifyFunction.AppleAuthFn {
+    return async (accessToken, refreshToken, profile) => {
+      const user = await this.userRepository.findOne({
+        where: {
+          /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+          email: (profile as any)._json.email,
+        },
+      });
+      if (!user) {
+        throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
+      }
+      if (
+        !user ||
+        user.authProvider !== 'apple' ||
+        user.authId !== profile.id
+      ) {
+        throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
+      }
+
+      const authUser: AuthUser = new AuthUser(user);
+      authUser.permissions = [];
+      authUser.externalAuthToken = accessToken;
+      authUser.externalRefreshToken = refreshToken;
+      authUser.tenant = new Tenant({id: user.defaultTenant});
+      return authUser;
+    };
+  }
+}
+```
+
+Please note the Verify function type _VerifyFunction.LocalPasswordFn_
+
+Now bind this provider to the application in application.ts.
+
+```ts
+import {AuthenticationComponent, Strategies} from 'loopback4-authentication';
+```
+
+```ts
+// Add authentication component
+this.component(AuthenticationComponent);
+// Customize authentication verify handlers
+this.bind(Strategies.Passport.APPLE_OAUTH2_VERIFIER).toProvider(
+  AppleOauth2VerifyProvider,
+);
+```
+
+Finally, add the authenticate function as a sequence action to sequence.ts.
+
+```ts
+export class MySequence implements SequenceHandler {
+  constructor(
+    @inject(SequenceActions.FIND_ROUTE) protected findRoute: FindRoute,
+    @inject(SequenceActions.PARSE_PARAMS) protected parseParams: ParseParams,
+    @inject(SequenceActions.INVOKE_METHOD) protected invoke: InvokeMethod,
+    @inject(SequenceActions.SEND) public send: Send,
+    @inject(SequenceActions.REJECT) public reject: Reject,
+    @inject(AuthenticationBindings.USER_AUTH_ACTION)
+    protected authenticateRequest: AuthenticateFn<AuthUser>,
+  ) {}
+
+  async handle(context: RequestContext) {
+    try {
+      const {request, response} = context;
+
+      const route = this.findRoute(request);
+      const args = await this.parseParams(request, route);
+      request.body = args[args.length - 1];
+      const authUser: AuthUser = await this.authenticateRequest(
+        request,
+        response,
+      );
+      const result = await this.invoke(route, args);
+      this.send(response, result);
+    } catch (err) {
+      this.reject(context, err);
+    }
+  }
+}
+```
+
+After this, you can use decorator to apply auth to controller functions wherever needed. See below.
+
+```ts
+@authenticateClient(STRATEGY.CLIENT_PASSWORD)
+  @authenticate(
+    STRATEGY.APPLE_OAUTH2,
+    {
+      accessType: 'offline',
+      scope: ['name', 'email'],
+      callbackURL: process.env.APPLE_AUTH_CALLBACK_URL,
+      clientID: process.env.APPLE_AUTH_CLIENT_ID,
+      teamID: process.env.APPLE_AUTH_TEAM_ID,
+      keyID: process.env.APPLE_AUTH_KEY_ID,
+      privateKeyLocation: process.env.APPLE_AUTH_PRIVATE_KEY_LOCATION,
+    },
+    (req: Request) => {
+      return {
+        accessType: 'offline',
+        state: Object.keys(req.query)
+          .map(key => key + '=' + req.query[key])
+          .join('&'),
+      };
+    },
+  )
+  @authorize(['*'])
+  @get('/auth/oauth-apple', {
+    responses: {
+      [STATUS_CODE.OK]: {
+        description: 'Token Response',
+        content: {
+          [CONTENT_TYPE.JSON]: {
+            schema: {'x-ts-type': TokenResponse},
+          },
+        },
+      },
+    },
+  })
+  async loginViaApple(
+    @param.query.string('client_id')
+    clientId?: string,
+    @param.query.string('client_secret')
+    clientSecret?: string,
+  ): Promise<void> {}
+
+  @authenticate(
+    STRATEGY.APPLE_OAUTH2,
+    {
+      accessType: 'offline',
+      scope: ['name', 'email'],
+      callbackURL: process.env.APPLE_AUTH_CALLBACK_URL,
+      clientID: process.env.APPLE_AUTH_CLIENT_ID,
+      teamID: process.env.APPLE_AUTH_TEAM_ID,
+      keyID: process.env.APPLE_AUTH_KEY_ID,
+      privateKeyLocation: process.env.APPLE_AUTH_PRIVATE_KEY_LOCATION,
+    },
+    (req: Request) => {
+      return {
+        accessType: 'offline',
+        state: Object.keys(req.query)
+          .map(key => `${key}=${req.query[key]}`)
+          .join('&'),
+      };
+    },
+  )
+  @authorize(['*'])
+  @get('/auth/apple-oauth-redirect', {
+    responses: {
+      [STATUS_CODE.OK]: {
+        description: 'Token Response',
+        content: {
+          [CONTENT_TYPE.JSON]: {
+            schema: {'x-ts-type': TokenResponse},
+          },
+        },
+      },
+    },
+  })
+  async appleCallback(
+    @param.query.string('code') code: string,
+    @param.query.string('state') state: string,
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+  ): Promise<void> {
+    const clientId = new URLSearchParams(state).get('client_id');
+    if (!clientId || !this.user) {
+      throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
+    }
+    const client = await this.authClientRepository.findOne({
+      where: {
+        clientId: clientId,
+      },
+    });
+    if (!client || !client.redirectUrl) {
+      throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
+    }
+    try {
+      const codePayload: ClientAuthCode<User> = {
+        clientId,
+        user: this.user,
+      };
+      const token = jwt.sign(codePayload, client.secret, {
+        expiresIn: client.authCodeExpiration,
+        audience: clientId,
+        subject: this.user.username,
+        issuer: process.env.JWT_ISSUER,
+      });
+      response.redirect(`${client.redirectUrl}?code=${token}`);
+    } catch (error) {
+      throw new HttpErrors.InternalServerError(AuthErrorKeys.UnknownError);
+    }
+  }
+```
+
+Please note above that we are creating two new APIs for apple auth. The first one is for UI clients to hit. We are authenticating client as well, then passing the details to the apple auth. Then, the actual authentication is done by apple authorization url, which redirects to the second API we created after success. The first API method body is empty as we do not need to handle its response. The apple auth provider in this package will do the redirection for you automatically.
+
+For accessing the authenticated AuthUser model reference, you can inject the CURRENT_USER provider, provided by the extension, which is populated by the auth action sequence above.
+
+```ts
+  @inject.getter(AuthenticationBindings.CURRENT_USER)
+  private readonly getCurrentUser: Getter<User>,
+```
+
+### Facebook Oauth 2
+
+First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
+
+```ts
+@model({
+  name: 'users',
+})
+export class User extends Entity implements IAuthUser {
+  @property({
+    type: 'number',
+    id: true,
+  })
+  id?: number;
+
+  @property({
+    type: 'string',
+    required: true,
+    name: 'first_name',
+  })
+  firstName: string;
+
+  @property({
+    type: 'string',
+    name: 'last_name',
+  })
+  lastName: string;
+
+  @property({
+    type: 'string',
+    name: 'middle_name',
+  })
+  middleName?: string;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
+  username: string;
+
+  @property({
+    type: 'string',
+  })
+  email?: string;
+
+  // Auth provider - 'facebook'
+  @property({
+    type: 'string',
+    required: true,
+    name: 'auth_provider',
+  })
+  authProvider: string;
+
+  // Id from external provider
+  @property({
+    type: 'string',
+    name: 'auth_id',
+  })
+  authId?: string;
+
+  @property({
+    type: 'string',
+    name: 'auth_token',
+  })
+  authToken?: string;
+
+  @property({
+    type: 'string',
+  })
+  password?: string;
+
+  constructor(data?: Partial<User>) {
+    super(data);
+  }
+}
+```
+
+Create CRUD repository for the above model. Use loopback CLI.
+
+```sh
+lb4 repository
+```
+
+Add the verifier function for the strategy. You need to create a provider for the same. You can add your application specific business logic for client auth here. Here is a simple example.
+
+```ts
+import {Provider} from '@loopback/context';
+import {repository} from '@loopback/repository';
+import {HttpErrors} from '@loopback/rest';
+import {AuthErrorKeys, VerifyFunction} from 'loopback4-authentication';
+
+import {Tenant} from '../../../models';
+import {UserCredentialsRepository, UserRepository} from '../../../repositories';
+import {AuthUser} from '../models/auth-user.model';
+
+export class FacebookOauth2VerifyProvider
+  implements Provider<VerifyFunction.FacebookAuthFn> {
+  constructor(
+    @repository(UserRepository)
+    public userRepository: UserRepository,
+    @repository(UserCredentialsRepository)
+    public userCredsRepository: UserCredentialsRepository,
+  ) {}
+
+  value(): VerifyFunction.FacebookAuthFn {
+    return async (accessToken, refreshToken, profile) => {
+      const user = await this.userRepository.findOne({
+        where: {
+          /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+          email: (profile as any)._json.email,
+        },
+      });
+      if (!user) {
+        throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
+      }
+      if (
+        !user ||
+        user.authProvider !== 'facebook' ||
+        user.authId !== profile.id
+      ) {
+        throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
+      }
+
+      const authUser: AuthUser = new AuthUser(user);
+      authUser.permissions = [];
+      authUser.externalAuthToken = accessToken;
+      authUser.externalRefreshToken = refreshToken;
+      authUser.tenant = new Tenant({id: user.defaultTenant});
+      return authUser;
+    };
+  }
+}
+```
+
+Please note the Verify function type _VerifyFunction.LocalPasswordFn_
+
+Now bind this provider to the application in application.ts.
+
+```ts
+import {AuthenticationComponent, Strategies} from 'loopback4-authentication';
+```
+
+```ts
+// Add authentication component
+this.component(AuthenticationComponent);
+// Customize authentication verify handlers
+this.bind(Strategies.Passport.FACEBOOK_OAUTH2_VERIFIER).toProvider(
+  FacebookOauth2VerifyProvider,
+);
+```
+
+Finally, add the authenticate function as a sequence action to sequence.ts.
+
+```ts
+export class MySequence implements SequenceHandler {
+  constructor(
+    @inject(SequenceActions.FIND_ROUTE) protected findRoute: FindRoute,
+    @inject(SequenceActions.PARSE_PARAMS) protected parseParams: ParseParams,
+    @inject(SequenceActions.INVOKE_METHOD) protected invoke: InvokeMethod,
+    @inject(SequenceActions.SEND) public send: Send,
+    @inject(SequenceActions.REJECT) public reject: Reject,
+    @inject(AuthenticationBindings.USER_AUTH_ACTION)
+    protected authenticateRequest: AuthenticateFn<AuthUser>,
+  ) {}
+
+  async handle(context: RequestContext) {
+    try {
+      const {request, response} = context;
+
+      const route = this.findRoute(request);
+      const args = await this.parseParams(request, route);
+      request.body = args[args.length - 1];
+      const authUser: AuthUser = await this.authenticateRequest(
+        request,
+        response,
+      );
+      const result = await this.invoke(route, args);
+      this.send(response, result);
+    } catch (err) {
+      this.reject(context, err);
+    }
+  }
+}
+```
+
+After this, you can use decorator to apply auth to controller functions wherever needed. See below.
+
+```ts
+@authenticateClient(STRATEGY.CLIENT_PASSWORD)
+  @authenticate(
+    STRATEGY.FACEBOOK_OAUTH2,
+    {
+      accessType: 'offline',
+      authorizationURL: process.env.FACEBOOK_AUTH_URL,
+      callbackURL: process.env.FACEBOOK_AUTH_CALLBACK_URL,
+      clientID: process.env.FACEBOOK_AUTH_CLIENT_ID,
+      clientSecret: process.env.FACEBOOK_AUTH_CLIENT_SECRET,
+      tokenURL: process.env.FACEBOOK_AUTH_TOKEN_URL,
+    },
+    (req: Request) => {
+      return {
+        accessType: 'offline',
+        state: Object.keys(req.query)
+          .map(key => key + '=' + req.query[key])
+          .join('&'),
+      };
+    },
+  )
+  @authorize(['*'])
+  @get('/auth/facebook', {
+    responses: {
+      [STATUS_CODE.OK]: {
+        description: 'Token Response',
+        content: {
+          [CONTENT_TYPE.JSON]: {
+            schema: {'x-ts-type': TokenResponse},
+          },
+        },
+      },
+    },
+  })
+  async loginViaFacebook(
+    @param.query.string('client_id')
+    clientId?: string,
+    @param.query.string('client_secret')
+    clientSecret?: string,
+  ): Promise<void> {}
+
+  @authenticate(
+    STRATEGY.FACEBOOK_OAUTH2,
+    {
+      accessType: 'offline',
+      authorizationURL: process.env.FACEBOOK_AUTH_URL,
+      callbackURL: process.env.FACEBOOK_AUTH_CALLBACK_URL,
+      clientID: process.env.FACEBOOK_AUTH_CLIENT_ID,
+      clientSecret: process.env.FACEBOOK_AUTH_CLIENT_SECRET,
+      tokenURL: process.env.FACEBOOK_AUTH_TOKEN_URL,
+    },
+    (req: Request) => {
+      return {
+        accessType: 'offline',
+        state: Object.keys(req.query)
+          .map(key => `${key}=${req.query[key]}`)
+          .join('&'),
+      };
+    },
+  )
+  @authorize(['*'])
+  @get('/auth/facebook-auth-redirect', {
+    responses: {
+      [STATUS_CODE.OK]: {
+        description: 'Token Response',
+        content: {
+          [CONTENT_TYPE.JSON]: {
+            schema: {'x-ts-type': TokenResponse},
+          },
+        },
+      },
+    },
+  })
+  async facebookCallback(
+    @param.query.string('code') code: string,
+    @param.query.string('state') state: string,
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+  ): Promise<void> {
+    const clientId = new URLSearchParams(state).get('client_id');
+    if (!clientId || !this.user) {
+      throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
+    }
+    const client = await this.authClientRepository.findOne({
+      where: {
+        clientId: clientId,
+      },
+    });
+    if (!client || !client.redirectUrl) {
+      throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
+    }
+    try {
+      const codePayload: ClientAuthCode<User> = {
+        clientId,
+        user: this.user,
+      };
+      const token = jwt.sign(codePayload, client.secret, {
+        expiresIn: client.authCodeExpiration,
+        audience: clientId,
+        subject: this.user.username,
+        issuer: process.env.JWT_ISSUER,
+      });
+      response.redirect(`${client.redirectUrl}?code=${token}`);
+    } catch (error) {
+      throw new HttpErrors.InternalServerError(AuthErrorKeys.UnknownError);
+    }
+  }
+```
+
+Please note above that we are creating two new APIs for facebook auth. The first one is for UI clients to hit. We are authenticating client as well, then passing the details to the facebook auth. Then, the actual authentication is done by facebook authorization url, which redirects to the second API we created after success. The first API method body is empty as we do not need to handle its response. The facebook auth provider in this package will do the redirection for you automatically.
 
 For accessing the authenticated AuthUser model reference, you can inject the CURRENT_USER provider, provided by the extension, which is populated by the auth action sequence above.
 
