@@ -28,7 +28,7 @@ import {
 } from './passport';
 import {VerifyFunction} from './types';
 
-interface StratOptions extends FacebookStrategy.StrategyOption {
+interface ExtendedStrategyOption extends FacebookStrategy.StrategyOption {
   passReqToCallback?: false;
 }
 
@@ -126,7 +126,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
       return this.getFacebookAuthVerifier(
         this.metadata.options as
           | FacebookStrategy.StrategyOptionWithRequest
-          | StratOptions,
+          | ExtendedStrategyOption,
         verifier as VerifyFunction.FacebookAuthFn,
       );
     } else {

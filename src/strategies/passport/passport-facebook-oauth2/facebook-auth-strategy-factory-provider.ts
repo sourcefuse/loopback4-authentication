@@ -12,13 +12,13 @@ import {AuthErrorKeys} from '../../../error-keys';
 import {Strategies} from '../../keys';
 import {VerifyCallback, VerifyFunction} from '../../types';
 
-interface StratOptions extends StrategyOption {
+interface ExtendedStrategyOption extends StrategyOption {
   passReqToCallback?: false;
 }
 
 export interface FacebookAuthStrategyFactory {
   (
-    options: StratOptions | StrategyOptionWithRequest,
+    options: ExtendedStrategyOption | StrategyOptionWithRequest,
     verifierPassed?: VerifyFunction.FacebookAuthFn,
   ): Strategy;
 }
@@ -36,7 +36,7 @@ export class FacebookAuthStrategyFactoryProvider
   }
 
   getFacebookAuthStrategyVerifier(
-    options: StratOptions | StrategyOptionWithRequest,
+    options: ExtendedStrategyOption | StrategyOptionWithRequest,
     verifierPassed?: VerifyFunction.FacebookAuthFn,
   ): Strategy {
     const verifyFn = verifierPassed ?? this.verifierFacebookAuth;
@@ -73,7 +73,7 @@ export class FacebookAuthStrategyFactoryProvider
       );
     } else {
       strategy = new Strategy(
-        options as StratOptions,
+        options as ExtendedStrategyOption,
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           accessToken: string,
