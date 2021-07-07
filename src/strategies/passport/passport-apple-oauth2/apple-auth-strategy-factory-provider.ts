@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import {inject, Provider} from '@loopback/core';
 import {HttpErrors, Request} from '@loopback/rest';
 import {HttpsProxyAgent} from 'https-proxy-agent';
@@ -15,8 +14,6 @@ import {Strategies} from '../../keys';
 import {VerifyFunction} from '../../types';
 
 import Strategy from 'passport-apple';
-
-//import * as AppleStrategy from 'passport-apple';
 export interface AppleAuthStrategyFactory {
   (
     options: AuthenticateOptions | AuthenticateOptionsWithRequest,
