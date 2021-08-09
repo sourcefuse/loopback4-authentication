@@ -2,5 +2,7 @@ node_modules/
 dist/
 coverage/
 api-docs/
+typing/
 
 index.*
+.eslintrc.d.ts
