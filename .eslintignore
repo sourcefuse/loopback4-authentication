@@ -4,3 +4,5 @@ coverage/
 api-docs/
 
 index.*
+.cz-config.js
+commitlint.config.js

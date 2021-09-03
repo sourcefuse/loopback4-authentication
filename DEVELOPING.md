@@ -7,8 +7,14 @@ users.
 
 Install the following extensions:
 
- - [tslint](https://marketplace.visualstudio.com/items?itemName=eg2.tslint)
- - [prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- [tslint](https://marketplace.visualstudio.com/items?itemName=eg2.tslint)
+- [prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+
+## Setup Commit Hooks
+
+Run the following script to prepare husky after the first time install -
+
+`npm run prepare`
 
 ## Development workflow
 
