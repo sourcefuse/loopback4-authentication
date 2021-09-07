@@ -5,4 +5,5 @@ api-docs/
 typing/
 
 index.*
-.eslintrc.d.ts
+.cz-config.js
+commitlint.config.js
