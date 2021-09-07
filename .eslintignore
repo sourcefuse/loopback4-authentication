@@ -2,6 +2,7 @@ node_modules/
 dist/
 coverage/
 api-docs/
+typing/
 
 index.*
 .cz-config.js

@@ -5,7 +5,8 @@ import * as InstagramStrategy from 'passport-instagram';
 import * as FacebookStrategy from 'passport-facebook';
 import * as AppleStrategy from 'passport-apple';
 import {DecodedIdToken} from 'passport-apple';
-import {IAuthClient, IAuthUser} from '../types';
+import {IAuthClient, IAuthUser} from '../../types';
+import {Keycloak} from './keycloak.types';
 
 export type VerifyCallback = (
   err?: string | Error | null,
@@ -60,7 +61,7 @@ export namespace VerifyFunction {
     (
       accessToken: string,
       refreshToken: string,
-      profile: KeycloakProfile,
+      profile: Keycloak.Profile,
       cb: (err?: string | Error, user?: IAuthUser) => void,
     ): Promise<T | null>;
   }
@@ -103,18 +104,4 @@ export namespace VerifyFunction {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (...params: any): Promise<T | null>;
   }
-}
-
-export interface KeycloakProfile {
-  keycloakId: string;
-  fullName: string;
-  firstName: string;
-  middleName?: string;
-  lastName: string;
-  username: string;
-  email: string;
-  avatar: string;
-  realm: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
 }

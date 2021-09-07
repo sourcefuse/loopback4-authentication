@@ -3,16 +3,14 @@ import {HttpErrors} from '@loopback/rest';
 import {HttpsProxyAgent} from 'https-proxy-agent';
 
 import {AuthErrorKeys} from '../../../error-keys';
-import {IAuthUser} from '../../../types';
 import {Strategies} from '../../keys';
-import {KeycloakProfile, VerifyFunction} from '../../types';
+import {Keycloak, VerifyFunction} from '../../types';
 
 export const KeycloakStrategy = require('@exlinc/keycloak-passport');
 
 export interface KeycloakStrategyFactory {
   (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    options: any,
+    options: Keycloak.StrategyOptions,
     verifierPassed?: VerifyFunction.KeycloakAuthFn,
   ): typeof KeycloakStrategy;
 }
@@ -30,8 +28,7 @@ export class KeycloakStrategyFactoryProvider
   }
 
   getKeycloakAuthStrategyVerifier(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    options: any,
+    options: Keycloak.StrategyOptions,
     verifierPassed?: VerifyFunction.KeycloakAuthFn,
   ): typeof KeycloakStrategy {
     const verifyFn = verifierPassed ?? this.verifierKeycloak;
@@ -40,8 +37,8 @@ export class KeycloakStrategyFactoryProvider
       async (
         accessToken: string,
         refreshToken: string,
-        profile: KeycloakProfile,
-        cb: (err?: string | Error, user?: IAuthUser) => void,
+        profile: Keycloak.Profile,
+        cb: Keycloak.VerifyCallback,
       ) => {
         try {
           const user = await verifyFn(accessToken, refreshToken, profile, cb);
@@ -70,7 +67,7 @@ export class KeycloakStrategyFactoryProvider
   private _userProfileFn(
     strategy: typeof KeycloakStrategy,
     accessToken: string,
-    done: (err: unknown, userInfo?: KeycloakProfile) => void,
+    done: (err: unknown, userInfo?: Keycloak.Profile) => void,
   ) {
     // Credits - https://github.com/exlinc/keycloak-passport/blob/eaa3859f83619d8e349e87193fdf8acc3a3d0ba9/index.js#L28
     strategy._oauth2._useAuthorizationHeaderForGET = true;
@@ -85,7 +82,7 @@ export class KeycloakStrategyFactoryProvider
         try {
           const json = JSON.parse(body);
           const email = json.email;
-          const userInfo: KeycloakProfile = {
+          const userInfo: Keycloak.Profile = {
             keycloakId: json.sub,
             fullName: json.name,
             firstName: json.given_name,

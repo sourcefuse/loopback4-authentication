@@ -26,7 +26,7 @@ import {
   KeycloakStrategyFactory,
   FacebookAuthStrategyFactory,
 } from './passport';
-import {VerifyFunction} from './types';
+import {Keycloak, VerifyFunction} from './types';
 
 interface ExtendedStrategyOption extends FacebookStrategy.StrategyOption {
   passReqToCallback?: false;
@@ -105,7 +105,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
       );
     } else if (name === STRATEGY.KEYCLOAK) {
       return this.getKeycloakVerifier(
-        this.metadata.options,
+        this.metadata.options as Keycloak.StrategyOptions,
         verifier as VerifyFunction.KeycloakAuthFn,
       );
     } else if (name === STRATEGY.INSTAGRAM_OAUTH2) {
