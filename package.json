@@ -53,7 +53,7 @@
   "dependencies": {
     "@exlinc/keycloak-passport": "^1.0.2",
     "@loopback/context": "^3.16.0",
-    "@loopback/core": "^2.16.0",
+    "@loopback/core": "^2.18.0",
     "https-proxy-agent": "^5.0.0",
     "passport": "^0.4.1",
     "passport-apple": "^2.0.1",
