@@ -10,7 +10,8 @@ import {VerifyFunction} from '../../types';
  * It will just throw an error saying Not Implemented
  */
 export class GoogleAuthVerifyProvider
-  implements Provider<VerifyFunction.GoogleAuthFn> {
+  implements Provider<VerifyFunction.GoogleAuthFn>
+{
   constructor() {}
 
   value(): VerifyFunction.GoogleAuthFn {

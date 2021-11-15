@@ -8,7 +8,8 @@ import {VerifyCallback, VerifyFunction} from '../../types';
  * It will just throw an error saying Not Implemented
  */
 export class InstagramAuthVerifyProvider
-  implements Provider<VerifyFunction.InstagramAuthFn> {
+  implements Provider<VerifyFunction.InstagramAuthFn>
+{
   constructor() {}
 
   value(): VerifyFunction.InstagramAuthFn {

@@ -4,7 +4,8 @@ import {Request} from 'express';
 import {IAuthUser, IAuthClient} from '../../../types';
 
 export class ResourceOwnerVerifyProvider
-  implements Provider<VerifyFunction.ResourceOwnerPasswordFn> {
+  implements Provider<VerifyFunction.ResourceOwnerPasswordFn>
+{
   constructor() {}
 
   value(): VerifyFunction.ResourceOwnerPasswordFn {

@@ -16,7 +16,8 @@ export interface ResourceOwnerPasswordStrategyFactory {
 }
 
 export class ResourceOwnerPasswordStrategyFactoryProvider
-  implements Provider<ResourceOwnerPasswordStrategyFactory> {
+  implements Provider<ResourceOwnerPasswordStrategyFactory>
+{
   constructor(
     @inject(Strategies.Passport.RESOURCE_OWNER_PASSWORD_VERIFIER)
     private readonly verifierResourceOwner: VerifyFunction.ResourceOwnerPasswordFn,

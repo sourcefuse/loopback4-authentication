@@ -22,7 +22,8 @@ export interface AppleAuthStrategyFactory {
 }
 
 export class AppleAuthStrategyFactoryProvider
-  implements Provider<AppleAuthStrategyFactory> {
+  implements Provider<AppleAuthStrategyFactory>
+{
   constructor(
     @inject(Strategies.Passport.APPLE_OAUTH2_VERIFIER)
     private readonly verifierAppleAuth: VerifyFunction.AppleAuthFn,

@@ -9,7 +9,8 @@ import {Keycloak, VerifyFunction} from '../../types';
  * It will just throw an error saying Not Implemented
  */
 export class KeycloakVerifyProvider
-  implements Provider<VerifyFunction.KeycloakAuthFn> {
+  implements Provider<VerifyFunction.KeycloakAuthFn>
+{
   constructor() {}
 
   value(): VerifyFunction.KeycloakAuthFn {

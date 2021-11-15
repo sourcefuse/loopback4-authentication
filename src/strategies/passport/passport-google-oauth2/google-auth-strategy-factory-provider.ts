@@ -22,7 +22,8 @@ export interface GoogleAuthStrategyFactory {
 }
 
 export class GoogleAuthStrategyFactoryProvider
-  implements Provider<GoogleAuthStrategyFactory> {
+  implements Provider<GoogleAuthStrategyFactory>
+{
   constructor(
     @inject(Strategies.Passport.GOOGLE_OAUTH2_VERIFIER)
     private readonly verifierGoogleAuth: VerifyFunction.GoogleAuthFn,

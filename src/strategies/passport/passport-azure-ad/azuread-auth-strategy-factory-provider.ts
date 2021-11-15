@@ -20,7 +20,8 @@ export interface AzureADAuthStrategyFactory {
 }
 
 export class AzureADAuthStrategyFactoryProvider
-  implements Provider<AzureADAuthStrategyFactory> {
+  implements Provider<AzureADAuthStrategyFactory>
+{
   constructor(
     @inject(Strategies.Passport.AZURE_AD_VERIFIER)
     private readonly verifierAzureADAuth: VerifyFunction.AzureADAuthFn,

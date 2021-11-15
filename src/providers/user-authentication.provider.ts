@@ -8,7 +8,8 @@ import {StrategyAdapter} from '../strategy-adapter';
 import {AuthenticateFn, IAuthUser, AuthenticationMetadata} from '../types';
 
 export class AuthenticateActionProvider
-  implements Provider<AuthenticateFn<IAuthUser | undefined>> {
+  implements Provider<AuthenticateFn<IAuthUser | undefined>>
+{
   constructor(
     @inject.getter(AuthenticationBindings.USER_STRATEGY)
     readonly getStrategy: Getter<Strategy>,

@@ -9,7 +9,8 @@ import {Strategies} from './keys';
 import {ClientPasswordStrategyFactory} from './passport/passport-client-password';
 
 export class ClientAuthStrategyProvider
-  implements Provider<Strategy | undefined> {
+  implements Provider<Strategy | undefined>
+{
   constructor(
     @inject(AuthenticationBindings.CLIENT_METADATA)
     private readonly clientMetadata: AuthenticationMetadata,

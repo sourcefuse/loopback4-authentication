@@ -59,7 +59,8 @@ describe('getting instagram oauth2 strategy with options', () => {
 });
 
 class InstagramAuthVerifyProvider
-  implements Provider<VerifyFunction.InstagramAuthFn> {
+  implements Provider<VerifyFunction.InstagramAuthFn>
+{
   constructor() {}
 
   value(): VerifyFunction.InstagramAuthFn {

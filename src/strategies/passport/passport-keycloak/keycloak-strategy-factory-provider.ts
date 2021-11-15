@@ -16,7 +16,8 @@ export interface KeycloakStrategyFactory {
 }
 
 export class KeycloakStrategyFactoryProvider
-  implements Provider<KeycloakStrategyFactory> {
+  implements Provider<KeycloakStrategyFactory>
+{
   constructor(
     @inject(Strategies.Passport.KEYCLOAK_VERIFIER)
     private readonly verifierKeycloak: VerifyFunction.KeycloakAuthFn,

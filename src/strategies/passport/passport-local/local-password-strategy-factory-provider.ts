@@ -18,7 +18,8 @@ export interface LocalPasswordStrategyFactory {
 }
 
 export class LocalPasswordStrategyFactoryProvider
-  implements Provider<LocalPasswordStrategyFactory> {
+  implements Provider<LocalPasswordStrategyFactory>
+{
   constructor(
     @inject(Strategies.Passport.LOCAL_PASSWORD_VERIFIER)
     private readonly verifierLocal: VerifyFunction.LocalPasswordFn,

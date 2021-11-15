@@ -9,7 +9,8 @@ import {VerifyFunction} from '../../types';
  * It will just throw an error saying Not Implemented
  */
 export class BearerTokenVerifyProvider
-  implements Provider<VerifyFunction.BearerFn> {
+  implements Provider<VerifyFunction.BearerFn>
+{
   constructor() {}
 
   value(): VerifyFunction.BearerFn {

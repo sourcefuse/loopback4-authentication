@@ -20,7 +20,8 @@ export interface InstagramAuthStrategyFactory {
 }
 
 export class InstagramAuthStrategyFactoryProvider
-  implements Provider<InstagramAuthStrategyFactory> {
+  implements Provider<InstagramAuthStrategyFactory>
+{
   constructor(
     @inject(Strategies.Passport.INSTAGRAM_OAUTH2_VERIFIER)
     private readonly verifierInstagramAuth: VerifyFunction.InstagramAuthFn,

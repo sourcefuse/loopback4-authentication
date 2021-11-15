@@ -3,7 +3,8 @@ import {VerifyFunction} from '../../../strategies';
 import {IAuthClient} from '../../../types';
 
 export class ClientPasswordVerifyProvider
-  implements Provider<VerifyFunction.OauthClientPasswordFn> {
+  implements Provider<VerifyFunction.OauthClientPasswordFn>
+{
   constructor() {}
 
   value() {

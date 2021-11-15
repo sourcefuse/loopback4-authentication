@@ -9,7 +9,8 @@ import {
 } from '../data/bearer-data';
 
 export class BearerTokenVerifyProvider
-  implements Provider<VerifyFunction.BearerFn> {
+  implements Provider<VerifyFunction.BearerFn>
+{
   constructor() {}
 
   value(): VerifyFunction.BearerFn {

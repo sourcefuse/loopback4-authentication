@@ -24,7 +24,8 @@ export interface FacebookAuthStrategyFactory {
 }
 
 export class FacebookAuthStrategyFactoryProvider
-  implements Provider<FacebookAuthStrategyFactory> {
+  implements Provider<FacebookAuthStrategyFactory>
+{
   constructor(
     @inject(Strategies.Passport.FACEBOOK_OAUTH2_VERIFIER)
     private readonly verifierFacebookAuth: VerifyFunction.FacebookAuthFn,

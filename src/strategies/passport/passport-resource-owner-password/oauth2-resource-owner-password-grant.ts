@@ -39,7 +39,9 @@ export namespace Oauth2ResourceOwnerPassword {
     ) {
       super();
       if (verify) {
-        this.passReqToCallback = (options as StrategyOptionsWithRequestInterface).passReqToCallback;
+        this.passReqToCallback = (
+          options as StrategyOptionsWithRequestInterface
+        ).passReqToCallback;
         this.verify = verify;
       } else {
         this.passReqToCallback = false;

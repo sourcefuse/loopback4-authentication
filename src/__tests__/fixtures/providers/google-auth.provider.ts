@@ -5,7 +5,8 @@ import {IAuthUser} from '../../../types';
 import {Request} from '@loopback/rest';
 
 export class BearerTokenVerifyProvider
-  implements Provider<VerifyFunction.GoogleAuthFn> {
+  implements Provider<VerifyFunction.GoogleAuthFn>
+{
   constructor() {}
 
   value(): VerifyFunction.GoogleAuthFn {

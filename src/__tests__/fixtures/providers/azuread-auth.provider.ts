@@ -5,7 +5,8 @@ import {IAuthUser} from '../../../types';
 import {Request} from '@loopback/rest';
 
 export class BearerTokenVerifyProvider
-  implements Provider<VerifyFunction.AzureADAuthFn> {
+  implements Provider<VerifyFunction.AzureADAuthFn>
+{
   constructor() {}
 
   value(): VerifyFunction.AzureADAuthFn {

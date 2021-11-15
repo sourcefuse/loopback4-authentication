@@ -7,7 +7,8 @@ import {DecodedIdToken} from 'passport-apple';
 import {VerifyFunction} from '../../types';
 
 export class AppleAuthVerifyProvider
-  implements Provider<VerifyFunction.AppleAuthFn> {
+  implements Provider<VerifyFunction.AppleAuthFn>
+{
   constructor() {}
 
   value(): VerifyFunction.AppleAuthFn {

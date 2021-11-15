@@ -10,7 +10,8 @@ import {VerifyFunction} from '../../types';
  * It will just throw an error saying Not Implemented
  */
 export class AzureADAuthVerifyProvider
-  implements Provider<VerifyFunction.AzureADAuthFn> {
+  implements Provider<VerifyFunction.AzureADAuthFn>
+{
   constructor() {}
 
   value(): VerifyFunction.AzureADAuthFn {

@@ -59,7 +59,8 @@ describe('getting google oauth2 strategy with options', () => {
 });
 
 class GoogleAuthVerifyProvider
-  implements Provider<VerifyFunction.GoogleAuthFn> {
+  implements Provider<VerifyFunction.GoogleAuthFn>
+{
   constructor() {}
 
   value(): VerifyFunction.GoogleAuthFn {

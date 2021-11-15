@@ -9,11 +9,13 @@ import {Request} from '@loopback/rest';
 
 describe('getting resource-owner strategy with options', () => {
   it('should return strategy by passing options and passReqToCallback as true', async () => {
-    const strategyVerifier: ResourceOwnerPasswordStrategyFactory = await getStrategy();
+    const strategyVerifier: ResourceOwnerPasswordStrategyFactory =
+      await getStrategy();
 
-    const options: Oauth2ResourceOwnerPassword.StrategyOptionsWithRequestInterface = {
-      passReqToCallback: true,
-    };
+    const options: Oauth2ResourceOwnerPassword.StrategyOptionsWithRequestInterface =
+      {
+        passReqToCallback: true,
+      };
 
     const resourceOwnerStrategyVerifier = strategyVerifier(options);
 
@@ -24,11 +26,13 @@ describe('getting resource-owner strategy with options', () => {
   });
 
   it('should return strategy by passing options and passReqToCallback as false', async () => {
-    const strategyVerifier: ResourceOwnerPasswordStrategyFactory = await getStrategy();
+    const strategyVerifier: ResourceOwnerPasswordStrategyFactory =
+      await getStrategy();
 
-    const options: Oauth2ResourceOwnerPassword.StrategyOptionsWithRequestInterface = {
-      passReqToCallback: false,
-    };
+    const options: Oauth2ResourceOwnerPassword.StrategyOptionsWithRequestInterface =
+      {
+        passReqToCallback: false,
+      };
 
     const resourceOwnerStrategyVerifier = strategyVerifier(options);
 
@@ -39,7 +43,8 @@ describe('getting resource-owner strategy with options', () => {
   });
 
   it('should return strategy by not passing any options', async () => {
-    const strategyVerifier: ResourceOwnerPasswordStrategyFactory = await getStrategy();
+    const strategyVerifier: ResourceOwnerPasswordStrategyFactory =
+      await getStrategy();
 
     const resourceOwnerStrategyVerifier = strategyVerifier();
 

@@ -9,7 +9,8 @@ import {VerifyFunction} from '../../types';
  * It will just throw an error saying Not Implemented
  */
 export class LocalPasswordVerifyProvider
-  implements Provider<VerifyFunction.LocalPasswordFn> {
+  implements Provider<VerifyFunction.LocalPasswordFn>
+{
   constructor() {}
 
   value(): VerifyFunction.LocalPasswordFn {
