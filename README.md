@@ -3,11 +3,9 @@
 [![LoopBack](<https://github.com/strongloop/loopback-next/raw/master/docs/site/imgs/branding/Powered-by-LoopBack-Badge-(blue)-@2x.png>)](http://loopback.io/)
 
 [![Node version](https://img.shields.io/node/v/loopback4-authentication.svg?style=flat-square)](https://nodejs.org/en/download/)
-[![Dependencies Status](https://img.shields.io/david/sourcefuse/loopback4-authentication.svg?style=flat-square&label=Dependencies)](https://github.com/sourcefuse/loopback4-authentication)
 [![Loopback Core Version](https://img.shields.io/npm/dependency-version/loopback4-authentication/@loopback/core.svg?color=dark%20green&style=flat-square)](https://github.com/strongloop/loopback-next)
 [![Loopback Build Version](https://img.shields.io/npm/dependency-version/loopback4-authentication/dev/@loopback/build.svg?color=dark%20green&style=flat-square)](https://github.com/strongloop/loopback-next/tree/master/packages/build)
-
-[![npm vulnerabilities](https://img.shields.io/snyk/vulnerabilities/npm/loopback4-authentication.svg?label=npm%20vulnerabilities&style=flat-square)](https://www.npmjs.com/package/loopback4-authentication)
+![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/loopback4-authentication?style=flat-square)
 
 [![Latest version](https://img.shields.io/npm/v/loopback4-authentication.svg?style=flat-square)](https://www.npmjs.com/package/loopback4-authentication)
 [![License](https://img.shields.io/github/license/sourcefuse/loopback4-authentication.svg?color=blue&label=License&style=flat-square)](https://github.com/sourcefuse/loopback4-authentication/blob/master/LICENSE)
@@ -126,7 +124,8 @@ import {VerifyFunction} from 'loopback4-authentication';
 import {AuthClientRepository} from '../../../repositories';
 
 export class ClientPasswordVerifyProvider
-  implements Provider<VerifyFunction.OauthClientPasswordFn> {
+  implements Provider<VerifyFunction.OauthClientPasswordFn>
+{
   constructor(
     @repository(AuthClientRepository)
     public authClientRepository: AuthClientRepository,
@@ -302,7 +301,8 @@ import {VerifyFunction} from 'loopback4-authentication';
 import {User} from '../models/user.model';
 
 export class BearerTokenVerifyProvider
-  implements Provider<VerifyFunction.BearerFn> {
+  implements Provider<VerifyFunction.BearerFn>
+{
   constructor(
     @repository(RevokedTokenRepository)
     public revokedTokenRepository: RevokedTokenRepository,
@@ -468,7 +468,8 @@ Add the verifier function for the strategy. You need to create a provider for th
 
 ```ts
 export class LocalPasswordVerifyProvider
-  implements Provider<VerifyFunction.LocalPasswordFn> {
+  implements Provider<VerifyFunction.LocalPasswordFn>
+{
   constructor(
     @repository(UserRepository)
     public userRepository: UserRepository,
@@ -675,7 +676,8 @@ Add the verifier function for the strategy. You need to create a provider for th
 
 ```ts
 export class ResourceOwnerVerifyProvider
-  implements Provider<VerifyFunction.ResourceOwnerPasswordFn> {
+  implements Provider<VerifyFunction.ResourceOwnerPasswordFn>
+{
   constructor(
     @repository(UserRepository)
     public userRepository: UserRepository,
@@ -887,7 +889,8 @@ import {UserCredentialsRepository, UserRepository} from '../../../repositories';
 import {AuthUser} from '../models/auth-user.model';
 
 export class GoogleOauth2VerifyProvider
-  implements Provider<VerifyFunction.GoogleAuthFn> {
+  implements Provider<VerifyFunction.GoogleAuthFn>
+{
   constructor(
     @repository(UserRepository)
     public userRepository: UserRepository,
@@ -1193,7 +1196,8 @@ import {UserCredentialsRepository, UserRepository} from '../../../repositories';
 import {AuthUser} from '../models/auth-user.model';
 
 export class InstagramOauth2VerifyProvider
-  implements Provider<VerifyFunction.InstagramAuthFn> {
+  implements Provider<VerifyFunction.InstagramAuthFn>
+{
   constructor(
     @repository(UserRepository)
     public userRepository: UserRepository,
@@ -1497,7 +1501,8 @@ import {UserCredentialsRepository, UserRepository} from '../../../repositories';
 import {AuthUser} from '../models/auth-user.model';
 
 export class AppleOauth2VerifyProvider
-  implements Provider<VerifyFunction.AppleAuthFn> {
+  implements Provider<VerifyFunction.AppleAuthFn>
+{
   constructor(
     @repository(UserRepository)
     public userRepository: UserRepository,
@@ -1803,7 +1808,8 @@ import {UserCredentialsRepository, UserRepository} from '../../../repositories';
 import {AuthUser} from '../models/auth-user.model';
 
 export class FacebookOauth2VerifyProvider
-  implements Provider<VerifyFunction.FacebookAuthFn> {
+  implements Provider<VerifyFunction.FacebookAuthFn>
+{
   constructor(
     @repository(UserRepository)
     public userRepository: UserRepository,
@@ -2110,7 +2116,8 @@ import {UserCredentialsRepository, UserRepository} from '../../../repositories';
 import {AuthUser} from '../models/auth-user.model';
 
 export class KeycloakVerifyProvider
-  implements Provider<VerifyFunction.KeycloakAuthFn> {
+  implements Provider<VerifyFunction.KeycloakAuthFn>
+{
   constructor(
     @repository(UserRepository)
     public userRepository: UserRepository,
