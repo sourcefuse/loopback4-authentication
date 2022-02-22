@@ -1,5 +1,5 @@
 import {Client, createClientForHandler, expect} from '@loopback/testlab';
-import {RestServer} from '@loopback/rest';
+import {getModelSchemaRef, RestServer} from '@loopback/rest';
 import {Application, inject} from '@loopback/core';
 import {post, requestBody} from '@loopback/openapi-v3';
 import {authenticate} from '../../../decorators';
@@ -10,7 +10,7 @@ import {Strategies} from '../../../strategies/keys';
 import {LocalVerifyProvider} from '../../fixtures/providers/local-password.provider';
 import {AuthenticationBindings} from '../../../keys';
 import {IAuthUser} from '../../../types';
-
+import {Authuser} from '../../../models';
 /**
  * Testing overall flow of authentication with bearer strategy
  */
@@ -25,7 +25,17 @@ describe('Local passport strategy', () => {
     class TestController {
       @post('/auth/local/no-user-data-passed')
       @authenticate(STRATEGY.LOCAL)
-      test(@requestBody() body: {username: string; password: string}) {
+      test(
+        @requestBody({
+          content: {
+            'application/json': {
+              schema: getModelSchemaRef(Authuser, {
+                title: 'NewAuthuser',
+                exclude: ['id'],
+              }),
+            },
+          },
+        }) body: {username: string; password: string}) {
         return 'test successful';
       }
     }
