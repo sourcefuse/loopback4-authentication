@@ -1,5 +1,5 @@
 import {Client, createClientForHandler, expect} from '@loopback/testlab';
-import {getModelSchemaRef, RestServer} from '@loopback/rest';
+import {RestServer} from '@loopback/rest';
 import {Application, inject} from '@loopback/core';
 import {post, requestBody} from '@loopback/openapi-v3';
 import {authenticate} from '../../../decorators';
@@ -21,21 +21,11 @@ describe('Local passport strategy', () => {
   beforeEach(givenAuthenticatedSequence);
   beforeEach(getAuthVerifier);
 
-  it('should return 422 bad request when no user data is passed', async () => {
+  it('should return 400 bad request when no user data is passed', async () => {
     class TestController {
       @post('/auth/local/no-user-data-passed')
       @authenticate(STRATEGY.LOCAL)
-      test(
-        @requestBody({
-          content: {
-            'application/json': {
-              schema: getModelSchemaRef(Authuser, {
-                title: 'NewAuthuser',
-                exclude: ['id'],
-              }),
-            },
-          },
-        }) body: {username: string; password: string}) {
+      test(@requestBody({required: true}) body: Authuser) {
         return 'test successful';
       }
     }
@@ -44,6 +34,26 @@ describe('Local passport strategy', () => {
 
     await whenIMakeRequestTo(server)
       .post('/auth/local/no-user-data-passed')
+      .expect(400);
+  });
+
+  it('should return 422 bad request when invalid user data is passed', async () => {
+    class TestController {
+      @post('/auth/local/no-user-data-passed')
+      @authenticate(STRATEGY.LOCAL)
+      test(
+        @requestBody()
+        body: Authuser,
+      ) {
+        return 'test successful';
+      }
+    }
+
+    app.controller(TestController);
+
+    await whenIMakeRequestTo(server)
+      .post('/auth/local/no-user-data-passed')
+      .send({})
       .expect(422);
   });
 
