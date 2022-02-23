@@ -10,7 +10,7 @@ import {Strategies} from '../../../strategies/keys';
 import {LocalVerifyProvider} from '../../fixtures/providers/local-password.provider';
 import {AuthenticationBindings} from '../../../keys';
 import {IAuthUser} from '../../../types';
-
+import {Authuser} from '../../../models';
 /**
  * Testing overall flow of authentication with bearer strategy
  */
@@ -21,11 +21,11 @@ describe('Local passport strategy', () => {
   beforeEach(givenAuthenticatedSequence);
   beforeEach(getAuthVerifier);
 
-  it('should return 422 bad request when no user data is passed', async () => {
+  it('should return 400 bad request when no user data is passed', async () => {
     class TestController {
       @post('/auth/local/no-user-data-passed')
       @authenticate(STRATEGY.LOCAL)
-      test(@requestBody() body: {username: string; password: string}) {
+      test(@requestBody({required: true}) body: Authuser) {
         return 'test successful';
       }
     }
@@ -34,6 +34,26 @@ describe('Local passport strategy', () => {
 
     await whenIMakeRequestTo(server)
       .post('/auth/local/no-user-data-passed')
+      .expect(400);
+  });
+
+  it('should return 422 bad request when invalid user data is passed', async () => {
+    class TestController {
+      @post('/auth/local/no-user-data-passed')
+      @authenticate(STRATEGY.LOCAL)
+      test(
+        @requestBody()
+        body: Authuser,
+      ) {
+        return 'test successful';
+      }
+    }
+
+    app.controller(TestController);
+
+    await whenIMakeRequestTo(server)
+      .post('/auth/local/no-user-data-passed')
+      .send({})
       .expect(422);
   });
 
