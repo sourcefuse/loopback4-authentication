@@ -3,6 +3,7 @@ dist/
 coverage/
 api-docs/
 typing/
+src/__tests__/
 
 index.*
 .cz-config.js
