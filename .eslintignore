@@ -8,3 +8,5 @@ src/__tests__/
 index.*
 .cz-config.js
 commitlint.config.js
+
+.eslintrc.js
