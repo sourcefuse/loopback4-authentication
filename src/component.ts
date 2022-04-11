@@ -30,6 +30,8 @@ import {
   LocalPasswordVerifyProvider,
   ResourceOwnerPasswordStrategyFactoryProvider,
   ResourceOwnerVerifyProvider,
+  PassportOtpStrategyFactoryProvider,
+  OtpVerifyProvider,
 } from './strategies';
 import {Strategies} from './strategies/keys';
 
@@ -47,6 +49,8 @@ export class AuthenticationComponent implements Component {
       // Strategy function factories
       [Strategies.Passport.LOCAL_STRATEGY_FACTORY.key]:
         LocalPasswordStrategyFactoryProvider,
+      [Strategies.Passport.OTP_AUTH_STRATEGY_FACTORY.key]:
+        PassportOtpStrategyFactoryProvider,
       [Strategies.Passport.CLIENT_PASSWORD_STRATEGY_FACTORY.key]:
         ClientPasswordStrategyFactoryProvider,
       [Strategies.Passport.BEARER_STRATEGY_FACTORY.key]:
@@ -71,6 +75,7 @@ export class AuthenticationComponent implements Component {
         ClientPasswordVerifyProvider,
       [Strategies.Passport.LOCAL_PASSWORD_VERIFIER.key]:
         LocalPasswordVerifyProvider,
+      [Strategies.Passport.OTP_VERIFIER.key]: OtpVerifyProvider,
       [Strategies.Passport.BEARER_TOKEN_VERIFIER.key]:
         BearerTokenVerifyProvider,
       [Strategies.Passport.RESOURCE_OWNER_PASSWORD_VERIFIER.key]:
