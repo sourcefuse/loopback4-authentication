@@ -25,7 +25,7 @@ module.exports = {
   ],
 
   scopes: [
-    {name: 'chore'},
+    {name: 'deps'},
     {name: 'ci-cd'},
     {name: 'component'},
     {name: 'provider'},

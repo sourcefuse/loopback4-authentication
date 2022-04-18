@@ -30,7 +30,8 @@
     "posttest": "npm run lint",
     "test:dev": "lb-mocha --allow-console-logs dist/__tests__/**/*.js && npm run posttest",
     "prepublishOnly": "npm run test",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "postinstall": "patch-package"
   },
   "repository": {
     "type": "git",
@@ -102,11 +103,27 @@
     "husky": "^7.0.4",
     "lodash": "^4.17.21",
     "nyc": "^15.1.0",
+    "patch-package": "^6.4.7",
     "semantic-release": "^19.0.2",
     "source-map-support": "^0.5.21",
     "ts-node": "^10.7.0",
     "tslint": "^6.1.3",
     "typescript": "~4.6.3"
+  },
+  "overrides": {
+    "commitizen": {
+      "minimist": "^1.2.6",
+      "cz-conventional-changelog": "^3.3.0"
+    },
+    "jake": {
+      "async": "^3.2.3"
+    },
+    "passport-azure-ad": {
+      "async": "^3.2.3"
+    },
+    "cache-manager": {
+      "async": "^3.2.3"
+    }
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
