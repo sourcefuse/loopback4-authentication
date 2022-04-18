@@ -25,6 +25,7 @@ It provides support for seven passport based strategies.
 7. [passport-instagram](https://github.com/jaredhanson/passport-instagram) - Passport strategy for authenticating with Instagram using the Instagram OAuth 2.0 API. This module lets you authenticate using Instagram in your Node.js applications.
 8. [passport-apple](https://github.com/ananay/passport-apple) - Passport strategy for authenticating with Apple using the Apple OAuth 2.0 API. This module lets you authenticate using Apple in your Node.js applications.
 9. [passport-facebook](https://github.com/jaredhanson/passport-facebook) - Passport strategy for authenticating with Facebook using the Facebook OAuth 2.0 API. This module lets you authenticate using Facebook in your Node.js applications.
+10. custom-passport-otp - Created a Custom Passport strategy for 2-Factor-Authentication using OTP (One Time Password).
 
 You can use one or more strategies of the above in your application. For each of the strategy (only which you use), you just need to provide your own verifier function, making it easily configurable. Rest of the strategy implementation intricacies is handled by extension.
 
@@ -791,6 +792,198 @@ For accessing the authenticated AuthUser and AuthClient model reference, you can
   private readonly getCurrentUser: Getter<User>,
   @inject.getter(AuthenticationBindings.CURRENT_CLIENT)
   private readonly getCurrentClient: Getter<AuthClient>,
+```
+
+### OTP
+
+First, create a OtpCache model. This model should have OTP and few details of user and client (which will be used to retrieve them from database), it will be used to verify otp and get user, client. See sample below.
+
+```ts
+@model()
+export class OtpCache extends Entity {
+  @property({
+    type: 'string',
+  })
+  otp: string;
+
+  @property({
+    type: 'string',
+  })
+  userId: string;
+
+  @property({
+    type: 'string',
+  })
+  clientId: string;
+
+  @property({
+    type: 'string',
+  })
+  clientSecret: string;
+
+  constructor(data?: Partial<OtpCache>) {
+    super(data);
+  }
+}
+```
+
+Create [redis-repository](https://loopback.io/doc/en/lb4/Repository.html#define-a-keyvaluerepository) for the above model. Use loopback CLI.
+
+```sh
+lb4 repository
+```
+
+Here is a simple example.
+
+```ts
+import {OtpCache} from '../models';
+import {AuthCacheSourceName} from 'loopback4-authentication';
+
+export class OtpCacheRepository extends DefaultKeyValueRepository<OtpCache> {
+  constructor(
+    @inject(`datasources.${AuthCacheSourceName}`)
+    dataSource: juggler.DataSource,
+  ) {
+    super(OtpCache, dataSource);
+  }
+}
+```
+
+Add the verifier function for the strategy. You need to create a provider for the same. You can add your application specific business logic for auth here. Here is a simple example.
+
+```ts
+export class OtpVerifyProvider implements Provider<VerifyFunction.OtpAuthFn> {
+  constructor(
+    @repository(UserRepository)
+    public userRepository: UserRepository,
+    @repository(OtpCacheRepository)
+    public otpCacheRepo: OtpCacheRepository,
+  ) {}
+
+  value(): VerifyFunction.OtpAuthFn {
+    return async (key: string, otp: string) => {
+      const otpCache = await this.otpCacheRepo.get(key);
+      if (!otpCache) {
+        throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
+      }
+      if (otpCache.otp.toString() !== otp) {
+        throw new HttpErrors.Unauthorized('Invalid OTP');
+      }
+      return this.userRepository.findById(otpCache.userId);
+    };
+  }
+}
+```
+
+Please note the Verify function type _VerifyFunction.OtpAuthFn_
+
+Now bind this provider to the application in application.ts.
+
+```ts
+import {AuthenticationComponent, Strategies} from 'loopback4-authentication';
+```
+
+```ts
+// Add authentication component
+this.component(AuthenticationComponent);
+// Customize authentication verify handlers
+this.bind(Strategies.Passport.OTP_VERIFIER).toProvider(OtpVerifyProvider);
+```
+
+Finally, add the authenticate function as a sequence action to sequence.ts.
+
+```ts
+export class MySequence implements SequenceHandler {
+  constructor(
+    @inject(SequenceActions.FIND_ROUTE) protected findRoute: FindRoute,
+    @inject(SequenceActions.PARSE_PARAMS) protected parseParams: ParseParams,
+    @inject(SequenceActions.INVOKE_METHOD) protected invoke: InvokeMethod,
+    @inject(SequenceActions.SEND) public send: Send,
+    @inject(SequenceActions.REJECT) public reject: Reject,
+    @inject(AuthenticationBindings.USER_AUTH_ACTION)
+    protected authenticateRequest: AuthenticateFn<AuthUser>,
+  ) {}
+
+  async handle(context: RequestContext) {
+    try {
+      const {request, response} = context;
+
+      const route = this.findRoute(request);
+      const args = await this.parseParams(request, route);
+      request.body = args[args.length - 1];
+      const authUser: AuthUser = await this.authenticateRequest(request);
+      const result = await this.invoke(route, args);
+      this.send(response, result);
+    } catch (err) {
+      this.reject(context, err);
+    }
+  }
+}
+```
+
+Then, you need to create APIs, where you will first authenticate the user, and then send the OTP to user's email/phone. See below.
+
+```ts
+  //You can use your other strategies also
+  @authenticate(STRATEGY.LOCAL)
+  @post('/auth/send-otp', {
+    responses: {
+      [STATUS_CODE.OK]: {
+        description: 'Send Otp',
+        content: {
+          [CONTENT_TYPE.JSON]: Object,
+        },
+      },
+    },
+  })
+  async login(
+    @requestBody()
+    req: LoginRequest,
+  ): Promise<{
+    key: string;
+  }> {
+
+    // User is authenticated before this step.
+    // Now follow these steps:
+    // 1. Create a unique key.
+    // 2. Generate and send OTP to user's email/phone.
+    // 3. Store the details in redis-cache using key created in step-1. (Refer OtpCache model mentioned above)
+    // 4. Response will be the key created in step-1
+  }
+```
+
+After this, create an API with @@authenticate(STRATEGY.OTP) decorator. See below.
+
+```ts
+  @authenticate(STRATEGY.OTP)
+  @post('/auth/login-otp', {
+    responses: {
+      [STATUS_CODE.OK]: {
+        description: 'Auth Code',
+        content: {
+          [CONTENT_TYPE.JSON]: Object,
+        },
+      },
+    },
+  })
+  async login(
+    @requestBody()
+    req: {
+      key: 'string';
+      otp: 'string';
+    },
+  ): Promise<{
+    code: string;
+  }> {
+    ......
+  }
+```
+
+For accessing the authenticated AuthUser model reference, you can inject the CURRENT_USER provider, provided by the extension, which is populated by the auth action sequence above.
+
+```ts
+  @inject.getter(AuthenticationBindings.CURRENT_USER)
+  private readonly getCurrentUser: Getter<User>,
 ```
 
 ### Google Oauth 2
