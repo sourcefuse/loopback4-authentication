@@ -7,6 +7,7 @@ import * as AppleStrategy from 'passport-apple';
 import {DecodedIdToken} from 'passport-apple';
 import {IAuthClient, IAuthUser} from '../../types';
 import {Keycloak} from './keycloak.types';
+import {Otp} from '../passport';
 
 export type VerifyCallback = (
   err?: string | Error | null,
@@ -23,6 +24,10 @@ export namespace VerifyFunction {
 
   export interface LocalPasswordFn<T = IAuthUser> extends GenericAuthFn<T> {
     (username: string, password: string, req?: Request): Promise<T | null>;
+  }
+
+  export interface OtpAuthFn<T = IAuthUser> extends GenericAuthFn<T> {
+    (key: string, otp: string, cb: Otp.VerifyCallback): Promise<T | null>;
   }
 
   export interface BearerFn<T = IAuthUser> extends GenericAuthFn<T> {

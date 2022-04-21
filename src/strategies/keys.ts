@@ -23,6 +23,16 @@ export namespace Strategies {
         'sf.passport.verifier.localPassword',
       );
 
+    // Passport-local-with-otp startegy
+    export const OTP_AUTH_STRATEGY_FACTORY =
+      BindingKey.create<LocalPasswordStrategyFactory>(
+        'sf.passport.strategyFactory.otpAuth',
+      );
+    export const OTP_VERIFIER =
+      BindingKey.create<VerifyFunction.LocalPasswordFn>(
+        'sf.passport.verifier.otpAuth',
+      );
+
     // Passport-oauth2-client-password strategy
     export const CLIENT_PASSWORD_STRATEGY_FACTORY =
       BindingKey.create<ClientPasswordStrategyFactory>(
