@@ -37,7 +37,7 @@ export namespace Otp {
       const key = req.body.key || options?.key;
       const otp = req.body.otp || options?.otp;
 
-      if (!key || !otp) {
+      if (!key) {
         this.fail();
         return;
       }
