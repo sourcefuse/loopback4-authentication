@@ -1,3 +1,10 @@
+## [6.1.1](https://github.com/sourcefuse/loopback4-authentication/compare/v6.1.0...v6.1.1) (2022-05-09)
+
+
+### Bug Fixes
+
+* **provider:** minor fix in otp strategy ([#70](https://github.com/sourcefuse/loopback4-authentication/issues/70)) ([14e7ae2](https://github.com/sourcefuse/loopback4-authentication/commit/14e7ae2cae4e6aae9be99e1e547efe018716ba51)), closes [#69](https://github.com/sourcefuse/loopback4-authentication/issues/69)
+
 # [6.1.0](https://github.com/sourcefuse/loopback4-authentication/compare/v6.0.3...v6.1.0) (2022-04-25)
 
 

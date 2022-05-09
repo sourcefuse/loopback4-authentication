@@ -17,7 +17,7 @@ var Otp;
         authenticate(req, options) {
             const key = req.body.key || (options === null || options === void 0 ? void 0 : options.key);
             const otp = req.body.otp || (options === null || options === void 0 ? void 0 : options.otp);
-            if (!key || !otp) {
+            if (!key) {
                 this.fail();
                 return;
             }

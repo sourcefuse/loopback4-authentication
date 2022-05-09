@@ -8,5 +8,8 @@ export declare const enum AuthErrorKeys {
     ClientUserMissing = "Client User Missing",
     InvalidCredentials = "Invalid Credentials",
     UnknownError = "Unknown Error",
-    WrongPassword = "Incorrect Password"
+    WrongPassword = "Incorrect Password",
+    KeyInvalid = "Key Invalid",
+    OtpInvalid = "Otp Invalid",
+    OtpExpired = "Otp Token Incorrect or Expired"
 }
