@@ -67,7 +67,7 @@
     "passport-instagram": "^1.0.0",
     "passport-local": "^1.0.0",
     "passport-oauth2-client-password": "^0.1.2",
-    "tslib": "^2.3.1"
+    "tslib": "^2.4.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.3",
