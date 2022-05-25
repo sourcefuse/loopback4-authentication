@@ -1,3 +1,10 @@
+## [6.1.2](https://github.com/sourcefuse/loopback4-authentication/compare/v6.1.1...v6.1.2) (2022-05-25)
+
+
+### Bug Fixes
+
+* **deps:** remove vulnerabilities ([#74](https://github.com/sourcefuse/loopback4-authentication/issues/74)) ([45acf67](https://github.com/sourcefuse/loopback4-authentication/commit/45acf671bf7b1b24e4c4acdc8e617949fe30b595)), closes [#73](https://github.com/sourcefuse/loopback4-authentication/issues/73) [#73](https://github.com/sourcefuse/loopback4-authentication/issues/73)
+
 ## [6.1.1](https://github.com/sourcefuse/loopback4-authentication/compare/v6.1.0...v6.1.1) (2022-05-09)
 
 
