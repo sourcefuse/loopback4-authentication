@@ -39,4 +39,5 @@ export interface ClientAuthCode<T extends IAuthUser, ID = number> {
   clientId: string;
   userId?: ID;
   user?: T;
+  mfa?: boolean;
 }
