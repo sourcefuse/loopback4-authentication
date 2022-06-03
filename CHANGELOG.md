@@ -1,3 +1,10 @@
+## [6.1.3](https://github.com/sourcefuse/loopback4-authentication/compare/v6.1.2...v6.1.3) (2022-06-03)
+
+
+### Bug Fixes
+
+* **component:** add mfa property to ClientAuthCode interface ([#81](https://github.com/sourcefuse/loopback4-authentication/issues/81)) ([1f13901](https://github.com/sourcefuse/loopback4-authentication/commit/1f139012dd5db3a1ac066b445856708e90808786)), closes [#69](https://github.com/sourcefuse/loopback4-authentication/issues/69)
+
 ## [6.1.2](https://github.com/sourcefuse/loopback4-authentication/compare/v6.1.1...v6.1.2) (2022-05-25)
 
 

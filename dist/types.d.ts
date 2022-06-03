@@ -28,6 +28,7 @@ export interface AuthenticateFn<T> {
 }
 export interface ClientAuthCode<T extends IAuthUser, ID = number> {
     clientId: string;
+    mfa?: boolean;
     userId?: ID;
     user?: T;
 }
