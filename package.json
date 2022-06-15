@@ -1,6 +1,6 @@
 {
   "name": "loopback4-authentication",
-  "version": "6.1.3",
+  "version": "6.1.4",
   "description": "A loopback-next extension for authentication feature. Oauth strategies supported.",
   "keywords": [
     "loopback-extension",
@@ -127,12 +127,19 @@
       "master"
     ],
     "plugins": [
-      ["@semantic-release/commit-analyzer", {
-        "preset":"angular",
-        "releaseRules" : [
-          {"type": "chore", "scope":"deps","release":"patch"}
-        ]
-      }],
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "angular",
+          "releaseRules": [
+            {
+              "type": "chore",
+              "scope": "deps",
+              "release": "patch"
+            }
+          ]
+        }
+      ],
       "@semantic-release/release-notes-generator",
       "@semantic-release/changelog",
       "@semantic-release/npm",
