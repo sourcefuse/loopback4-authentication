@@ -56,9 +56,9 @@
     "@loopback/core": "^4.0.1",
     "ajv": "^8.11.0",
     "https-proxy-agent": "^5.0.0",
-    "passport": "^0.5.2",
+    "passport": "^0.6.0",
     "passport-apple": "^2.0.1",
-    "passport-azure-ad": "^4.3.1",
+    "passport-azure-ad": "^4.3.3",
     "passport-facebook": "^3.0.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-http-bearer": "^1.0.1",
@@ -112,6 +112,9 @@
     "commitizen": {
       "minimist": "^1.2.6",
       "cz-conventional-changelog": "^3.3.0"
+    },
+    "passport-azure-ad": {
+      "passport": "^0.6.0"
     }
   },
   "publishConfig": {
