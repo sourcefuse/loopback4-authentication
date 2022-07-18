@@ -2550,6 +2550,22 @@ this.bind(VerifyBindings.BEARER_SIGNUP_VERIFY_PROVIDER).toProvider(
 
 If a https proxy agent is needed for keycloak and google auth, just add an environment variable named `HTTPS_PROXY` or `https_proxy` with proxy url as value. It will add that proxy agent to the request.
 
+## Middleware Sequence Support
+
+As action based sequence will be deprecated soon, we have provided support for middleware based sequences. If you are using middleware sequence you can add authentication to your application by enabling client or user authentication middleware. This can be done by binding the AuthenticationBindings.CONFIG :
+
+```ts
+this.bind(AuthenticationBindings.CONFIG).to({
+  useClientAuthenticationMiddleware: true,
+  useUserAuthenticationMiddleware: true,
+});
+
+this.component(AuthenticationComponent);
+```
+
+This binding needs to be done before adding the Authentication component to your application.
+Apart from this all other steps for authentication for all strategies remain the same.
+
 ## Feedback
 
 If you've noticed a bug or have a question or have a feature request, [search the issue tracker](https://github.com/sourcefuse/loopback4-authentication/issues) to see if someone else in the community has already created a ticket.

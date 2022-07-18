@@ -4,6 +4,7 @@ import {Strategy} from 'passport';
 
 import {
   AuthenticateFn,
+  AuthenticationConfig,
   AuthenticationMetadata,
   IAuthClient,
   IAuthUser,
@@ -45,6 +46,10 @@ export namespace AuthenticationBindings {
 
   export const CURRENT_CLIENT = BindingKey.create<IAuthClient | undefined>(
     'sf.clientAuthentication.currentClient',
+  );
+
+  export const CONFIG = BindingKey.create<AuthenticationConfig>(
+    'sf.userAuthentication.config',
   );
 }
 

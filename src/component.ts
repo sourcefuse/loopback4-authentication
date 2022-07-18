@@ -1,6 +1,11 @@
-import {Component, ProviderMap} from '@loopback/core';
+import {Binding, Component, inject, ProviderMap} from '@loopback/core';
+import {createMiddlewareBinding} from '@loopback/express';
 
 import {AuthenticationBindings} from './keys';
+import {
+  ClientAuthenticationMiddlewareProvider,
+  UserAuthenticationMiddlewareProvider,
+} from './middlewares';
 import {
   AuthenticateActionProvider,
   AuthMetadataProvider,
@@ -34,9 +39,13 @@ import {
   OtpVerifyProvider,
 } from './strategies';
 import {Strategies} from './strategies/keys';
+import {AuthenticationConfig} from './types';
 
 export class AuthenticationComponent implements Component {
-  constructor() {
+  constructor(
+    @inject(AuthenticationBindings.CONFIG, {optional: true})
+    private readonly config?: AuthenticationConfig,
+  ) {
     this.providers = {
       [AuthenticationBindings.USER_AUTH_ACTION.key]: AuthenticateActionProvider,
       [AuthenticationBindings.CLIENT_AUTH_ACTION.key]:
@@ -90,7 +99,19 @@ export class AuthenticationComponent implements Component {
       [Strategies.Passport.AZURE_AD_VERIFIER.key]: AzureADAuthVerifyProvider,
       [Strategies.Passport.KEYCLOAK_VERIFIER.key]: KeycloakVerifyProvider,
     };
+    this.bindings = [];
+    if (this.config?.useClientAuthenticationMiddleware) {
+      this.bindings.push(
+        createMiddlewareBinding(ClientAuthenticationMiddlewareProvider),
+      );
+    }
+    if (this.config?.useUserAuthenticationMiddleware) {
+      this.bindings.push(
+        createMiddlewareBinding(UserAuthenticationMiddlewareProvider),
+      );
+    }
   }
 
   providers?: ProviderMap;
+  bindings?: Binding[];
 }

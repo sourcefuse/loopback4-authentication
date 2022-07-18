@@ -11,7 +11,7 @@
       "program": "${workspaceFolder}\\index.js",
       "outFiles": [
         "${workspaceFolder}/**/*.js"
-      ]
+      ],
     },
     {
       "type": "node",
@@ -25,7 +25,20 @@
           "${workspaceFolder}\\dist\\__tests__"
       ],
       "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen"
+      "internalConsoleOptions": "neverOpen",
+  },
+  {
+    "name": "Run mocha",
+			// Type of configuration. Possible values: "node", "mono".
+			"type": "node",
+			// Workspace relative or absolute path to the program.
+			"program": "${workspaceRoot}/node_modules/.bin/lb-mocha",
+			// Automatically stop program after launch.
+			"stopOnEntry": false,
+			// Command line arguments passed to the program.
+			"args": ["--allow-console-logs","\"${workspaceRoot}/dist/__tests__\"","-g","\"should return 200 when client id is passed and passReqToCallback is set true\""],
+			// Workspace relative or absolute path to the working directory of the program being debugged. Default is the current workspace.
+			"cwd": ".",
   }
   ]
 }
