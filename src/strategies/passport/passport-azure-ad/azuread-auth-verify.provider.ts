@@ -16,6 +16,8 @@ export class AzureADAuthVerifyProvider
 
   value(): VerifyFunction.AzureADAuthFn {
     return async (
+      accessToken: string,
+      refreshToken: string,
       profile: AzureADStrategy.IProfile,
       done: AzureADStrategy.VerifyCallback,
       req?: Request,

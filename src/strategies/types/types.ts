@@ -56,6 +56,8 @@ export namespace VerifyFunction {
 
   export interface AzureADAuthFn<T = IAuthUser> extends GenericAuthFn<T> {
     (
+      accessToken: string,
+      refreshToken: string,
       profile: AzureADStrategy.IProfile,
       done: AzureADStrategy.VerifyCallback,
       req?: Request,
