@@ -1,3 +1,15 @@
+# [7.0.0](https://github.com/sourcefuse/loopback4-authentication/compare/v6.1.5...v7.0.0) (2022-07-28)
+
+
+### Bug Fixes
+
+* **provider:** adding tokens to verify type for azure ([#92](https://github.com/sourcefuse/loopback4-authentication/issues/92)) ([f326b85](https://github.com/sourcefuse/loopback4-authentication/commit/f326b858403f434d5ec5dcf3846448b2476a9844)), closes [#91](https://github.com/sourcefuse/loopback4-authentication/issues/91)
+
+
+### BREAKING CHANGES
+
+* **provider:** changed the verify function signature
+
 ## [6.1.5](https://github.com/sourcefuse/loopback4-authentication/compare/v6.1.4...v6.1.5) (2022-07-08)
 
 ## [6.1.4](https://github.com/sourcefuse/loopback4-authentication/compare/v6.1.3...v6.1.4) (2022-06-15)
