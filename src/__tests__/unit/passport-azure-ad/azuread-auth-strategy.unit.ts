@@ -70,7 +70,11 @@ async function getStrategy() {
 }
 
 //returning a user
-function verifierBearer(profile: IProfile): Promise<IAuthUser | null> {
+function verifierBearer(
+  accessToken: string,
+  refreshToken: string,
+  profile: IProfile,
+): Promise<IAuthUser | null> {
   const userToPass: IAuthUser = {
     id: 1,
     username: 'xyz',

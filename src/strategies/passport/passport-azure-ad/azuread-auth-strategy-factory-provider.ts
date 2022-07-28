@@ -42,13 +42,27 @@ export class AzureADAuthStrategyFactoryProvider
         options,
 
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        async (req: Request, profile: IProfile, done: VerifyCallback) => {
+        async (
+          req: Request,
+          iss: string,
+          sub: string,
+          profile: IProfile,
+          accessToken: string,
+          refreshToken: string,
+          done: VerifyCallback,
+        ) => {
           if (!profile.oid) {
             return done(new Error('No oid found'), null);
           }
 
           try {
-            const user = await verifyFn(profile, done, req);
+            const user = await verifyFn(
+              accessToken,
+              refreshToken,
+              profile,
+              done,
+              req,
+            );
             if (!user) {
               throw new HttpErrors.Unauthorized(
                 AuthErrorKeys.InvalidCredentials,
@@ -65,13 +79,25 @@ export class AzureADAuthStrategyFactoryProvider
         options,
 
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        async (profile: IProfile, done: VerifyCallback) => {
+        async (
+          iss: string,
+          sub: string,
+          profile: IProfile,
+          accessToken: string,
+          refreshToken: string,
+          done: VerifyCallback,
+        ) => {
           if (!profile.oid) {
             return done(new Error('No oid found'), null);
           }
 
           try {
-            const user = await verifyFn(profile, done);
+            const user = await verifyFn(
+              accessToken,
+              refreshToken,
+              profile,
+              done,
+            );
             if (!user) {
               throw new HttpErrors.Unauthorized(
                 AuthErrorKeys.InvalidCredentials,

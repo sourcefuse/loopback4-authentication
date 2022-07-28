@@ -11,6 +11,8 @@ export class BearerTokenVerifyProvider
 
   value(): VerifyFunction.AzureADAuthFn {
     return async (
+      accessToken: string,
+      refreshToken: string,
       profile: AzureADAuthStrategy.IProfile,
       done: AzureADAuthStrategy.VerifyCallback,
       req?: Request,
