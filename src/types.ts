@@ -41,3 +41,8 @@ export interface ClientAuthCode<T extends IAuthUser, ID = number> {
   userId?: ID;
   user?: T;
 }
+
+export interface AuthenticationConfig {
+  useClientAuthenticationMiddleware?: boolean;
+  useUserAuthenticationMiddleware?: boolean;
+}

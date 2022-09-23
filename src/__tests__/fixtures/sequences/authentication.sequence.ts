@@ -37,8 +37,8 @@ export class MyAuthenticationSequence implements SequenceHandler {
       request.body = args[args.length - 1];
 
       //call authentication action
-      await this.authenticateClientRequest(request);
-      await this.authenticateRequest(request);
+      await this.authenticateClientRequest(request, response);
+      await this.authenticateRequest(request, response);
 
       // Authentication successful, proceed to invoke controller
       const result = await this.invoke(route, args);
