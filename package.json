@@ -59,6 +59,7 @@
     "passport": "^0.6.0",
     "passport-apple": "^2.0.1",
     "passport-azure-ad": "^4.3.3",
+    "passport-cognito-oauth2": "^0.1.1",
     "passport-facebook": "^3.0.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-http-bearer": "^1.0.1",

@@ -5,7 +5,7 @@ import * as InstagramStrategy from 'passport-instagram';
 import * as FacebookStrategy from 'passport-facebook';
 import * as AppleStrategy from 'passport-apple';
 import {DecodedIdToken} from 'passport-apple';
-import {IAuthClient, IAuthUser} from '../../types';
+import {Cognito, IAuthClient, IAuthUser} from '../../types';
 import {Keycloak} from './keycloak.types';
 import {Otp} from '../passport';
 
@@ -91,6 +91,16 @@ export namespace VerifyFunction {
       refreshToken: string,
       profile: FacebookStrategy.Profile,
       cb: VerifyCallback,
+      req?: Request,
+    ): Promise<T | null>;
+  }
+
+  export interface CognitoAuthFn<T = IAuthUser> extends GenericAuthFn<T> {
+    (
+      accessToken: string,
+      refreshToken: string,
+      profile: Cognito.Profile,
+      cb: Cognito.VerifyCallback,
       req?: Request,
     ): Promise<T | null>;
   }

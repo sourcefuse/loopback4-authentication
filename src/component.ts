@@ -39,6 +39,10 @@ import {
   OtpVerifyProvider,
 } from './strategies';
 import {Strategies} from './strategies/keys';
+import {
+  CognitoAuthVerifyProvider,
+  CognitoStrategyFactoryProvider,
+} from './strategies/passport/passport-cognito-oauth2';
 import {AuthenticationConfig} from './types';
 
 export class AuthenticationComponent implements Component {
@@ -78,6 +82,8 @@ export class AuthenticationComponent implements Component {
         AzureADAuthStrategyFactoryProvider,
       [Strategies.Passport.KEYCLOAK_STRATEGY_FACTORY.key]:
         KeycloakStrategyFactoryProvider,
+      [Strategies.Passport.COGNITO_OAUTH2_STRATEGY_FACTORY.key]:
+        CognitoStrategyFactoryProvider,
 
       // Verifier functions
       [Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER.key]:
@@ -95,6 +101,8 @@ export class AuthenticationComponent implements Component {
         InstagramAuthVerifyProvider,
       [Strategies.Passport.FACEBOOK_OAUTH2_VERIFIER.key]:
         FacebookAuthVerifyProvider,
+      [Strategies.Passport.COGNITO_OAUTH2_VERIFIER.key]:
+        CognitoAuthVerifyProvider,
       [Strategies.Passport.APPLE_OAUTH2_VERIFIER.key]: AppleAuthVerifyProvider,
       [Strategies.Passport.AZURE_AD_VERIFIER.key]: AzureADAuthVerifyProvider,
       [Strategies.Passport.KEYCLOAK_VERIFIER.key]: KeycloakVerifyProvider,

@@ -27,8 +27,9 @@ import {
   FacebookAuthStrategyFactory,
   PassportOtpStrategyFactory,
   Otp,
+  CognitoAuthStrategyFactory,
 } from './passport';
-import {Keycloak, VerifyFunction} from './types';
+import {Cognito, Keycloak, VerifyFunction} from './types';
 
 interface ExtendedStrategyOption extends FacebookStrategy.StrategyOption {
   passReqToCallback?: false;
@@ -59,6 +60,8 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     private readonly getFacebookAuthVerifier: FacebookAuthStrategyFactory,
     @inject(Strategies.Passport.APPLE_OAUTH2_STRATEGY_FACTORY)
     private readonly getAppleAuthVerifier: AppleAuthStrategyFactory,
+    @inject(Strategies.Passport.COGNITO_OAUTH2_STRATEGY_FACTORY)
+    private readonly getCognitoAuthVerifier: CognitoAuthStrategyFactory,
   ) {}
 
   async value(): Promise<Strategy | undefined> {
@@ -132,6 +135,11 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
           | FacebookStrategy.StrategyOptionWithRequest
           | ExtendedStrategyOption,
         verifier as VerifyFunction.FacebookAuthFn,
+      );
+    } else if (name === STRATEGY.COGNITO_OAUTH2) {
+      return this.getCognitoAuthVerifier(
+        this.metadata.options as Cognito.StrategyOptions,
+        verifier as VerifyFunction.CognitoAuthFn,
       );
     } else if (name === STRATEGY.OTP) {
       return this.getOtpVerifier(
