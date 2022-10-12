@@ -25,7 +25,8 @@ It provides support for seven passport based strategies.
 7. [passport-instagram](https://github.com/jaredhanson/passport-instagram) - Passport strategy for authenticating with Instagram using the Instagram OAuth 2.0 API. This module lets you authenticate using Instagram in your Node.js applications.
 8. [passport-apple](https://github.com/ananay/passport-apple) - Passport strategy for authenticating with Apple using the Apple OAuth 2.0 API. This module lets you authenticate using Apple in your Node.js applications.
 9. [passport-facebook](https://github.com/jaredhanson/passport-facebook) - Passport strategy for authenticating with Facebook using the Facebook OAuth 2.0 API. This module lets you authenticate using Facebook in your Node.js applications.
-10. custom-passport-otp - Created a Custom Passport strategy for 2-Factor-Authentication using OTP (One Time Password).
+10. [passport-cognito-oauth2](https://github.com/ebuychance/passport-cognito-oauth2) - Passport strategy for authenticating with Cognito using the Cognito OAuth 2.0 API. This module lets you authenticate using Cognito in your Node.js applications.
+11. custom-passport-otp - Created a Custom Passport strategy for 2-Factor-Authentication using OTP (One Time Password).
 
 You can use one or more strategies of the above in your application. For each of the strategy (only which you use), you just need to provide your own verifier function, making it easily configurable. Rest of the strategy implementation intricacies is handled by extension.
 
