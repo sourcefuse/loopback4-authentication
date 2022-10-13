@@ -10,6 +10,7 @@ import {VerifyFunction} from './types';
 import {InstagramAuthStrategyFactoryProvider} from './passport';
 import {AppleAuthStrategyFactoryProvider} from './passport/passport-apple-oauth2';
 import {FacebookAuthStrategyFactoryProvider} from './passport/passport-facebook-oauth2';
+import {CognitoStrategyFactoryProvider} from './passport/passport-cognito-oauth2';
 
 export namespace Strategies {
   export namespace Passport {
@@ -120,6 +121,16 @@ export namespace Strategies {
     export const APPLE_OAUTH2_VERIFIER =
       BindingKey.create<VerifyFunction.AppleAuthFn>(
         'sf.passport.verifier.appleOauth2',
+      );
+
+    // Passport-cognito-oauth2 strategy
+    export const COGNITO_OAUTH2_STRATEGY_FACTORY =
+      BindingKey.create<CognitoStrategyFactoryProvider>(
+        'sf.passport.strategyFactory.cognitoOauth2',
+      );
+    export const COGNITO_OAUTH2_VERIFIER =
+      BindingKey.create<VerifyFunction.CognitoAuthFn>(
+        'sf.passport.verifier.cognitoOauth2',
       );
   }
 }

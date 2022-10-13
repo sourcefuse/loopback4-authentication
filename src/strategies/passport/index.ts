@@ -8,4 +8,5 @@ export * from './passport-azure-ad';
 export * from './passport-insta-oauth2';
 export * from './passport-apple-oauth2';
 export * from './passport-facebook-oauth2';
+export * from './passport-cognito-oauth2';
 export * from './passport-otp';
