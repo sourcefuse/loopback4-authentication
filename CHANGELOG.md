@@ -1,3 +1,11 @@
+# [7.1.0](https://github.com/sourcefuse/loopback4-authentication/compare/v7.0.1...v7.1.0) (2022-10-14)
+
+
+### Features
+
+* **middleware:** add client and user authentication middleware ([#90](https://github.com/sourcefuse/loopback4-authentication/issues/90)) ([0e470f8](https://github.com/sourcefuse/loopback4-authentication/commit/0e470f85ad46ec96cb73111119344ad8878021b3)), closes [#32](https://github.com/sourcefuse/loopback4-authentication/issues/32)
+* **provider:** strategy for Amazon Cognito OAuth ([#98](https://github.com/sourcefuse/loopback4-authentication/issues/98)) ([03b0294](https://github.com/sourcefuse/loopback4-authentication/commit/03b029447f7e3a07af2ff4835c233a0fd4502202)), closes [#97](https://github.com/sourcefuse/loopback4-authentication/issues/97)
+
 ## [7.0.1](https://github.com/sourcefuse/loopback4-authentication/compare/v7.0.0...v7.0.1) (2022-09-09)
 
 # [7.0.0](https://github.com/sourcefuse/loopback4-authentication/compare/v6.1.5...v7.0.0) (2022-07-28)
