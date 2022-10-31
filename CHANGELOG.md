@@ -1,3 +1,5 @@
+## [7.1.1](https://github.com/sourcefuse/loopback4-authentication/compare/v7.1.0...v7.1.1) (2022-10-31)
+
 # [7.1.0](https://github.com/sourcefuse/loopback4-authentication/compare/v7.0.1...v7.1.0) (2022-10-14)
 
 
