@@ -1,4 +1,4 @@
-import {BindingKey} from '@loopback/context';
+import {BindingKey, Constructor} from '@loopback/context';
 import {MetadataAccessor} from '@loopback/metadata';
 import {Strategy} from 'passport';
 
@@ -6,6 +6,7 @@ import {
   AuthenticateFn,
   AuthenticationConfig,
   AuthenticationMetadata,
+  EntityWithIdentifier,
   IAuthClient,
   IAuthUser,
 } from './types';
@@ -51,6 +52,10 @@ export namespace AuthenticationBindings {
   export const CONFIG = BindingKey.create<AuthenticationConfig>(
     'sf.userAuthentication.config',
   );
+
+  export const USER_MODEL = BindingKey.create<
+    Constructor<EntityWithIdentifier>
+  >('sf.userAuthentication.userModel');
 }
 
 export const USER_AUTHENTICATION_METADATA_KEY = MetadataAccessor.create<
