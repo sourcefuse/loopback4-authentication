@@ -20,6 +20,10 @@ export interface IAuthUser {
   password?: string;
 }
 
+export interface EntityWithIdentifier {
+  getIdentifier?(): string | undefined;
+}
+
 export interface AuthenticationMetadata<T = void> {
   strategy: string;
   options?: Object;
