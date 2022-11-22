@@ -1,3 +1,10 @@
+# [7.2.0](https://github.com/sourcefuse/loopback4-authentication/compare/v7.1.1...v7.2.0) (2022-11-22)
+
+
+### Features
+
+* **component:** add new binding for User model ([#108](https://github.com/sourcefuse/loopback4-authentication/issues/108)) ([c76617c](https://github.com/sourcefuse/loopback4-authentication/commit/c76617c647b167eebc20c5f06b47e39799fc9b14)), closes [#107](https://github.com/sourcefuse/loopback4-authentication/issues/107)
+
 ## [7.1.1](https://github.com/sourcefuse/loopback4-authentication/compare/v7.1.0...v7.1.1) (2022-10-31)
 
 # [7.1.0](https://github.com/sourcefuse/loopback4-authentication/compare/v7.0.1...v7.1.0) (2022-10-14)
