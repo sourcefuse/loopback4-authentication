@@ -1,11 +1,16 @@
-import {Getter, inject, Provider, Setter} from '@loopback/context';
+import {Constructor, Getter, inject, Provider, Setter} from '@loopback/context';
 import {HttpErrors, Request, Response} from '@loopback/rest';
 import {Strategy} from 'passport';
 
 import {AuthErrorKeys} from '../error-keys';
 import {AuthenticationBindings} from '../keys';
 import {StrategyAdapter} from '../strategy-adapter';
-import {AuthenticateFn, IAuthUser, AuthenticationMetadata} from '../types';
+import {
+  AuthenticateFn,
+  IAuthUser,
+  AuthenticationMetadata,
+  EntityWithIdentifier,
+} from '../types';
 
 export class AuthenticateActionProvider
   implements Provider<AuthenticateFn<IAuthUser | undefined>>
@@ -17,6 +22,8 @@ export class AuthenticateActionProvider
     private readonly getMetadata: Getter<AuthenticationMetadata>,
     @inject.setter(AuthenticationBindings.CURRENT_USER)
     readonly setCurrentUser: Setter<IAuthUser | undefined>,
+    @inject(AuthenticationBindings.USER_MODEL, {optional: true})
+    public authUserModel?: Constructor<EntityWithIdentifier & IAuthUser>,
   ) {}
 
   value(): AuthenticateFn<IAuthUser | undefined> {
@@ -45,12 +52,11 @@ export class AuthenticateActionProvider
       authOpts = metadata.authOptions(request);
     }
     const strategyAdapter = new StrategyAdapter<IAuthUser>(strategy);
-    const user = await strategyAdapter.authenticate(
-      request,
-      response,
-      authOpts,
-    );
+    let user = await strategyAdapter.authenticate(request, response, authOpts);
     if (user) {
+      if (this.authUserModel) {
+        user = new this.authUserModel(user);
+      }
       this.setCurrentUser(user);
       return user;
     }

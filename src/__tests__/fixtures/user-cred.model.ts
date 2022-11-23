@@ -1,7 +1,7 @@
 import {Entity, model, property} from '@loopback/repository';
 
 @model({settings: {strict: false}})
-export class Authuser extends Entity {
+export class UserCred extends Entity {
   @property({
     type: 'string',
     id: true,
@@ -16,19 +16,13 @@ export class Authuser extends Entity {
   })
   password: string;
 
-  // Define well-known properties here
-
-  // Indexer property to allow additional data
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [prop: string]: any;
-
-  constructor(data?: Partial<Authuser>) {
+  constructor(data?: Partial<UserCred>) {
     super(data);
   }
 }
 
-export interface AuthuserRelations {
+export interface UserCredRelations {
   // describe navigational properties here
 }
 
-export type AuthuserWithRelations = Authuser & AuthuserRelations;
+export type AuthuserWithRelations = UserCred & UserCredRelations;
