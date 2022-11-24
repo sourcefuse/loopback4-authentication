@@ -10,7 +10,7 @@ import {Strategies} from '../../../../strategies/keys';
 import {LocalVerifyProvider} from '../../../fixtures/providers/local-password.provider';
 import {AuthenticationBindings} from '../../../../keys';
 import {IAuthUser} from '../../../../types';
-import {Authuser} from '../../../../models';
+import {UserCred} from '../../../fixtures/user-cred.model';
 /**
  * Testing overall flow of authentication with bearer strategy
  */
@@ -25,7 +25,10 @@ describe('Local passport strategy', () => {
     class TestController {
       @post('/auth/local/no-user-data-passed')
       @authenticate(STRATEGY.LOCAL)
-      test(@requestBody({required: true}) body: Authuser) {
+      test(
+        @requestBody({required: true})
+        body: UserCred,
+      ) {
         return 'test successful';
       }
     }
@@ -43,7 +46,7 @@ describe('Local passport strategy', () => {
       @authenticate(STRATEGY.LOCAL)
       test(
         @requestBody()
-        body: Authuser,
+        body: UserCred,
       ) {
         return 'test successful';
       }
@@ -66,7 +69,7 @@ describe('Local passport strategy', () => {
 
       @post('/auth/local/no-options')
       @authenticate(STRATEGY.LOCAL)
-      test(@requestBody() body: {username: string; password: string}) {
+      test(@requestBody() body: UserCred) {
         return this.user;
       }
     }
@@ -94,7 +97,7 @@ describe('Local passport strategy', () => {
 
       @post('/auth/local/pass-req-callback-true')
       @authenticate(STRATEGY.LOCAL, {passReqToCallback: true})
-      async test(@requestBody() body: {username: string; password: string}) {
+      async test(@requestBody() body: UserCred) {
         return this.user;
       }
     }
@@ -122,7 +125,7 @@ describe('Local passport strategy', () => {
 
       @post('/auth/local/pass-req-callback-false')
       @authenticate(STRATEGY.LOCAL, {passReqToCallback: false})
-      async test(@requestBody() body: {username: string; password: string}) {
+      async test(@requestBody() body: UserCred) {
         return this.user;
       }
     }
@@ -144,7 +147,7 @@ describe('Local passport strategy', () => {
 
       @post('/auth/local/null-user')
       @authenticate(STRATEGY.LOCAL)
-      async test(@requestBody() body: {username: string; password: string}) {
+      async test(@requestBody() body: UserCred) {
         return body;
       }
     }
@@ -192,7 +195,7 @@ describe('Local strategy with no verifier', () => {
 
       @post('/auth/local/no-verifier')
       @authenticate(STRATEGY.LOCAL, {passReqToCallback: false})
-      async test(@requestBody() body: {username: string; password: string}) {
+      async test(@requestBody() body: UserCred) {
         return body;
       }
     }

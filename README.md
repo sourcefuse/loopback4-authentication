@@ -286,6 +286,12 @@ export class User extends Entity implements IAuthUser {
 }
 ```
 
+Now bind this model to USER_MODEL key in application.ts
+
+```ts
+this.bind(AuthenticationBindings.USER_MODEL).to(User);
+```
+
 Create CRUD repository for the above model. Use loopback CLI.
 
 ```sh
@@ -458,6 +464,12 @@ export class User extends Entity implements IAuthUser {
     super(data);
   }
 }
+```
+
+Now bind this model to USER_MODEL key in application.ts
+
+```ts
+this.bind(AuthenticationBindings.USER_MODEL).to(User);
 ```
 
 Create CRUD repository for the above model. Use loopback CLI.
@@ -666,6 +678,12 @@ export class User extends Entity implements IAuthUser {
     super(data);
   }
 }
+```
+
+Now bind this model to USER_MODEL key in application.ts
+
+```ts
+this.bind(AuthenticationBindings.USER_MODEL).to(User);
 ```
 
 Create CRUD repository for both of the above models. Use loopback CLI.
@@ -1064,6 +1082,12 @@ export class User extends Entity implements IAuthUser {
 }
 ```
 
+Now bind this model to USER_MODEL key in application.ts
+
+```ts
+this.bind(AuthenticationBindings.USER_MODEL).to(User);
+```
+
 Create CRUD repository for the above model. Use loopback CLI.
 
 ```sh
@@ -1371,6 +1395,12 @@ export class User extends Entity implements IAuthUser {
 }
 ```
 
+Now bind this model to USER_MODEL key in application.ts
+
+```ts
+this.bind(AuthenticationBindings.USER_MODEL).to(User);
+```
+
 Create CRUD repository for the above model. Use loopback CLI.
 
 ```sh
@@ -1674,6 +1704,12 @@ export class User extends Entity implements IAuthUser {
     super(data);
   }
 }
+```
+
+Now bind this model to USER_MODEL key in application.ts
+
+```ts
+this.bind(AuthenticationBindings.USER_MODEL).to(User);
 ```
 
 Create CRUD repository for the above model. Use loopback CLI.
@@ -1983,6 +2019,12 @@ export class User extends Entity implements IAuthUser {
 }
 ```
 
+Now bind this model to USER_MODEL key in application.ts
+
+```ts
+this.bind(AuthenticationBindings.USER_MODEL).to(User);
+```
+
 Create CRUD repository for the above model. Use loopback CLI.
 
 ```sh
@@ -2286,6 +2328,12 @@ export class User extends Entity implements IAuthUser {
     super(data);
   }
 }
+```
+
+Now bind this model to USER_MODEL key in application.ts
+
+```ts
+this.bind(AuthenticationBindings.USER_MODEL).to(User);
 ```
 
 Create CRUD repository for the above model. Use loopback CLI.
