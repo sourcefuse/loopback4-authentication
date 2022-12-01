@@ -56,10 +56,12 @@ export namespace Oauth2ResourceOwnerPassword {
 
     authenticate(req: any, options?: {}): void {
       if (
+        /*eslint-disable*/
         !req.body ||
-        !req.body['client_id'] ||
-        !req.body['username'] ||
-        !req.body['password']
+        !req.body?.['client_id'] ||
+        !req.body?.['username'] ||
+        !req.body?.['password']
+        /*eslint-disable*/
       ) {
         this.fail();
         return;
