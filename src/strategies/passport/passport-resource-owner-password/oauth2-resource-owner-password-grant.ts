@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as passport from 'passport';
+import {Request} from '@loopback/rest';
+import {IAuthClient, IAuthUser} from '../../../types';
 
 export namespace Oauth2ResourceOwnerPassword {
   export interface StrategyOptionsWithRequestInterface {
@@ -8,12 +9,16 @@ export namespace Oauth2ResourceOwnerPassword {
 
   export interface VerifyFunctionWithRequest {
     (
-      req: any,
+      req: Request,
       clientId: string,
       clientSecret: string,
       username: string,
       password: string,
-      done: (error: any, client?: any, info?: any) => void,
+      done: (
+        error: Error | null,
+        client?: IAuthClient | false,
+        info?: IAuthUser | false,
+      ) => void,
     ): void;
   }
 
@@ -23,7 +28,11 @@ export namespace Oauth2ResourceOwnerPassword {
       clientSecret: string,
       username: string,
       password: string,
-      done: (error: any, client?: any, info?: any) => void,
+      done: (
+        error: Error | null,
+        client?: IAuthClient | false,
+        info?: IAuthUser | false,
+      ) => void,
     ): void;
   }
 
@@ -54,12 +63,13 @@ export namespace Oauth2ResourceOwnerPassword {
     private readonly verify: VerifyFunction | VerifyFunctionWithRequest;
     private readonly passReqToCallback: boolean;
 
-    authenticate(req: any, options?: {}): void {
+    authenticate(req: Request, options?: {}): void {
       if (
+        /* eslint-disable @typescript-eslint/prefer-optional-chain */
         !req.body ||
-        !req.body['client_id'] ||
-        !req.body['username'] ||
-        !req.body['password']
+        !req.body?.['client_id'] ||
+        !req.body?.['username'] ||
+        !req.body?.['password']
       ) {
         this.fail();
         return;
@@ -70,7 +80,11 @@ export namespace Oauth2ResourceOwnerPassword {
       const username = req.body['username'];
       const password = req.body['password'];
 
-      const verified = (err: any, client: any, user: any) => {
+      const verified = (
+        err: Error | null,
+        client?: IAuthClient | false,
+        user?: IAuthUser | false,
+      ) => {
         if (err) {
           this.error(err);
           return;
