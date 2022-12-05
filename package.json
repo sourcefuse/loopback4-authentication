@@ -47,8 +47,8 @@
     "!*/__tests__"
   ],
   "peerDependencies": {
-    "@loopback/boot": "^5.0.4",
-    "@loopback/rest": "^12.0.4"
+    "@loopback/boot": "^5.0.5",
+    "@loopback/rest": "^12.0.5"
   },
   "dependencies": {
     "@exlinc/keycloak-passport": "^1.0.2",
