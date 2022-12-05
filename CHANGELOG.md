@@ -1,3 +1,10 @@
+## [7.2.1](https://github.com/sourcefuse/loopback4-authentication/compare/v7.2.0...v7.2.1) (2022-12-05)
+
+
+### Bug Fixes
+
+* **provider:** inject USER_MODEL key to user-authentication provider ([#109](https://github.com/sourcefuse/loopback4-authentication/issues/109)) ([73d5b48](https://github.com/sourcefuse/loopback4-authentication/commit/73d5b4831196a7b57e6cd4f63a908f168e48cee9)), closes [#107](https://github.com/sourcefuse/loopback4-authentication/issues/107)
+
 # [7.2.0](https://github.com/sourcefuse/loopback4-authentication/compare/v7.1.1...v7.2.0) (2022-11-22)
 
 
