@@ -1,9 +1,7 @@
 import {inject, Provider} from '@loopback/core';
 import {HttpErrors, Request} from '@loopback/rest';
 import {HttpsProxyAgent} from 'https-proxy-agent';
-
 import {Profile, Strategy, VerifiedCallback} from 'passport-saml';
-
 import {
   SamlConfig,
   StrategyOptions,
@@ -38,23 +36,14 @@ export class SamlStrategyFactoryProvider
     if (options && options.passReqToCallback === true) {
       strategy = new Strategy(
         options as SamlConfig,
-
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           req: Request,
-          // accessToken: string,
-          // refreshToken: string,
           profile: Profile | null | undefined,
           cb: VerifiedCallback,
         ) => {
           try {
-            const user = await verifyFn(
-              // accessToken,
-              // refreshToken,
-              profile,
-              cb,
-              req,
-            );
+            const user = await verifyFn(profile, cb, req);
             if (!user) {
               throw new HttpErrors.Unauthorized(
                 AuthErrorKeys.InvalidCredentials,
@@ -70,12 +59,7 @@ export class SamlStrategyFactoryProvider
       strategy = new Strategy(
         options as SamlConfig,
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        async (
-          // accessToken: string,
-          // refreshToken: string,
-          profile: Profile | null | undefined,
-          cb: VerifiedCallback,
-        ) => {
+        async (profile: Profile | null | undefined, cb: VerifiedCallback) => {
           try {
             const user = await verifyFn(profile, cb);
             if (!user) {
@@ -90,13 +74,12 @@ export class SamlStrategyFactoryProvider
         },
       );
     }
-
     this._setupProxy(strategy);
 
     return strategy;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- //NOSONAR
   private _setupProxy(strategy: any) {
     // Setup proxy if any
     let httpsProxyAgent;
@@ -106,6 +89,8 @@ export class SamlStrategyFactoryProvider
     } else if (process.env['HTTPS_PROXY']) {
       httpsProxyAgent = new HttpsProxyAgent(process.env['HTTPS_PROXY']);
       strategy._oauth2.setAgent(httpsProxyAgent);
+    } else {
+      //this is intentional
     }
   }
 }
