@@ -33,27 +33,26 @@ export class SamlStrategyFactoryProvider
   ): Strategy {
     const verifyFn = verifierPassed ?? this.verifierSaml;
     let strategy;
+    const func = async (
+      req: Request,
+      profile: Profile | null | undefined,
+      cb: VerifiedCallback,
+    ) => {
+      try {
+        const user = await verifyFn(profile, cb, req);
+        if (!user) {
+          throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
+        }
+        cb(null, user as unknown as Record<string, unknown>);
+      } catch (err) {
+        cb(err);
+      }
+    };
     if (options && options.passReqToCallback === true) {
       strategy = new Strategy(
         options as SamlConfig,
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        async (
-          req: Request,
-          profile: Profile | null | undefined,
-          cb: VerifiedCallback,
-        ) => {
-          try {
-            const user = await verifyFn(profile, cb, req);
-            if (!user) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.InvalidCredentials,
-              );
-            }
-            cb(null, user as unknown as Record<string, unknown>);
-          } catch (err) {
-            cb(err);
-          }
-        },
+        func,
       );
     } else {
       strategy = new Strategy(
@@ -75,12 +74,12 @@ export class SamlStrategyFactoryProvider
       );
     }
     this._setupProxy(strategy);
-
     return strategy;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- //NOSONAR
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _setupProxy(strategy: any) {
+    //NOSONAR
     // Setup proxy if any
     let httpsProxyAgent;
     if (process.env['https_proxy']) {
