@@ -7,6 +7,7 @@ import * as PassportLocal from 'passport-local';
 import * as InstagramStrategy from 'passport-instagram';
 import * as FacebookStrategy from 'passport-facebook';
 import * as AppleStrategy from 'passport-apple';
+import * as SamlStrategy from 'passport-saml';
 
 import {AuthenticationBindings} from '../keys';
 import {STRATEGY} from '../strategy-name.enum';
@@ -29,6 +30,7 @@ import {
   Otp,
   CognitoAuthStrategyFactory,
 } from './passport';
+import {SamlStrategyFactory} from './SAML';
 import {Cognito, Keycloak, VerifyFunction} from './types';
 
 interface ExtendedStrategyOption extends FacebookStrategy.StrategyOption {
@@ -62,6 +64,8 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     private readonly getAppleAuthVerifier: AppleAuthStrategyFactory,
     @inject(Strategies.Passport.COGNITO_OAUTH2_STRATEGY_FACTORY)
     private readonly getCognitoAuthVerifier: CognitoAuthStrategyFactory,
+    @inject(Strategies.SAML_STRATEGY_FACTORY)
+    private readonly getSamlVerifier: SamlStrategyFactory,
   ) {}
 
   async value(): Promise<Strategy | undefined> {
@@ -145,6 +149,11 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
       return this.getOtpVerifier(
         this.metadata.options as Otp.StrategyOptions,
         verifier as VerifyFunction.OtpAuthFn,
+      );
+    } else if (name === STRATEGY.SAML) {
+      return this.getSamlVerifier(
+        this.metadata.options as SamlStrategy.Strategy,
+        verifier as VerifyFunction.SamlFn,
       );
     } else {
       return Promise.reject(`The strategy ${name} is not available.`);

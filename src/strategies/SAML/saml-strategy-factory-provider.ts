@@ -11,8 +11,10 @@ import {Strategies} from '../../keys';
 import {VerifyFunction} from '../../types';
 
 export interface SamlStrategyFactory {
+  // sonarignore:start
   (options: StrategyOptions, verifierPassed?: VerifyFunction.SamlFn): Strategy;
 }
+// sonarignore:end
 
 export class SamlStrategyFactoryProvider
   implements Provider<SamlStrategyFactory>
@@ -77,9 +79,10 @@ export class SamlStrategyFactoryProvider
     return strategy;
   }
 
+  // sonarignore:start
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _setupProxy(strategy: any) {
-    //NOSONAR
+    // sonarignore:end
     // Setup proxy if any
     let httpsProxyAgent;
     if (process.env['https_proxy']) {
