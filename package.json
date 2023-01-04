@@ -75,7 +75,7 @@
     "@loopback/boot": "^5.0.5",
     "@loopback/build": "^9.0.5",
     "@loopback/metadata": "^5.0.5",
-    "@loopback/rest": "^12.0.5",
+    "@loopback/rest": "^12.0.6",
     "@loopback/testlab": "^5.0.5",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/commit-analyzer": "^9.0.2",
