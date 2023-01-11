@@ -1,3 +1,18 @@
+## Release [v7.3.0](https://github.com/sourcefuse/loopback4-authentication/compare/v7.2.1..v7.3.0) January 11, 2023
+Welcome to the January 11, 2023 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
+
+  - [](https://github.com/sourcefuse/loopback4-authentication/issues/-121) :- [feat(core): generate detailed and informative changelog ](https://github.com/sourcefuse/loopback4-authentication/commit/d19b73cffb29eafb515aa1318cfb1bb0f6258899) was commited on January 11, 2023 by [yeshamavani](mailto:83634146+yeshamavani@users.noreply.github.com)
+    
+      - Using Customizable npm package to generate changelog
+      
+      - updated loopback packages
+      
+      -  GH-121
+      
+  
+Clink on the above links to understand the changes in detail.
+  ___
+
 ## [7.2.1](https://github.com/sourcefuse/loopback4-authentication/compare/v7.2.0...v7.2.1) (2022-12-05)
 
 
