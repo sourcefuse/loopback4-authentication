@@ -1,0 +1,12 @@
+## Release [<%= range.split('..')[1] %>](https://github.com/sourcefuse/loopback4-authentication/compare/<%= range %>) <%= new Date().toLocaleDateString('en-us', {year:"numeric", month:"long", day:"numeric"})
+;%>
+Welcome to the <%= new Date().toLocaleDateString('en-us', {year:"numeric", month:"long", day:"numeric"});%> release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
+<% commits.forEach(function (commit) { %>
+  - [<%= commit.issueTitle %>](https://github.com/sourcefuse/loopback4-authentication/issues/<%= commit.issueno %>) :- [<%= commit.title %>](https://github.com/sourcefuse/loopback4-authentication/commit/<%= commit.sha1%>) was commited on <%= commit.committerDate %> by [<%= commit.authorName %>](mailto:<%= commit.authorEmail %>)
+    <% commit.messageLines.forEach(function (message) { %>
+      - <%= message %>
+      <% }) %>
+  <% }) %>
+Clink on the above links to understand the changes in detail.
+  ___
+

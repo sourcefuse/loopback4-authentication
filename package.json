@@ -47,13 +47,13 @@
     "!*/__tests__"
   ],
   "peerDependencies": {
-    "@loopback/boot": "^5.0.5",
-    "@loopback/rest": "^12.0.5"
+    "@loopback/boot": "^5.0.7",
+    "@loopback/rest": "^12.0.7"
   },
   "dependencies": {
     "@exlinc/keycloak-passport": "^1.0.2",
-    "@loopback/context": "^5.0.5",
-    "@loopback/core": "^4.0.5",
+    "@loopback/context": "^5.0.7",
+    "@loopback/core": "^4.0.7",
     "ajv": "^8.11.0",
     "https-proxy-agent": "^5.0.0",
     "passport": "^0.6.0",
@@ -72,11 +72,11 @@
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
-    "@loopback/boot": "^5.0.5",
-    "@loopback/build": "^9.0.5",
-    "@loopback/metadata": "^5.0.5",
-    "@loopback/rest": "^12.0.5",
-    "@loopback/testlab": "^5.0.5",
+    "@loopback/boot": "^5.0.7",
+    "@loopback/build": "^9.0.7",
+    "@loopback/metadata": "^5.0.7",
+    "@loopback/rest": "^12.0.7",
+    "@loopback/testlab": "^5.0.7",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/commit-analyzer": "^9.0.2",
     "@semantic-release/git": "^10.0.1",
@@ -84,7 +84,7 @@
     "@semantic-release/release-notes-generator": "^10.0.3",
     "@types/express": "^4.17.13",
     "@types/lodash": "^4.14.181",
-    "@types/node": "^14.18.33",
+    "@types/node": "^14.18.36",
     "@types/passport": "^1.0.7",
     "@types/passport-apple": "^1.1.1",
     "@types/passport-azure-ad": "^4.3.1",
@@ -98,16 +98,19 @@
     "cz-conventional-changelog": "^3.3.0",
     "cz-customizable": "^6.3.0",
     "cz-customizable-ghooks": "^2.0.0",
-    "eslint": "^8.28.0",
+    "eslint": "^8.30.0",
     "fs-extra": "^10.1.0",
+    "git-release-notes": "^5.0.0",
     "husky": "^7.0.4",
+    "jsdom": "^21.0.0",
     "lodash": "^4.17.21",
     "nyc": "^15.1.0",
     "semantic-release": "^19.0.3",
+    "simple-git": "^3.15.1",
     "source-map-support": "^0.5.21",
     "ts-node": "^10.7.0",
     "tslint": "^6.1.3",
-    "typescript": "~4.8.4"
+    "typescript": "~4.9.4"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
@@ -115,6 +118,24 @@
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-customizable"
+    }
+  },
+  "overrides": {
+    "body-parser": {
+      "debug": "^4.3.4"
+    },
+    "express": {
+      "debug": "^4.3.4",
+      "finalhandler": "^1.2.0",
+      "send": "^0.18.0",
+      "serve-static": "^1.15.0"
+    },
+    "passport-apple": {
+      "jsonwebtoken": "^9.0.0"
+    },
+    "git-release-notes": {
+      "ejs": "^3.1.8",
+      "yargs": "^17.6.2"
     }
   },
   "release": {
@@ -136,7 +157,6 @@
         }
       ],
       "@semantic-release/release-notes-generator",
-      "@semantic-release/changelog",
       "@semantic-release/npm",
       [
         "@semantic-release/git",
