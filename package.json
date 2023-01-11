@@ -57,7 +57,7 @@
     "ajv": "^8.11.0",
     "https-proxy-agent": "^5.0.0",
     "passport": "^0.6.0",
-    "passport-apple": "^2.0.1",
+    "passport-apple": "git+https://github.com/yeshamavani/passport-apple.git",
     "passport-azure-ad": "^4.3.4",
     "passport-cognito-oauth2": "^0.1.1",
     "passport-facebook": "^3.0.0",
@@ -129,9 +129,6 @@
       "finalhandler": "^1.2.0",
       "send": "^0.18.0",
       "serve-static": "^1.15.0"
-    },
-    "passport-apple": {
-      "jsonwebtoken": "^9.0.0"
     },
     "git-release-notes": {
       "ejs": "^3.1.8",
