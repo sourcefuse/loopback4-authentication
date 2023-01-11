@@ -1,3 +1,18 @@
+## Release [v7.3.1](https://github.com/sourcefuse/loopback4-authentication/compare/v7.3.0..v7.3.1) January 11, 2023
+Welcome to the January 11, 2023 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
+
+  - [](https://github.com/sourcefuse/loopback4-authentication/issues/-123) :- [fix(deps): solve passport-apple depending on vulnerable version of jsonwebtoken ](https://github.com/sourcefuse/loopback4-authentication/commit/8e26c92314ac4e40b0205fa0367604926d3d2c54) was commited on January 11, 2023 by [yeshamavani](mailto:83634146+yeshamavani@users.noreply.github.com)
+    
+      - forked the passport-apple repo
+      
+      - changed the vulnerable version deps
+      
+      -  GH-123
+      
+  
+Clink on the above links to understand the changes in detail.
+  ___
+
 ## Release [v7.3.0](https://github.com/sourcefuse/loopback4-authentication/compare/v7.2.1..v7.3.0) January 11, 2023
 Welcome to the January 11, 2023 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
 
