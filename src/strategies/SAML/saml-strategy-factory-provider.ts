@@ -1,5 +1,7 @@
+// SONAR-IGNORE-ALL
 import {inject, Provider} from '@loopback/core';
 import {HttpErrors, Request} from '@loopback/rest';
+import {AnyObject} from '@loopback/repository';
 import {HttpsProxyAgent} from 'https-proxy-agent';
 import {Profile, Strategy, VerifiedCallback} from 'passport-saml';
 import {
@@ -14,7 +16,6 @@ export interface SamlStrategyFactory {
   (options: StrategyOptions, verifierPassed?: VerifyFunction.SamlFn): Strategy;
 }
 
-// sonarignore:start
 export class SamlStrategyFactoryProvider
   implements Provider<SamlStrategyFactory>
 {
@@ -77,12 +78,9 @@ export class SamlStrategyFactoryProvider
     this._setupProxy(strategy);
     return strategy;
   }
-  // sonarignore:end
 
-  // sonarignore:start
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _setupProxy(strategy: any) {
-    // sonarignore:end
+  private _setupProxy(strategy: AnyObject) {
     // Setup proxy if any
     let httpsProxyAgent;
     if (process.env['https_proxy']) {

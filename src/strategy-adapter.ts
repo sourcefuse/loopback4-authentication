@@ -61,7 +61,7 @@ export class StrategyAdapter<T> {
 
       strategy.redirect = (url: string) => {
         if (response) {
-          response.redirect(url, 302);
+          response.redirect(302, url);
         }
         resolve();
       };

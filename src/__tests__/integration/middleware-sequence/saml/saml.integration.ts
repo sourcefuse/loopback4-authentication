@@ -18,7 +18,7 @@ describe('getting saml strategy with options using Middleware Sequence', () => {
   beforeEach(givenAuthenticatedSequence);
   beforeEach(getAuthVerifier);
 
-  it('should return 302 when client id is passed and passReqToCallback is set true', async () => {
+  it('should return 302 when name is passed and passReqToCallback is set true', async () => {
     class TestController {
       @get('/test')
       @authenticate(STRATEGY.SAML, {
