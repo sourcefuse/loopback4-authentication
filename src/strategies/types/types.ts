@@ -118,8 +118,6 @@ export namespace VerifyFunction {
   }
   export interface SamlFn<T = IAuthUser> extends GenericAuthFn<T> {
     (
-      // accessToken: string,
-      // refreshToken: string,
       profile: SamlStrategy.Profile,
       cb: SamlStrategy.VerifiedCallback,
       req?: Request,
