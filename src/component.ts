@@ -37,6 +37,8 @@ import {
   ResourceOwnerVerifyProvider,
   PassportOtpStrategyFactoryProvider,
   OtpVerifyProvider,
+  SamlStrategyFactoryProvider,
+  SamlVerifyProvider,
 } from './strategies';
 import {Strategies} from './strategies/keys';
 import {
@@ -84,6 +86,7 @@ export class AuthenticationComponent implements Component {
         KeycloakStrategyFactoryProvider,
       [Strategies.Passport.COGNITO_OAUTH2_STRATEGY_FACTORY.key]:
         CognitoStrategyFactoryProvider,
+      [Strategies.SAML_STRATEGY_FACTORY.key]: SamlStrategyFactoryProvider,
 
       // Verifier functions
       [Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER.key]:
@@ -106,6 +109,7 @@ export class AuthenticationComponent implements Component {
       [Strategies.Passport.APPLE_OAUTH2_VERIFIER.key]: AppleAuthVerifyProvider,
       [Strategies.Passport.AZURE_AD_VERIFIER.key]: AzureADAuthVerifyProvider,
       [Strategies.Passport.KEYCLOAK_VERIFIER.key]: KeycloakVerifyProvider,
+      [Strategies.SAML_VERIFIER.key]: SamlVerifyProvider,
     };
     this.bindings = [];
     if (this.config?.useClientAuthenticationMiddleware) {
