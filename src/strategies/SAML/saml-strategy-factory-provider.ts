@@ -3,17 +3,19 @@ import {inject, Provider} from '@loopback/core';
 import {HttpErrors, Request} from '@loopback/rest';
 import {AnyObject} from '@loopback/repository';
 import {HttpsProxyAgent} from 'https-proxy-agent';
-import {Profile, Strategy, VerifiedCallback} from 'passport-saml';
 import {
+  Profile,
+  Strategy,
+  VerifiedCallback,
   SamlConfig,
-  StrategyOptions,
-} from 'passport-saml/lib/passport-saml/types';
+  VerifyWithRequest,
+  VerifyWithoutRequest,
+} from '@node-saml/passport-saml';
 import {AuthErrorKeys} from '../../error-keys';
 import {Strategies} from '../../keys';
 import {VerifyFunction} from '../../types';
-
 export interface SamlStrategyFactory {
-  (options: StrategyOptions, verifierPassed?: VerifyFunction.SamlFn): Strategy;
+  (options: SamlConfig, verifierPassed?: VerifyFunction.SamlFn): Strategy;
 }
 
 export class SamlStrategyFactoryProvider
@@ -30,7 +32,7 @@ export class SamlStrategyFactoryProvider
   }
 
   getSamlStrategyVerifier(
-    options: StrategyOptions,
+    options: SamlConfig,
     verifierPassed?: VerifyFunction.SamlFn,
   ): Strategy {
     const verifyFn = verifierPassed ?? this.verifierSaml;
@@ -52,13 +54,19 @@ export class SamlStrategyFactoryProvider
     };
     if (options && options.passReqToCallback === true) {
       strategy = new Strategy(
+        // sonarignore:start
         options as SamlConfig,
+        // sonarignore:end
+        logoutVerify as VerifyWithRequest,
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         func,
       );
     } else {
       strategy = new Strategy(
+        // sonarignore:start
         options as SamlConfig,
+        // sonarignore:end
+        logoutVerify as unknown as VerifyWithoutRequest,
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (profile: Profile | null | undefined, cb: VerifiedCallback) => {
           try {
@@ -79,7 +87,6 @@ export class SamlStrategyFactoryProvider
     return strategy;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _setupProxy(strategy: AnyObject) {
     // Setup proxy if any
     let httpsProxyAgent;
@@ -93,4 +100,11 @@ export class SamlStrategyFactoryProvider
       //this is intentional
     }
   }
+}
+function logoutVerify(
+  req: Request<AnyObject, AnyObject, Record<string, AnyObject>>,
+  profile: Profile | null,
+  done: VerifiedCallback,
+): void {
+  throw new Error('Function not implemented.');
 }

@@ -1,7 +1,7 @@
 import {Provider} from '@loopback/context';
 import {HttpErrors, Request} from '@loopback/rest';
 
-import * as SamlStrategy from 'passport-saml';
+import * as SamlStrategy from '@node-saml/passport-saml';
 
 import {VerifyFunction} from '../../types';
 

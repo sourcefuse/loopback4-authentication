@@ -4,7 +4,7 @@ import * as AzureADStrategy from 'passport-azure-ad';
 import * as InstagramStrategy from 'passport-instagram';
 import * as FacebookStrategy from 'passport-facebook';
 import * as AppleStrategy from 'passport-apple';
-import * as SamlStrategy from 'passport-saml';
+import * as SamlStrategy from '@node-saml/passport-saml';
 import {DecodedIdToken} from 'passport-apple';
 import {Cognito, IAuthClient, IAuthUser} from '../../types';
 import {Keycloak} from './keycloak.types';

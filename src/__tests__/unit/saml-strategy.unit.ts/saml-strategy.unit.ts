@@ -1,19 +1,21 @@
 import {IAuthUser} from '../../../types';
 import {expect} from '@loopback/testlab';
-import * as SamlStrategy from 'passport-saml';
+import * as SamlStrategy from '@node-saml/passport-saml';
 import {
   SamlStrategyFactoryProvider,
   SamlStrategyFactory,
 } from '../../../strategies/SAML';
-import {StrategyOptions} from 'passport-saml/lib/passport-saml/types';
+import {SamlConfig} from '@node-saml/passport-saml';
 
 describe('getting saml strategy with options', () => {
   it('should return strategy by passing options and passReqToCallback as true', async () => {
     const strategyVerifier: SamlStrategyFactory = await getStrategy();
 
-    const options: StrategyOptions = {
+    const options: SamlConfig = {
       name: 'string',
       passReqToCallback: true,
+      cert: 'string',
+      issuer: 'string',
     };
 
     const SamlStrategyVerifier = strategyVerifier(options);
@@ -27,9 +29,11 @@ describe('getting saml strategy with options', () => {
   it('should return strategy by passing options and passReqToCallback as false', async () => {
     const strategyVerifier: SamlStrategyFactory = await getStrategy();
 
-    const options: StrategyOptions = {
+    const options: SamlConfig = {
       name: 'string',
       passReqToCallback: false,
+      cert: 'string',
+      issuer: 'string',
     };
 
     const SamlStrategyVerifier = strategyVerifier(options);

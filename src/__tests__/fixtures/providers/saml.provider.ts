@@ -1,6 +1,6 @@
 import {Provider} from '@loopback/core';
 import {VerifyFunction} from '../../../strategies';
-import * as SamlStrategy from 'passport-saml';
+import * as SamlStrategy from '@node-saml/passport-saml';
 import {IAuthUser} from '../../../types';
 import {Request} from '@loopback/rest';
 
