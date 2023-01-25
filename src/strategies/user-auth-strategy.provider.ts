@@ -7,8 +7,8 @@ import * as PassportLocal from 'passport-local';
 import * as InstagramStrategy from 'passport-instagram';
 import * as FacebookStrategy from 'passport-facebook';
 import * as AppleStrategy from 'passport-apple';
-import * as SamlStrategy from 'passport-saml';
 
+import {SamlConfig} from '@node-saml/passport-saml';
 import {AuthenticationBindings} from '../keys';
 import {STRATEGY} from '../strategy-name.enum';
 import {AuthenticationMetadata} from '../types';
@@ -152,7 +152,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
       );
     } else if (name === STRATEGY.SAML) {
       return this.getSamlVerifier(
-        this.metadata.options as SamlStrategy.Strategy,
+        this.metadata.options as SamlConfig,
         verifier as VerifyFunction.SamlFn,
       );
     } else {
