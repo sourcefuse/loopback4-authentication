@@ -11,7 +11,6 @@ import {InstagramAuthStrategyFactoryProvider} from './passport';
 import {AppleAuthStrategyFactoryProvider} from './passport/passport-apple-oauth2';
 import {FacebookAuthStrategyFactoryProvider} from './passport/passport-facebook-oauth2';
 import {CognitoStrategyFactoryProvider} from './passport/passport-cognito-oauth2';
-import {SamlStrategyFactoryProvider} from './SAML/saml-strategy-factory-provider';
 
 export namespace Strategies {
   export namespace Passport {
@@ -134,12 +133,4 @@ export namespace Strategies {
         'sf.passport.verifier.cognitoOauth2',
       );
   }
-  // SAML strategy
-  export const SAML_STRATEGY_FACTORY =
-    BindingKey.create<SamlStrategyFactoryProvider>(
-      'sf.passport.strategyFactory.saml',
-    );
-  export const SAML_VERIFIER = BindingKey.create<VerifyFunction.SamlFn>(
-    'sf.passport.verifier.saml',
-  );
 }

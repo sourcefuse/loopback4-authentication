@@ -10,3 +10,4 @@ index.*
 commitlint.config.js
 
 .eslintrc.js
+vendor/
