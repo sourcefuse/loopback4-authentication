@@ -97,6 +97,16 @@ export class SamlStrategyFactoryProvider
     }
   }
 }
+/**
+ * This function is called when a user logs out of the application.
+ * Once this function is implemented,it will be called when the user logs out of the application,
+ * allowing the application to perform any necessary tasks before ending the user's session.
+ * @param req - The request object.
+ * @param {Profile | null} profile - The user's profile, as returned by the
+ * provider.
+ * @param {VerifiedCallback} done - A callback to be called when the verification
+ * is complete.
+ */
 function logoutVerify(
   req: Request<AnyObject, AnyObject, Record<string, AnyObject>>,
   profile: Profile | null,
