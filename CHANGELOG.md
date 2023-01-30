@@ -1,3 +1,37 @@
+## Release [v7.4.0](https://github.com/sourcefuse/loopback4-authentication/compare/v7.3.1..v7.4.0) January 30, 2023
+Welcome to the January 30, 2023 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
+
+  - [](https://github.com/sourcefuse/loopback4-authentication/issues/-127) :- [fix(deps): using local folder instead of git url for passport apple ](https://github.com/sourcefuse/loopback4-authentication/commit/2c68a98f1b1771ce03eb668688253c60eeafd7ff) was commited on January 30, 2023 by [yeshamavani](mailto:83634146+yeshamavani@users.noreply.github.com)
+    
+      - passport apple depends on vulnerable verion of jsonwebtoken
+      
+      - using a local folder to fix it
+      
+      -  GH-127
+      
+  
+  - [](https://github.com/sourcefuse/loopback4-authentication/issues/-128) :- [feat(provider): add SAML passport authentication strategy ](https://github.com/sourcefuse/loopback4-authentication/commit/decb68a638e51ffebb213d45bb273c66d0af2feb) was commited on January 20, 2023 by [RaghavaroraSF](mailto:97958393+RaghavaroraSF@users.noreply.github.com)
+    
+      - * feat(provider): add SAML strategy
+      
+      - * feat(provider): feat(provider): add SAML strategy
+      
+      - * feat(provider): feat(provider): add SAML strategy
+      
+      - * feat(provider): feat(provider): add SAML strategy
+      
+      - * feat(provider): add SAML passport authentication strategy
+      
+      - * feat(provider): add SAML passport authentication strategy
+      
+      - * feat(provider): add SAML passport authentication strategy
+      
+      -  GH-128
+      
+  
+Clink on the above links to understand the changes in detail.
+  ___
+
 ## Release [v7.3.1](https://github.com/sourcefuse/loopback4-authentication/compare/v7.3.0..v7.3.1) January 11, 2023
 Welcome to the January 11, 2023 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
 
