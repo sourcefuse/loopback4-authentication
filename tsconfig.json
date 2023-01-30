@@ -4,8 +4,9 @@
   "compilerOptions": {
     "typeRoots": ["./src/typing", "./node_modules/@types"],
     "rootDir": "src",
-    "outDir": "dist"
+    "outDir": "dist",
+    "experimentalDecorators": true
   },
-  "exclude": ["./src/typing", "./node_modules/@types"],
+  "exclude": ["./src/typing", "./node_modules/@types", "vendor"],
   "include": ["src", ".eslintrc.js"]
 }
