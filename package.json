@@ -44,7 +44,8 @@
     "index.d.ts",
     "dist",
     "src",
-    "!*/__tests__"
+    "!*/__tests__",
+    "vendor"
   ],
   "peerDependencies": {
     "@loopback/boot": "^5.0.7",
