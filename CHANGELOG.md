@@ -1,3 +1,18 @@
+## Release [v7.4.1](https://github.com/sourcefuse/loopback4-authentication/compare/v7.4.0..v7.4.1) January 31, 2023
+Welcome to the January 31, 2023 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
+
+  - [](https://github.com/sourcefuse/loopback4-authentication/issues/-135) :- [fix(component): include vendor files in package.json ](https://github.com/sourcefuse/loopback4-authentication/commit/756ad00bca07b9d4123c6d7c8ef52f655dd77433) was commited on January 31, 2023 by [yeshamavani](mailto:83634146+yeshamavani@users.noreply.github.com)
+    
+      - When the package is intsalled
+      
+      - vendor folder should be a part of it
+      
+      -  GH-135
+      
+  
+Clink on the above links to understand the changes in detail.
+  ___
+
 ## Release [v7.4.0](https://github.com/sourcefuse/loopback4-authentication/compare/v7.3.1..v7.4.0) January 30, 2023
 Welcome to the January 30, 2023 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
 
