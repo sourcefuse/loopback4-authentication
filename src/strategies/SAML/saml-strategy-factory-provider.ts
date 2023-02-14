@@ -53,19 +53,15 @@ export class SamlStrategyFactoryProvider
       }
     };
     if (options && options.passReqToCallback === true) {
-      // sonarignore:start
       strategy = new Strategy(
-        options as SamlConfig,
-        // sonarignore:end
+        options,
         logoutVerify as VerifyWithRequest,
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         func,
       );
     } else {
-      // sonarignore:start
       strategy = new Strategy(
-        options as SamlConfig,
-        // sonarignore:end
+        options,
         logoutVerify as unknown as VerifyWithoutRequest,
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (profile: Profile | null | undefined, cb: VerifiedCallback) => {
