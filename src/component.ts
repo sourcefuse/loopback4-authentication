@@ -43,6 +43,10 @@ import {
   CognitoAuthVerifyProvider,
   CognitoStrategyFactoryProvider,
 } from './strategies/passport/passport-cognito-oauth2';
+import {
+  SamlStrategyFactoryProvider,
+  SamlVerifyProvider,
+} from './strategies/SAML';
 import {AuthenticationConfig} from './types';
 
 export class AuthenticationComponent implements Component {
@@ -72,6 +76,8 @@ export class AuthenticationComponent implements Component {
         ResourceOwnerPasswordStrategyFactoryProvider,
       [Strategies.Passport.GOOGLE_OAUTH2_STRATEGY_FACTORY.key]:
         GoogleAuthStrategyFactoryProvider,
+      [Strategies.Passport.SAML_STRATEGY_FACTORY.key]:
+        SamlStrategyFactoryProvider,
       [Strategies.Passport.INSTAGRAM_OAUTH2_STRATEGY_FACTORY.key]:
         InstagramAuthStrategyFactoryProvider,
       [Strategies.Passport.FACEBOOK_OAUTH2_STRATEGY_FACTORY.key]:
@@ -97,6 +103,7 @@ export class AuthenticationComponent implements Component {
         ResourceOwnerVerifyProvider,
       [Strategies.Passport.GOOGLE_OAUTH2_VERIFIER.key]:
         GoogleAuthVerifyProvider,
+      [Strategies.Passport.SAML_VERIFIER.key]: SamlVerifyProvider,
       [Strategies.Passport.INSTAGRAM_OAUTH2_VERIFIER.key]:
         InstagramAuthVerifyProvider,
       [Strategies.Passport.FACEBOOK_OAUTH2_VERIFIER.key]:

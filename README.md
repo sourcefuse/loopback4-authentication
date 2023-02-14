@@ -26,7 +26,8 @@ It provides support for seven passport based strategies.
 8. [passport-apple](https://github.com/ananay/passport-apple) - Passport strategy for authenticating with Apple using the Apple OAuth 2.0 API. This module lets you authenticate using Apple in your Node.js applications.
 9. [passport-facebook](https://github.com/jaredhanson/passport-facebook) - Passport strategy for authenticating with Facebook using the Facebook OAuth 2.0 API. This module lets you authenticate using Facebook in your Node.js applications.
 10. [passport-cognito-oauth2](https://github.com/ebuychance/passport-cognito-oauth2) - Passport strategy for authenticating with Cognito using the Cognito OAuth 2.0 API. This module lets you authenticate using Cognito in your Node.js applications.
-11. custom-passport-otp - Created a Custom Passport strategy for 2-Factor-Authentication using OTP (One Time Password).
+11. [passport-SAML](https://github.com/node-saml/passport-saml) - Passport strategy for authenticating with SAML using the SAML 2.0 API. This module lets you authenticate using SAML in your Node.js applications
+12. custom-passport-otp - Created a Custom Passport strategy for 2-Factor-Authentication using OTP (One Time Password).
 
 You can use one or more strategies of the above in your application. For each of the strategy (only which you use), you just need to provide your own verifier function, making it easily configurable. Rest of the strategy implementation intricacies is handled by extension.
 
@@ -2594,6 +2595,303 @@ this.bind(VerifyBindings.BEARER_SIGNUP_VERIFY_PROVIDER).toProvider(
   LocalPreSignupProvider as Constructor<Provider<PreSignupFn>>,
 );
 ```
+
+### SAML
+
+SAML (Security Assertion Markup Language) is an XML-based standard for exchanging authentication and authorization data between parties, in particular, between an identity provider (IdP) and a service provider (SP).
+
+First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
+
+```ts
+@model({
+  name: 'users',
+})
+export class User extends Entity implements IAuthUser {
+  @property({
+    type: 'number',
+    id: true,
+  })
+  id?: number;
+  @property({
+    type: 'string',
+    required: true,
+    name: 'first_name',
+  })
+  firstName: string;
+  @property({
+    type: 'string',
+    name: 'last_name',
+  })
+  lastName: string;
+  @property({
+    type: 'string',
+    name: 'middle_name',
+  })
+  middleName?: string;
+  @property({
+    type: 'string',
+    required: true,
+  })
+  username: string;
+  @property({
+    type: 'string',
+  })
+  email?: string;
+  // Auth provider - 'SAML'
+  @property({
+    type: 'string',
+    required: true,
+    name: 'auth_provider',
+  })
+  authProvider: string;
+  // Id from external provider
+  @property({
+    type: 'string',
+    name: 'auth_id',
+  })
+  authId?: string;
+  @property({
+    type: 'string',
+    name: 'auth_token',
+  })
+  authToken?: string;
+  @property({
+    type: 'string',
+  })
+  password?: string;
+  constructor(data?: Partial<User>) {
+    super(data);
+  }
+}
+```
+
+Now bind this model to USER_MODEL key in application.ts
+
+```ts
+this.bind(AuthenticationBindings.USER_MODEL).to(User);
+```
+
+Create CRUD repository for the above model. Use loopback CLI.
+
+```sh
+lb4 repository
+```
+
+Add the verifier function for the strategy. You need to create a provider for the same. You can add your application specific business logic for client auth here. Here is a simple example.
+
+```ts
+import {Provider} from '@loopback/context';
+import {repository} from '@loopback/repository';
+import {HttpErrors} from '@loopback/rest';
+import {AuthErrorKeys, VerifyFunction} from 'loopback4-authentication';
+import {Tenant} from '../../../models';
+import {UserCredentialsRepository, UserRepository} from '../../../repositories';
+import {AuthUser} from '../models/auth-user.model';
+export class SamlVerifyProvider implements Provider<VerifyFunction.SamlFn> {
+  constructor(
+    @repository(UserRepository)
+    public userRepository: UserRepository,
+    @repository(UserCredentialsRepository)
+    public userCredsRepository: UserCredentialsRepository,
+  ) {}
+  value(): VerifyFunction.SamlFn {
+    return async (profile) => {
+      const user = await this.userRepository.findOne({
+        where: {
+          /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+          email: (profile as any)._json.email,
+        },
+      });
+      if (!user) {
+        throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
+      }
+      if (!user || user.authProvider !== 'saml' || user.authId !== profile.id) {
+        throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
+      }
+      const authUser: AuthUser = new AuthUser({
+        ...user,
+        id: user.id as string,
+      });
+      authUser.permissions = [];
+      return this.postVerifyProvider(profile, authUser);
+    };
+  }
+}
+```
+
+Please note the Verify function type _VerifyFunction.LocalPasswordFn_
+
+Now bind this provider to the application in application.ts.
+
+```ts
+import {AuthenticationComponent, Strategies} from 'loopback4-authentication';
+```
+
+```ts
+// Add authentication component
+this.component(AuthenticationComponent);
+// Customize authentication verify handlers
+this.bind(Strategies.Passport.SAML_VERIFIER).toProvider(SamlVerifyProvider);
+```
+
+Finally, add the authenticate function as a sequence action to sequence.ts.
+
+```ts
+export class MySequence implements SequenceHandler {
+  constructor(
+    @inject(SequenceActions.FIND_ROUTE) protected findRoute: FindRoute,
+    @inject(SequenceActions.PARSE_PARAMS) protected parseParams: ParseParams,
+    @inject(SequenceActions.INVOKE_METHOD) protected invoke: InvokeMethod,
+    @inject(SequenceActions.SEND) public send: Send,
+    @inject(SequenceActions.REJECT) public reject: Reject,
+    @inject(AuthenticationBindings.USER_AUTH_ACTION)
+    protected authenticateRequest: AuthenticateFn<AuthUser>,
+  ) {}
+  async handle(context: RequestContext) {
+    try {
+      const {request, response} = context;
+      const route = this.findRoute(request);
+      const args = await this.parseParams(request, route);
+      request.body = args[args.length - 1];
+      const authUser: AuthUser = await this.authenticateRequest(
+        request,
+        response,
+      );
+      const result = await this.invoke(route, args);
+      this.send(response, result);
+    } catch (err) {
+      this.reject(context, err);
+    }
+  }
+}
+```
+
+After this, you can use decorator to apply auth to controller functions wherever needed. See below.
+
+```ts
+  @authenticateClient(STRATEGY.CLIENT_PASSWORD)
+  @authenticate(
+    STRATEGY.SAML,
+    {
+      accessType: 'offline',
+      scope: ['profile', 'email'],
+      authorizationURL: process.env.SAML_URL,
+      callbackURL: process.env.SAML_CALLBACK_URL,
+      clientID: process.env.SAML_CLIENT_ID,
+      clientSecret: process.env.SAML_CLIENT_SECRET,
+      tokenURL: process.env.SAML_TOKEN_URL,
+    },
+    queryGen('body'),
+  )
+  @authorize({permissions: ['*']})
+  @post('/auth/saml', {
+    description: 'POST Call for saml based login',
+    responses: {
+      [STATUS_CODE.OK]: {
+        description: 'Saml Token Response',
+        content: {
+          [CONTENT_TYPE.JSON]: {
+            schema: {[X_TS_TYPE]: TokenResponse},
+          },
+        },
+      },
+    },
+  })
+  async postLoginViaSaml(
+    @requestBody({
+      content: {
+        [CONTENT_TYPE.FORM_URLENCODED]: {
+          schema: getModelSchemaRef(ClientAuthRequest),
+        },
+      },
+    })
+    clientCreds?: ClientAuthRequest, //NOSONAR
+  ): Promise<void> {
+    //do nothing
+  }
+  @authenticate(
+    STRATEGY.SAML,
+    {
+      accessType: 'offline',
+      scope: ['profile', 'email'],
+      authorizationURL: process.env.SAML_URL,
+      callbackURL: process.env.SAML_CALLBACK_URL,
+      clientID: process.env.SAML_CLIENT_ID,
+      clientSecret: process.env.SAML_CLIENT_SECRET,
+      tokenURL: process.env.SAML_TOKEN_URL,
+    },
+    queryGen('query'),
+  )
+  @authorize({permissions: ['*']})
+  @get('/auth/saml-redirect', {
+    responses: {
+      [STATUS_CODE.OK]: {
+        description: 'Saml Redirect Token Response',
+        content: {
+          [CONTENT_TYPE.JSON]: {
+            schema: {[X_TS_TYPE]: TokenResponse},
+          },
+        },
+      },
+    },
+  })
+  async samlCallback(
+    @param.query.string('code') code: string, //NOSONAR
+    @param.query.string('state') state: string,
+    @param.query.string('session_state') sessionState: string, //NOSONAR
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+    @inject(AuthenticationBindings.CURRENT_USER)
+    user: AuthUser | undefined,
+  ): Promise<void> {
+    const clientId = new URLSearchParams(state).get('client_id');
+    if (!clientId || !user) {
+      throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
+    }
+    const client = await this.authClientRepository.findOne({
+      where: {
+        clientId,
+      },
+    });
+    if (!client?.redirectUrl) {
+      throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
+    }
+    try {
+      const token = await this.getAuthCode(client, user);
+      response.redirect(`${client.redirectUrl}?code=${token}`);
+    } catch (error) {
+      this.logger.error(error);
+      throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
+    }
+  }
+```
+
+Please note above that we are creating two new APIs for SAML. The first one is for UI clients to hit. We are authenticating client as well, then passing the details to the SAML. Then, the actual authentication is done by SAML authorization url, which redirects to the second API we created after success. The first API method body is empty as we do not need to handle its response. The SAML provider in this package will do the redirection for you automatically.
+
+For accessing the authenticated AuthUser model reference, you can inject the CURRENT_USER provider, provided by the extension, which is populated by the auth action sequence above.
+
+```ts
+  @inject.getter(AuthenticationBindings.CURRENT_USER)
+  private readonly getCurrentUser: Getter<User>,
+```
+
+The `logoutVerify` function is used in the node-saml library as a part of the Passport SAML authentication process. This function is used to verify the authenticity of a SAML logout request.
+The logout process in SAML is used to end the user's session on the service provider, and the logoutVerify function is used to verify that the logout request is coming from a trusted IdP.
+The implementation of the logoutVerify function may vary depending on the specific requirements and the security constraints of the application. It is typically used to verify the signature on the logout request, to ensure that the request has not been tampered with, and to extract the user's identity information from the request.
+
+```ts
+function logoutVerify(
+  req: Request<AnyObject, AnyObject, Record<string, AnyObject>>,
+  profile: Profile | null,
+  done: VerifiedCallback,
+): void {
+  throw new Error('Function not implemented.');
+}
+```
+
+This function is called when a user logs out of the application.Once this function is implemented,it will be called when the user logs out of the application,allowing the application to perform any necessary tasks before ending the user's session.
+@param req - The request object.
+@param {Profile | null} profile - The user's profile, as returned by the provider.
+@param {VerifiedCallback} done - A callback to be called when the verificationis complete.
 
 ### Https proxy support for keycloak and google auth
 
