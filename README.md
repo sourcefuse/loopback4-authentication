@@ -2880,11 +2880,20 @@ The implementation of the logoutVerify function may vary depending on the specif
 
 ```ts
 function logoutVerify(
-  req: Request<AnyObject, AnyObject, Record<string, AnyObject>>,
+  req: Request<AnyObject, AnyObject, AnyObject>,
   profile: Profile | null,
   done: VerifiedCallback,
 ): void {
-  throw new Error('Function not implemented.');
+  // Check if a user is currently authenticated
+  if (req.isAuthenticated()) {
+    // Log the user out by removing their session data
+    req.logout(done);
+    // Call the "done" callback to indicate success
+    done(null, {message: 'User successfully logged out'});
+  } else {
+    // Call the "done" callback with an error to indicate that the user is not logged in
+    done(new Error('User is not currently logged in'));
+  }
 }
 ```
 
