@@ -67,7 +67,7 @@ export class StrategyAdapter<T> {
       };
 
       // authenticate
-      strategy.authenticate(request, options);
+      strategy.authenticate(request, options ?? {});
     });
   }
 }

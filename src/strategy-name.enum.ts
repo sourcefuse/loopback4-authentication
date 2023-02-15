@@ -11,4 +11,5 @@ export const enum STRATEGY {
   AZURE_AD = 'Azure AD',
   KEYCLOAK = 'keycloak',
   OTP = 'otp',
+  SAML = 'saml',
 }
