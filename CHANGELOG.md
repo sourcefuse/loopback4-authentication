@@ -1,3 +1,46 @@
+## Release [v7.5.0](https://github.com/sourcefuse/loopback4-authentication/compare/v7.4.1..v7.5.0) February 17, 2023
+Welcome to the February 17, 2023 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
+
+  - [Correction to the changelog format](https://github.com/sourcefuse/loopback4-authentication/issues/138) :- [fix(chore): corrected the issue number ](https://github.com/sourcefuse/loopback4-authentication/commit/f5d0ad62c49dc00cbdb66ddfd9be792c1a8a8a78) was commited on February 17, 2023 by [yeshamavani](mailto:83634146+yeshamavani@users.noreply.github.com)
+    
+      - * fix(chore): corrected the issue number
+      
+      -  now will show correct issue description as well
+      
+      -  GH-138
+      
+      - * fix(chore): correct the changelog format
+      
+      -  now issue description will be visible
+      
+      -  GH-138
+      
+  
+  - [Package Update : loopback4-authentication](https://github.com/sourcefuse/loopback4-authentication/issues/140) :- [fix(deps): remove all current vilnenrability of loopback4-authentication ](https://github.com/sourcefuse/loopback4-authentication/commit/5c9d259c654020091a5bcf3964dfcad39e3bbff2) was commited on February 17, 2023 by [Sunny Tyagi](mailto:107617248+Tyagi-Sunny@users.noreply.github.com)
+    
+      - remove all current vilnenrability of loopback4-authentication
+      
+      -  GH-140
+      
+  
+  - [Add SAML passport authentication strategy](https://github.com/sourcefuse/loopback4-authentication/issues/131) :- [feat(provider): add SAML passport authentication strategy ](https://github.com/sourcefuse/loopback4-authentication/commit/80798842eabb06e1cb679905b8a4c766edf87977) was commited on February 15, 2023 by [RaghavaroraSF](mailto:97958393+RaghavaroraSF@users.noreply.github.com)
+    
+      - * feat(provider): add SAML passport authentication strategy
+      
+      -  GH-131
+      
+      - * feat(provider): add SAML passport authentication strategy
+      
+      -  GH-131
+      
+      - * feat(provider): add SAML passport authentication strategy
+      
+      -  GH-131
+      
+  
+Clink on the above links to understand the changes in detail.
+  ___
+
 ## Release [v7.4.1](https://github.com/sourcefuse/loopback4-authentication/compare/v7.4.0..v7.4.1) January 31, 2023
 Welcome to the January 31, 2023 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
 
