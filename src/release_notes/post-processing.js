@@ -15,7 +15,9 @@ module.exports = async function (data, callback) {
     });
 
     commit.messageLines.forEach((message) => {
-      commit.issueno = message.includes('GH-') ? message.slice(3) : null;
+      commit.issueno = message.includes('GH-')
+        ? message.replace('GH-', '').trim()
+        : null;
     });
 
     const issueDesc = await getIssueDesc(commit.issueno).then((res) => {
@@ -59,7 +61,7 @@ function getIssueDesc(issueNo) {
           );
           let issueTitle = '';
           for (const ele of title) {
-            if (ele.nodeName === 'SPAN') {
+            if (ele.nodeName === 'BDI') {
               issueTitle = ele.innerHTML;
             }
           }
