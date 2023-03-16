@@ -1,12 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import * as passport from 'passport';
+import {AnyObject} from '@loopback/repository';
 
 export namespace Otp {
   export interface VerifyFunction {
     (
       key: string,
       otp: string,
-      done: (error: any, user?: any, info?: any) => void,
+      done: (error: any , user?: any, info?: any) => void,
     ): void;
   }
 
@@ -33,7 +34,7 @@ export namespace Otp {
     name: string;
     private readonly verify: VerifyFunction;
 
-    authenticate(req: any, options?: StrategyOptions): void {
+    authenticate(req: AnyObject, options?: StrategyOptions): void {
       const key = req.body.key || options?.key;
       const otp = req.body.otp || options?.otp;
 
@@ -42,7 +43,7 @@ export namespace Otp {
         return;
       }
 
-      const verified = (err?: any, user?: any, _info?: any) => {
+      const verified = (err?: AnyObject, user?: AnyObject, _info?: AnyObject) => {
         if (err) {
           this.error(err);
           return;

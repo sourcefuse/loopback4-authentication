@@ -1,19 +1,20 @@
 import {inject, Provider} from '@loopback/core';
 import {HttpErrors, Request} from '@loopback/rest';
 import {HttpsProxyAgent} from 'https-proxy-agent';
+import {AnyObject} from '@loopback/repository';
+
 import {
   Profile,
   AuthenticateOptions,
   AuthenticateOptionsWithRequest,
   VerifyCallback,
-  DecodedIdToken,
+  Strategy
 } from 'passport-apple';
 
 import {AuthErrorKeys} from '../../../error-keys';
 import {Strategies} from '../../keys';
 import {VerifyFunction} from '../../types';
 
-import Strategy from 'passport-apple';
 export interface AppleAuthStrategyFactory {
   (
     options: AuthenticateOptions | AuthenticateOptionsWithRequest,
@@ -40,38 +41,39 @@ export class AppleAuthStrategyFactoryProvider
   ): Strategy {
     const verifyFn = verifierPassed ?? this.verifierAppleAuth;
     let strategy;
+    const func = async (
+      req: Request,
+      accessToken: string,
+      refreshToken: string,
+      decodedIdToken: string,
+      profile: Profile,
+      cb: VerifyCallback,
+    ) => {
+      try {
+        const user = await verifyFn(
+          accessToken,
+          refreshToken,
+          decodedIdToken,
+          profile,
+          cb,
+          req,
+        );
+        if (!user) {
+          throw new HttpErrors.Unauthorized(
+            AuthErrorKeys.InvalidCredentials,
+          );
+        }
+        cb(undefined, user);
+      } catch (err) {
+        cb(err);
+      }
+    }
     if (options && options.passReqToCallback === true) {
       strategy = new Strategy(
         options,
-
+        func,
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        async (
-          req: Request,
-          accessToken: string,
-          refreshToken: string,
-          decodedIdToken: DecodedIdToken,
-          profile: Profile,
-          cb: VerifyCallback,
-        ) => {
-          try {
-            const user = await verifyFn(
-              accessToken,
-              refreshToken,
-              decodedIdToken,
-              profile,
-              cb,
-              req,
-            );
-            if (!user) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.InvalidCredentials,
-              );
-            }
-            cb(undefined, user);
-          } catch (err) {
-            cb(err);
-          }
-        },
+
       );
     } else {
       strategy = new Strategy(
@@ -80,7 +82,7 @@ export class AppleAuthStrategyFactoryProvider
         async (
           accessToken: string,
           refreshToken: string,
-          decodedIdToken: DecodedIdToken,
+          decodedIdToken: string,
           profile: Profile,
           cb: VerifyCallback,
         ) => {
@@ -109,8 +111,7 @@ export class AppleAuthStrategyFactoryProvider
     return strategy;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _setupProxy(strategy: any) {
+  private _setupProxy(strategy: AnyObject) {
     // Setup proxy if any
     let httpsProxyAgent;
     if (process.env['https_proxy']) {
@@ -119,6 +120,9 @@ export class AppleAuthStrategyFactoryProvider
     } else if (process.env['HTTPS_PROXY']) {
       httpsProxyAgent = new HttpsProxyAgent(process.env['HTTPS_PROXY']);
       strategy._oauth2.setAgent(httpsProxyAgent);
+    }
+    else {
+      //this is intentional
     }
   }
 }

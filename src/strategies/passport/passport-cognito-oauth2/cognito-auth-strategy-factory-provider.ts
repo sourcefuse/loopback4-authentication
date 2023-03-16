@@ -32,36 +32,36 @@ export class CognitoStrategyFactoryProvider
     verifierPassed?: VerifyFunction.CognitoAuthFn,
   ): typeof CognitoStrategy {
     const verifyFn = verifierPassed ?? this.verifierCognito;
+    const func= async (
+      req: Request,
+      accessToken: string,
+      refreshToken: string,
+      profile: Cognito.Profile,
+      cb: Cognito.VerifyCallback,
+    ) => {
+      try {
+        const user = await verifyFn(
+          accessToken,
+          refreshToken,
+          profile,
+          cb,
+          req,
+        );
+        if (!user) {
+          throw new HttpErrors.Unauthorized(
+            AuthErrorKeys.InvalidCredentials,
+          );
+        }
+        cb(undefined, user);
+      } catch (err) {
+        cb(err);
+      }
+    };
     let strategy;
     if (options && options.passReqToCallback === true) {
       strategy = new CognitoStrategy(
         options,
-
-        async (
-          req: Request,
-          accessToken: string,
-          refreshToken: string,
-          profile: Cognito.Profile,
-          cb: Cognito.VerifyCallback,
-        ) => {
-          try {
-            const user = await verifyFn(
-              accessToken,
-              refreshToken,
-              profile,
-              cb,
-              req,
-            );
-            if (!user) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.InvalidCredentials,
-              );
-            }
-            cb(undefined, user);
-          } catch (err) {
-            cb(err);
-          }
-        },
+        func
       );
     } else {
       strategy = new CognitoStrategy(
@@ -100,6 +100,9 @@ export class CognitoStrategyFactoryProvider
     } else if (process.env['HTTPS_PROXY']) {
       httpsProxyAgent = new HttpsProxyAgent(process.env['HTTPS_PROXY']);
       strategy._oauth2.setAgent(httpsProxyAgent);
+    }
+    else{
+      //this is intentional
     }
   }
 }

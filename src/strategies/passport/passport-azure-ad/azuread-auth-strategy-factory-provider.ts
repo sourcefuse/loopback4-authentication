@@ -31,6 +31,71 @@ export class AzureADAuthStrategyFactoryProvider
     return (options, verifier) =>
       this.getAzureADAuthStrategyVerifier(options, verifier);
   }
+  OidcFunctionVerifier1(verifyFn: VerifyFunction.AzureADAuthFn) {
+      return async (
+      req: Request,
+      iss: string,
+      sub: string,
+      profile: IProfile,
+      accessToken: string,
+      refreshToken: string,
+      done: VerifyCallback,
+    ) => {
+      if (!profile.oid) {
+        return done(new Error('No oid found'), null);
+      }
+
+      try {
+        const user = await verifyFn(
+          accessToken,
+          refreshToken,
+          profile,
+          done,
+          req,
+        );
+        if (!user) {
+          throw new HttpErrors.Unauthorized(
+            AuthErrorKeys.InvalidCredentials,
+          );
+        }
+        done(null, user);
+      } catch (err) {
+        done(err);
+      }
+
+    }
+  }
+  OidcFunctionVerifier2(verifyFn: VerifyFunction.AzureADAuthFn){
+      return async (
+      iss: string,
+      sub: string,
+      profile: IProfile,
+      accessToken: string,
+      refreshToken: string,
+      done: VerifyCallback,
+    ) => {
+      if (!profile.oid) {
+        return done(new Error('No oid found'), null);
+      }
+
+      try {
+        const user = await verifyFn(
+          accessToken,
+          refreshToken,
+          profile,
+          done,
+        );
+        if (!user) {
+          throw new HttpErrors.Unauthorized(
+            AuthErrorKeys.InvalidCredentials,
+          );
+        }
+        done(null, user) ;
+      } catch (err) {
+        done(err);
+      }
+    }
+  }
 
   getAzureADAuthStrategyVerifier(
     options: IOIDCStrategyOptionWithoutRequest | IOIDCStrategyOptionWithRequest,
@@ -40,74 +105,12 @@ export class AzureADAuthStrategyFactoryProvider
     if (options && options.passReqToCallback === true) {
       return new OIDCStrategy(
         options,
-
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        async (
-          req: Request,
-          iss: string,
-          sub: string,
-          profile: IProfile,
-          accessToken: string,
-          refreshToken: string,
-          done: VerifyCallback,
-        ) => {
-          if (!profile.oid) {
-            return done(new Error('No oid found'), null);
-          }
-
-          try {
-            const user = await verifyFn(
-              accessToken,
-              refreshToken,
-              profile,
-              done,
-              req,
-            );
-            if (!user) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.InvalidCredentials,
-              );
-            }
-            done(null, user);
-          } catch (err) {
-            done(err);
-          }
-        },
+        this.OidcFunctionVerifier1(verifyFn)
       );
     } else if (options && options.passReqToCallback === false) {
       return new OIDCStrategy(
         options,
-
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        async (
-          iss: string,
-          sub: string,
-          profile: IProfile,
-          accessToken: string,
-          refreshToken: string,
-          done: VerifyCallback,
-        ) => {
-          if (!profile.oid) {
-            return done(new Error('No oid found'), null);
-          }
-
-          try {
-            const user = await verifyFn(
-              accessToken,
-              refreshToken,
-              profile,
-              done,
-            );
-            if (!user) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.InvalidCredentials,
-              );
-            }
-            done(null, user);
-          } catch (err) {
-            done(err);
-          }
-        },
+        this.OidcFunctionVerifier2(verifyFn)
       );
     } else {
       throw new Error('Invalid value for passReqToCallback');

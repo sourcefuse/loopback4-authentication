@@ -26,66 +26,79 @@ export class ClientPasswordStrategyFactoryProvider
     return (options, verifier) =>
       this.getClientPasswordVerifier(options, verifier);
   }
+  getClientPasswordVerifier1(verifyFn:VerifyFunction.OauthClientPasswordFn){
+    return async (
+      req: Request,
+      clientId: string,
+      clientSecret: string,
+      cb: (err: Error | null, client?: IAuthClient | false) => void,
+    ) => {
+      try {
+        const client = await verifyFn(clientId, clientSecret, req);
+        if (!client) {
+          throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
+        } else if (
+          !client.clientSecret ||
+          client.clientSecret !== clientSecret
+        ) {
+          throw new HttpErrors.Unauthorized(
+            AuthErrorKeys.ClientVerificationFailed,
+          );
+        }
+        else{
+          //this is intentional
+        }
+        cb(null, client);
+      } catch (err) {
+        cb(err);
+      }
+    };
+  }
+  getClientPasswordVerifier2(verifyFn:VerifyFunction.OauthClientPasswordFn){
+    return async (
+      clientId: string,
+      clientSecret: string,
+      cb: (err: Error | null, client?: IAuthClient | false) => void,
+    ) => {
+      try {
+        const client = await verifyFn(clientId, clientSecret);
+        if (!client) {
+          throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
+        } else if (
+          !client.clientSecret ||
+          client.clientSecret !== clientSecret
+        ) {
+          throw new HttpErrors.Unauthorized(
+            AuthErrorKeys.ClientVerificationFailed,
+          );
+        }
+        else{
+          //this is intentional
+        }
+        cb(null, client);
+      } catch (err) {
+        cb(err);
+      }
+    };
+  }
 
   getClientPasswordVerifier(
     options?: ClientPasswordStrategy.StrategyOptionsWithRequestInterface,
     verifierPassed?: VerifyFunction.OauthClientPasswordFn,
   ): ClientPasswordStrategy.Strategy {
     const verifyFn = verifierPassed ?? this.verifier;
+
     if (options?.passReqToCallback) {
       return new ClientPasswordStrategy.Strategy(
         options,
-
+        this.getClientPasswordVerifier1(verifyFn)
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        async (
-          req: Request,
-          clientId: string,
-          clientSecret: string,
-          cb: (err: Error | null, client?: IAuthClient | false) => void,
-        ) => {
-          try {
-            const client = await verifyFn(clientId, clientSecret, req);
-            if (!client) {
-              throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
-            } else if (
-              !client.clientSecret ||
-              client.clientSecret !== clientSecret
-            ) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.ClientVerificationFailed,
-              );
-            }
-            cb(null, client);
-          } catch (err) {
-            cb(err);
-          }
-        },
+        ,
       );
     } else {
       return new ClientPasswordStrategy.Strategy(
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        async (
-          clientId: string,
-          clientSecret: string,
-          cb: (err: Error | null, client?: IAuthClient | false) => void,
-        ) => {
-          try {
-            const client = await verifyFn(clientId, clientSecret);
-            if (!client) {
-              throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
-            } else if (
-              !client.clientSecret ||
-              client.clientSecret !== clientSecret
-            ) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.ClientVerificationFailed,
-              );
-            }
-            cb(null, client);
-          } catch (err) {
-            cb(err);
-          }
-        },
+        this.getClientPasswordVerifier2(verifyFn),
       );
     }
   }

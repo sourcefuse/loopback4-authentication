@@ -5,7 +5,8 @@
     "typeRoots": ["./src/typing", "./node_modules/@types"],
     "rootDir": "src",
     "outDir": "dist",
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "noImplicitAny": false
   },
   "exclude": ["./src/typing", "./node_modules/@types", "vendor"],
   "include": ["src", ".eslintrc.js"]

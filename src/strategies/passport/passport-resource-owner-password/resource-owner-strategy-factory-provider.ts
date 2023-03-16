@@ -33,40 +33,41 @@ export class ResourceOwnerPasswordStrategyFactoryProvider
     verifierPassed?: VerifyFunction.ResourceOwnerPasswordFn,
   ): Oauth2ResourceOwnerPassword.Strategy {
     const verifyFn = verifierPassed ?? this.verifierResourceOwner;
+    const func=async (
+      req: Request,
+      clientId: string,
+      clientSecret: string,
+      username: string,
+      password: string,
+      cb: (
+        err: Error | null,
+        client?: IAuthClient | false,
+        user?: IAuthUser | false,
+      ) => void,
+    ) => {
+      try {
+        const userInfo = await verifyFn(
+          clientId,
+          clientSecret,
+          username,
+          password,
+          req,
+        );
+        if (!userInfo || isEmpty(userInfo)) {
+          throw new HttpErrors.Unauthorized(
+            AuthErrorKeys.InvalidCredentials,
+          );
+        }
+        cb(null, userInfo.client, userInfo.user);
+      } catch (err) {
+        cb(err);
+      }
+    };
     if (options?.passReqToCallback) {
       return new Oauth2ResourceOwnerPassword.Strategy(
         options,
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        async (
-          req: Request,
-          clientId: string,
-          clientSecret: string,
-          username: string,
-          password: string,
-          cb: (
-            err: Error | null,
-            client?: IAuthClient | false,
-            user?: IAuthUser | false,
-          ) => void,
-        ) => {
-          try {
-            const userInfo = await verifyFn(
-              clientId,
-              clientSecret,
-              username,
-              password,
-              req,
-            );
-            if (!userInfo || isEmpty(userInfo)) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.InvalidCredentials,
-              );
-            }
-            cb(null, userInfo.client, userInfo.user);
-          } catch (err) {
-            cb(err);
-          }
-        },
+        func
       );
     } else {
       return new Oauth2ResourceOwnerPassword.Strategy(

@@ -37,36 +37,37 @@ export class InstagramAuthStrategyFactoryProvider
     verifierPassed?: VerifyFunction.InstagramAuthFn,
   ): Strategy {
     const verifyFn = verifierPassed ?? this.verifierInstagramAuth;
+    const func=async (
+      req: Request,
+      accessToken: string,
+      refreshToken: string,
+      profile: Profile,
+      cb: VerifyCallback,
+    ) => {
+      try {
+        const user = await verifyFn(
+          accessToken,
+          refreshToken,
+          profile,
+          cb,
+          req,
+        );
+        if (!user) {
+          throw new HttpErrors.Unauthorized(
+            AuthErrorKeys.InvalidCredentials,
+          );
+        }
+        cb(undefined, user);
+      } catch (err) {
+        cb(err);
+      }
+    };
     let strategy;
     if (options && options.passReqToCallback === true) {
       strategy = new Strategy(
         options,
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        async (
-          req: Request,
-          accessToken: string,
-          refreshToken: string,
-          profile: Profile,
-          cb: VerifyCallback,
-        ) => {
-          try {
-            const user = await verifyFn(
-              accessToken,
-              refreshToken,
-              profile,
-              cb,
-              req,
-            );
-            if (!user) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.InvalidCredentials,
-              );
-            }
-            cb(undefined, user);
-          } catch (err) {
-            cb(err);
-          }
-        },
+        func
       );
     } else {
       strategy = new Strategy(
@@ -107,6 +108,9 @@ export class InstagramAuthStrategyFactoryProvider
     } else if (process.env['HTTPS_PROXY']) {
       httpsProxyAgent = new HttpsProxyAgent(process.env['HTTPS_PROXY']);
       strategy._oauth2.setAgent(httpsProxyAgent);
+    }
+    else{
+      //this is intentional
     }
   }
 }

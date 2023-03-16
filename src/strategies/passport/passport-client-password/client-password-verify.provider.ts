@@ -11,7 +11,8 @@ import {VerifyFunction} from '../../types';
 export class ClientPasswordVerifyProvider
   implements Provider<VerifyFunction.OauthClientPasswordFn>
 {
-  constructor() {}
+  constructor() {//this is intentional
+  }
 
   value(): VerifyFunction.OauthClientPasswordFn {
     return async (clientId: string, clientSecret: string) => {
