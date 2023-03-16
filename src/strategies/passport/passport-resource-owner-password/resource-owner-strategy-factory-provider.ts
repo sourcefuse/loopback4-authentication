@@ -28,6 +28,37 @@ export class ResourceOwnerPasswordStrategyFactoryProvider
       this.getResourceOwnerVerifier(options, verifier);
   }
 
+  getresourceownerStrategy(verifyFn: VerifyFunction.ResourceOwnerPasswordFn) {
+    return async (
+      req: Request,
+      clientId: string,
+      clientSecret: string,
+      username: string,
+      password: string,
+      cb: (
+        err: Error | null,
+        client?: IAuthClient | false,
+        user?: IAuthUser | false,
+      ) => void,
+    ) => {
+      try {
+        const userInfo = await verifyFn(
+          clientId,
+          clientSecret,
+          username,
+          password,
+          req,
+        );
+        if (!userInfo || isEmpty(userInfo)) {
+          throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
+        }
+        cb(null, userInfo.client, userInfo.user);
+      } catch (err) {
+        cb(err);
+      }
+    };
+  }
+
   getResourceOwnerVerifier(
     options?: Oauth2ResourceOwnerPassword.StrategyOptionsWithRequestInterface,
     verifierPassed?: VerifyFunction.ResourceOwnerPasswordFn,
@@ -37,36 +68,7 @@ export class ResourceOwnerPasswordStrategyFactoryProvider
       return new Oauth2ResourceOwnerPassword.Strategy(
         options,
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        async (
-          req: Request,
-          clientId: string,
-          clientSecret: string,
-          username: string,
-          password: string,
-          cb: (
-            err: Error | null,
-            client?: IAuthClient | false,
-            user?: IAuthUser | false,
-          ) => void,
-        ) => {
-          try {
-            const userInfo = await verifyFn(
-              clientId,
-              clientSecret,
-              username,
-              password,
-              req,
-            );
-            if (!userInfo || isEmpty(userInfo)) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.InvalidCredentials,
-              );
-            }
-            cb(null, userInfo.client, userInfo.user);
-          } catch (err) {
-            cb(err);
-          }
-        },
+        this.getresourceownerStrategy(verifyFn),
       );
     } else {
       return new Oauth2ResourceOwnerPassword.Strategy(

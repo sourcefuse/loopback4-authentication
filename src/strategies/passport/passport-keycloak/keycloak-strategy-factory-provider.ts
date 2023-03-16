@@ -127,6 +127,8 @@ export class KeycloakStrategyFactoryProvider
     } else if (process.env['HTTPS_PROXY']) {
       httpsProxyAgent = new HttpsProxyAgent(process.env['HTTPS_PROXY']);
       strategy._oauth2.setAgent(httpsProxyAgent);
+    } else {
+      //this is intentional
     }
   }
 }

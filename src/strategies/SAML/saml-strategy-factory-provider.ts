@@ -37,7 +37,7 @@ export class SamlStrategyFactoryProvider
   ): Strategy {
     const verifyFn = verifierPassed ?? this.verifierSaml;
     let strategy;
-    const func = async (
+    const getSAMLStrategy = async (
       req: Request,
       profile: Profile | null | undefined,
       cb: VerifiedCallback,
@@ -57,7 +57,7 @@ export class SamlStrategyFactoryProvider
         options,
         logoutVerify as VerifyWithRequest,
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        func,
+        getSAMLStrategy,
       );
     } else {
       strategy = new Strategy(

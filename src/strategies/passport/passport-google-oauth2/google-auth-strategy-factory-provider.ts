@@ -13,7 +13,6 @@ import {AuthErrorKeys} from '../../../error-keys';
 import {Strategies} from '../../keys';
 import {VerifyFunction} from '../../types';
 
-//import * as GoogleStrategy from 'passport-google-oauth20';
 export interface GoogleAuthStrategyFactory {
   (
     options: StrategyOptions | StrategyOptionsWithRequest,
@@ -39,37 +38,35 @@ export class GoogleAuthStrategyFactoryProvider
     verifierPassed?: VerifyFunction.GoogleAuthFn,
   ): Strategy {
     const verifyFn = verifierPassed ?? this.verifierGoogleAuth;
+    const googleAuthStrategy = async (
+      req: Request,
+      accessToken: string,
+      refreshToken: string,
+      profile: Profile,
+      cb: VerifyCallback,
+    ) => {
+      try {
+        const user = await verifyFn(
+          accessToken,
+          refreshToken,
+          profile,
+          cb,
+          req,
+        );
+        if (!user) {
+          throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
+        }
+        cb(undefined, user);
+      } catch (err) {
+        cb(err);
+      }
+    };
     let strategy;
     if (options && options.passReqToCallback === true) {
       strategy = new Strategy(
         options,
-
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        async (
-          req: Request,
-          accessToken: string,
-          refreshToken: string,
-          profile: Profile,
-          cb: VerifyCallback,
-        ) => {
-          try {
-            const user = await verifyFn(
-              accessToken,
-              refreshToken,
-              profile,
-              cb,
-              req,
-            );
-            if (!user) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.InvalidCredentials,
-              );
-            }
-            cb(undefined, user);
-          } catch (err) {
-            cb(err);
-          }
-        },
+        googleAuthStrategy,
       );
     } else {
       strategy = new Strategy(
@@ -110,6 +107,8 @@ export class GoogleAuthStrategyFactoryProvider
     } else if (process.env['HTTPS_PROXY']) {
       httpsProxyAgent = new HttpsProxyAgent(process.env['HTTPS_PROXY']);
       strategy._oauth2.setAgent(httpsProxyAgent);
+    } else {
+      //this is intentional
     }
   }
 }

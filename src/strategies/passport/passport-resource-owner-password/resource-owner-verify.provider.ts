@@ -12,8 +12,6 @@ import {VerifyFunction} from '../../types';
 export class ResourceOwnerVerifyProvider
   implements Provider<VerifyFunction.ResourceOwnerPasswordFn>
 {
-  constructor() {}
-
   value(): VerifyFunction.ResourceOwnerPasswordFn {
     return async (clientId, clientSecret, username, password) => {
       throw new HttpErrors.NotImplemented(
