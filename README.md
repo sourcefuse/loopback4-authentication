@@ -71,7 +71,7 @@ Once this is done, you are ready to configure any of the available strategy in t
 
 ### Oauth2-client-password
 
-In order to use it, run `npm install passport-oauth2-client-password`.
+In order to use it, run `npm install passport-oauth2-client-password`,and then bind the ClientPasswordVerifyProvider in application.ts.
 First, create an AuthClient model implementing the IAuthClient interface. The purpose of this model is to store oauth registered clients for the app in the DB. See sample below.
 
 ```ts
@@ -234,7 +234,7 @@ For accessing the authenticated AuthClient model reference, you can inject the C
 
 ### Http-bearer
 
-In order to use it, run `npm install passport-http-bearer`.
+In order to use it, run `npm install passport-http-bearer`,and then bind the BearerTokenVerifyProvider in application.ts.
 First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
 
 ```ts
@@ -415,7 +415,7 @@ For accessing the authenticated AuthUser model reference, you can inject the CUR
 
 ### local
 
-In order to use it, run `npm install passport-local`.
+In order to use it, run `npm install passport-local`,and then bind the LocalPasswordVerifyProvider in application.ts.
 First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
 
 ```ts
@@ -590,7 +590,7 @@ For accessing the authenticated AuthUser model reference, you can inject the CUR
 
 ### Oauth2-resource-owner-password
 
-In order to use it, run `npm install passport-oauth2-resource-owner-password`.
+In order to use it, run `npm install passport-oauth2-resource-owner-password`,and then bind the ResourceOwnerVerifyProvider in application.ts.
 First, create an AuthClient model implementing the IAuthClient interface. The purpose of this model is to store oauth registered clients for the app in the DB. See sample below.
 
 ```ts
@@ -820,6 +820,7 @@ For accessing the authenticated AuthUser and AuthClient model reference, you can
 
 ### OTP
 
+In order to use it, run `npm install passport`,and then bind the OtpVerifyProvider in application.ts.
 First, create a OtpCache model. This model should have OTP and few details of user and client (which will be used to retrieve them from database), it will be used to verify otp and get user, client. See sample below.
 
 ```ts
@@ -1012,7 +1013,7 @@ For accessing the authenticated AuthUser model reference, you can inject the CUR
 
 ### Google Oauth 2
 
-In order to use it, run `npm install passport-google-oauth20` or `npm install @types/passport-google-oauth20`.
+In order to use it, run `npm install passport-google-oauth20`,and then bind the GoogleOauth2VerifyProvider in application.ts.
 First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
 
 ```ts
@@ -1326,7 +1327,7 @@ For accessing the authenticated AuthUser model reference, you can inject the CUR
 
 ### Instagram Oauth 2
 
-In order to use it, run `npm install passport-instagram`.
+In order to use it, run `npm install passport-instagram`,and then bind the InstagramOauth2VerifyProvider in application.ts.
 First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
 
 ```ts
@@ -1638,7 +1639,7 @@ For accessing the authenticated AuthUser model reference, you can inject the CUR
 
 ### Apple Oauth 2
 
-In order to use it, run `npm install --save passport-apple`.
+In order to use it, run `npm install --save passport-apple`,and then bind the AppleOauth2VerifyProvider in application.ts.
 First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
 
 ```ts
@@ -1952,7 +1953,7 @@ For accessing the authenticated AuthUser model reference, you can inject the CUR
 
 ### Facebook Oauth 2
 
-In order to use it, run `npm install passport-facebook`.
+In order to use it, run `npm install passport-facebook`,and then bind the FacebookOauth2VerifyProvider in application.ts.
 First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
 
 ```ts
@@ -2264,7 +2265,7 @@ For accessing the authenticated AuthUser model reference, you can inject the CUR
 
 ### Keycloak
 
-In order to use it, run `npm install @exlinc/keycloak-passport`.
+In order to use it, run `npm install @exlinc/keycloak-passport`,and then bind the KeycloakVerifyProvider in application.ts.
 First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
 
 ```ts
@@ -2607,7 +2608,7 @@ this.bind(VerifyBindings.BEARER_SIGNUP_VERIFY_PROVIDER).toProvider(
 
 ### SAML
 
-In order to use it, run `npm install @node-saml/passport-saml`.
+In order to use it, run `npm install @node-saml/passport-saml`,and then bind the SamlVerifyProvider in application.ts.
 SAML (Security Assertion Markup Language) is an XML-based standard for exchanging authentication and authorization data between parties, in particular, between an identity provider (IdP) and a service provider (SP).
 
 First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
