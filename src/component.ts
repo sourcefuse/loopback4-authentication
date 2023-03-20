@@ -13,31 +13,50 @@ import {
   ClientAuthMetadataProvider,
 } from './providers';
 import {
-  AuthStrategyProvider,
   AzureADAuthStrategyFactoryProvider,
   AzureADAuthVerifyProvider,
+} from './strategies/passport/passport-azure-ad';
+import {
   BearerStrategyFactoryProvider,
   BearerTokenVerifyProvider,
-  ClientAuthStrategyProvider,
+} from './strategies/passport/passport-bearer';
+import {
   ClientPasswordStrategyFactoryProvider,
   ClientPasswordVerifyProvider,
+} from './strategies/passport/passport-client-password';
+import {
   GoogleAuthStrategyFactoryProvider,
   GoogleAuthVerifyProvider,
+} from './strategies/passport/passport-google-oauth2';
+import {
   InstagramAuthStrategyFactoryProvider,
   InstagramAuthVerifyProvider,
+} from './strategies/passport/passport-insta-oauth2';
+import {
   FacebookAuthStrategyFactoryProvider,
   FacebookAuthVerifyProvider,
+} from './strategies/passport/passport-facebook-oauth2';
+import {
   AppleAuthStrategyFactoryProvider,
   AppleAuthVerifyProvider,
+} from './strategies/passport/passport-apple-oauth2';
+import {
   KeycloakStrategyFactoryProvider,
   KeycloakVerifyProvider,
+} from './strategies/passport/passport-keycloak';
+import {
   LocalPasswordStrategyFactoryProvider,
   LocalPasswordVerifyProvider,
-  ResourceOwnerPasswordStrategyFactoryProvider,
+} from './strategies/passport/passport-local';
+import {
   ResourceOwnerVerifyProvider,
+  ResourceOwnerPasswordStrategyFactoryProvider,
+} from './strategies/passport/passport-resource-owner-password';
+import {
   PassportOtpStrategyFactoryProvider,
   OtpVerifyProvider,
-} from './strategies';
+} from './strategies/passport/passport-otp';
+import {AuthStrategyProvider, ClientAuthStrategyProvider} from './strategies';
 import {Strategies} from './strategies/keys';
 import {
   CognitoAuthVerifyProvider,

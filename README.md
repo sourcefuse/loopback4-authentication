@@ -71,6 +71,7 @@ Once this is done, you are ready to configure any of the available strategy in t
 
 ### Oauth2-client-password
 
+In order to use it, run `npm install passport-oauth2-client-password`.
 First, create an AuthClient model implementing the IAuthClient interface. The purpose of this model is to store oauth registered clients for the app in the DB. See sample below.
 
 ```ts
@@ -233,6 +234,7 @@ For accessing the authenticated AuthClient model reference, you can inject the C
 
 ### Http-bearer
 
+In order to use it, run `npm install passport-http-bearer`.
 First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
 
 ```ts
@@ -413,6 +415,7 @@ For accessing the authenticated AuthUser model reference, you can inject the CUR
 
 ### local
 
+In order to use it, run `npm install passport-local`.
 First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
 
 ```ts
@@ -587,6 +590,7 @@ For accessing the authenticated AuthUser model reference, you can inject the CUR
 
 ### Oauth2-resource-owner-password
 
+In order to use it, run `npm install passport-oauth2-resource-owner-password`.
 First, create an AuthClient model implementing the IAuthClient interface. The purpose of this model is to store oauth registered clients for the app in the DB. See sample below.
 
 ```ts
@@ -1008,6 +1012,7 @@ For accessing the authenticated AuthUser model reference, you can inject the CUR
 
 ### Google Oauth 2
 
+In order to use it, run `npm install passport-google-oauth20` or `npm install @types/passport-google-oauth20`.
 First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
 
 ```ts
@@ -1321,6 +1326,7 @@ For accessing the authenticated AuthUser model reference, you can inject the CUR
 
 ### Instagram Oauth 2
 
+In order to use it, run `npm install passport-instagram`.
 First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
 
 ```ts
@@ -1632,6 +1638,7 @@ For accessing the authenticated AuthUser model reference, you can inject the CUR
 
 ### Apple Oauth 2
 
+In order to use it, run `npm install --save passport-apple`.
 First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
 
 ```ts
@@ -1945,6 +1952,7 @@ For accessing the authenticated AuthUser model reference, you can inject the CUR
 
 ### Facebook Oauth 2
 
+In order to use it, run `npm install passport-facebook`.
 First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
 
 ```ts
@@ -2256,6 +2264,7 @@ For accessing the authenticated AuthUser model reference, you can inject the CUR
 
 ### Keycloak
 
+In order to use it, run `npm install @exlinc/keycloak-passport`.
 First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
 
 ```ts
@@ -2598,6 +2607,7 @@ this.bind(VerifyBindings.BEARER_SIGNUP_VERIFY_PROVIDER).toProvider(
 
 ### SAML
 
+In order to use it, run `npm install @node-saml/passport-saml`.
 SAML (Security Assertion Markup Language) is an XML-based standard for exchanging authentication and authorization data between parties, in particular, between an identity provider (IdP) and a service provider (SP).
 
 First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
