@@ -16,6 +16,7 @@ export class ClientPasswordVerifyProvider
       const clientToPass: IAuthClient = {
         clientId: clientId || 'id',
         clientSecret: clientSecret || 'secret',
+        clientType: 'public',
       };
 
       return clientToPass;

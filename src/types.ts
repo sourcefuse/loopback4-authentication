@@ -11,6 +11,7 @@ export * from './strategies/types';
 export interface IAuthClient {
   clientId: string;
   clientSecret: string;
+  clientType: string;
   redirectUrl?: string;
 }
 

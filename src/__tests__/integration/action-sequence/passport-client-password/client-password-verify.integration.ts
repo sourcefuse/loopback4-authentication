@@ -38,7 +38,10 @@ describe('Client-password strategy', () => {
 
     const client = await whenIMakeRequestTo(server)
       .post('/test')
-      .send({client_id: 'some id', client_secret: 'some secret'})
+      .send({
+        client_id: 'some id',
+        client_secret: 'some secret',
+      })
       .expect(200);
 
     expect(client.body).to.have.property('clientId');
@@ -56,7 +59,13 @@ describe('Client-password strategy', () => {
 
       @post('/test')
       @authenticateClient(STRATEGY.CLIENT_PASSWORD, {passReqToCallback: false})
-      test(@requestBody() body: {client_id: string; client_secret: string}) {
+      test(
+        @requestBody()
+        body: {
+          client_id: string;
+          // ; client_secret: string
+        },
+      ) {
         return this.client;
       }
     }
@@ -65,13 +74,16 @@ describe('Client-password strategy', () => {
 
     const client = await whenIMakeRequestTo(server)
       .post('/test')
-      .send({client_id: 'some id', client_secret: 'some secret'})
+      .send({
+        client_id: 'some id',
+        // , client_secret: 'some secret'
+      })
       .expect(200);
 
     expect(client.body).to.have.property('clientId');
-    expect(client.body).to.have.property('clientSecret');
+    // expect(client.body).to.have.property('clientSecret');
     expect(client.body.clientId).to.equal('some id');
-    expect(client.body.clientSecret).to.equal('some secret');
+    // expect(client.body.clientSecret).to.equal('some secret');
   });
 
   it('should return status 401 when options.passRequestToCallback is set true', async () => {
@@ -170,7 +182,7 @@ describe('integration test for client-password and no verifier', () => {
         @requestBody()
         body: {
           client_id: string;
-          client_secret: string;
+          // client_secret: string;
         },
       ) {
         return this.client;
@@ -181,7 +193,10 @@ describe('integration test for client-password and no verifier', () => {
 
     await whenIMakeRequestTo(server)
       .post('/test')
-      .send({client_id: 'some id', client_secret: 'some secret'})
+      .send({
+        client_id: 'some id',
+        // , client_secret: 'some secret'
+      })
       .expect(401);
   });
 

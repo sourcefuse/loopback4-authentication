@@ -3,7 +3,7 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 import {HttpErrors, Request, Response} from '@loopback/rest';
-import {Strategy} from 'passport';
+import {Strategy} from './strategies/passport/passport-client-password/client-password-strategy';
 
 const passportRequestMixin = require('passport/lib/http/request');
 

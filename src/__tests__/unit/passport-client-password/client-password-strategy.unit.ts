@@ -70,6 +70,7 @@ function verifierBearer(
   const clientToPass: IAuthClient = {
     clientId: clientId,
     clientSecret: clientSecret,
+    clientType: 'public',
   };
 
   return new Promise(function (resolve, reject) {

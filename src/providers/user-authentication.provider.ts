@@ -1,6 +1,6 @@
 import {Constructor, Getter, inject, Provider, Setter} from '@loopback/context';
 import {HttpErrors, Request, Response} from '@loopback/rest';
-import {Strategy} from 'passport';
+import {Strategy} from '../strategies/passport/passport-client-password/client-password-strategy';
 
 import {AuthErrorKeys} from '../error-keys';
 import {AuthenticationBindings} from '../keys';

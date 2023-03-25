@@ -29,6 +29,7 @@ export class ResourceOwnerVerifyProvider
       const clientToPass: IAuthClient = {
         clientId: clientId || 'client id',
         clientSecret: clientSecret || 'client secret',
+        clientType: 'public',
       };
 
       return {user: userToPass, client: clientToPass};

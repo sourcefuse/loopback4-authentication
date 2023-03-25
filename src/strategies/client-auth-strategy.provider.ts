@@ -1,6 +1,6 @@
 import {inject, Provider, ValueOrPromise} from '@loopback/context';
 import {Strategy} from 'passport';
-import {StrategyOptionsWithRequestInterface} from 'passport-oauth2-client-password';
+import {StrategyOptionsWithRequestInterface} from './passport/passport-client-password/client-password-strategy';
 
 import {AuthenticationBindings} from '../keys';
 import {STRATEGY} from '../strategy-name.enum';

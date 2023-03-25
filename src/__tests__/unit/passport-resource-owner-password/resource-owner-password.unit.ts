@@ -81,6 +81,7 @@ function verifierResourceOwner(
   const clientToPass: IAuthClient = {
     clientId: 'id',
     clientSecret: 'secret',
+    clientType: 'public',
   };
 
   return new Promise(function (resolve, reject) {
