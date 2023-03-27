@@ -3,7 +3,7 @@ import {HttpErrors, Request} from '@loopback/rest';
 import * as ClientPasswordStrategy from './client-password-strategy';
 
 import {AuthErrorKeys} from '../../../error-keys';
-import {IAuthClient} from '../../../types';
+import {ClientType, IAuthClient} from '../../../types';
 import {Strategies} from '../../keys';
 import {VerifyFunction} from '../../types';
 
@@ -45,13 +45,19 @@ export class ClientPasswordStrategyFactoryProvider
             const client = await verifyFn(clientId, clientSecret, req);
             if (!client) {
               throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
-            } else if (
-              !client.clientSecret ||
-              client.clientSecret !== clientSecret
-            ) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.ClientVerificationFailed,
-              );
+            } else if (client.clientType !== ClientType.public) {
+              if (!clientSecret) {
+                throw new HttpErrors.Unauthorized(
+                  AuthErrorKeys.ConfidentialClientSecretMissing,
+                );
+              } else if (
+                !client.clientSecret ||
+                client.clientSecret !== clientSecret
+              ) {
+                throw new HttpErrors.Unauthorized(
+                  AuthErrorKeys.ClientVerificationFailed,
+                );
+              }
             }
             cb(null, client);
           } catch (err) {
@@ -73,7 +79,7 @@ export class ClientPasswordStrategyFactoryProvider
 
             if (!client) {
               throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
-            } else if (client.clientType !== 'public') {
+            } else if (client.clientType !== ClientType.public) {
               if (!clientSecret) {
                 throw new HttpErrors.Unauthorized(
                   AuthErrorKeys.ConfidentialClientSecretMissing,

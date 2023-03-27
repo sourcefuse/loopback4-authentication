@@ -1,4 +1,4 @@
-import {IAuthClient} from '../../../types';
+import {ClientType, IAuthClient} from '../../../types';
 import {
   ClientPasswordStrategyFactoryProvider,
   ClientPasswordStrategyFactory,
@@ -70,7 +70,7 @@ function verifierBearer(
   const clientToPass: IAuthClient = {
     clientId: clientId,
     clientSecret: clientSecret,
-    clientType: 'public',
+    clientType: ClientType.public,
   };
 
   return new Promise(function (resolve, reject) {

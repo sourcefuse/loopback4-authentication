@@ -1,6 +1,6 @@
 import {Provider} from '@loopback/core';
 import {VerifyFunction} from '../../../strategies';
-import {IAuthClient} from '../../../types';
+import {ClientType, IAuthClient} from '../../../types';
 
 export class ClientPasswordVerifyProvider
   implements Provider<VerifyFunction.OauthClientPasswordFn>
@@ -16,7 +16,7 @@ export class ClientPasswordVerifyProvider
       const clientToPass: IAuthClient = {
         clientId: clientId || 'id',
         clientSecret: clientSecret || 'secret',
-        clientType: 'public',
+        clientType: ClientType.public,
       };
 
       return clientToPass;

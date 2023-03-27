@@ -1,7 +1,7 @@
 import {Provider} from '@loopback/core';
 import {VerifyFunction} from '../../../strategies';
 import {Request} from 'express';
-import {IAuthUser, IAuthClient} from '../../../types';
+import {IAuthUser, IAuthClient, ClientType} from '../../../types';
 
 export class ResourceOwnerVerifyProvider
   implements Provider<VerifyFunction.ResourceOwnerPasswordFn>
@@ -29,7 +29,7 @@ export class ResourceOwnerVerifyProvider
       const clientToPass: IAuthClient = {
         clientId: clientId || 'client id',
         clientSecret: clientSecret || 'client secret',
-        clientType: 'public',
+        clientType: ClientType.public,
       };
 
       return {user: userToPass, client: clientToPass};
