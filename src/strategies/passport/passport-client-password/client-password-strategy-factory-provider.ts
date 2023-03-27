@@ -45,20 +45,24 @@ export class ClientPasswordStrategyFactoryProvider
             const client = await verifyFn(clientId, clientSecret, req);
             if (!client) {
               throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
-            } else if (client.clientType !== ClientType.public) {
-              if (!clientSecret) {
-                throw new HttpErrors.Unauthorized(
-                  AuthErrorKeys.ConfidentialClientSecretMissing,
-                );
-              } else if (
-                !client.clientSecret ||
-                client.clientSecret !== clientSecret
-              ) {
-                throw new HttpErrors.Unauthorized(
-                  AuthErrorKeys.ClientVerificationFailed,
-                );
-              }
+            } else if (
+              client.clientType !== ClientType.public &&
+              !clientSecret
+            ) {
+              throw new HttpErrors.Unauthorized(
+                AuthErrorKeys.ConfidentialClientSecretMissing,
+              );
+            } else if (
+              client.clientType !== ClientType.public &&
+              (!client.clientSecret || client.clientSecret !== clientSecret)
+            ) {
+              throw new HttpErrors.Unauthorized(
+                AuthErrorKeys.ClientVerificationFailed,
+              );
+            } else {
+              // do nothing
             }
+
             cb(null, client);
           } catch (err) {
             cb(err);
@@ -79,19 +83,22 @@ export class ClientPasswordStrategyFactoryProvider
 
             if (!client) {
               throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
-            } else if (client.clientType !== ClientType.public) {
-              if (!clientSecret) {
-                throw new HttpErrors.Unauthorized(
-                  AuthErrorKeys.ConfidentialClientSecretMissing,
-                );
-              } else if (
-                !client.clientSecret ||
-                client.clientSecret !== clientSecret
-              ) {
-                throw new HttpErrors.Unauthorized(
-                  AuthErrorKeys.ClientVerificationFailed,
-                );
-              }
+            } else if (
+              client.clientType !== ClientType.public &&
+              !clientSecret
+            ) {
+              throw new HttpErrors.Unauthorized(
+                AuthErrorKeys.ConfidentialClientSecretMissing,
+              );
+            } else if (
+              client.clientType !== ClientType.public &&
+              (!client.clientSecret || client.clientSecret !== clientSecret)
+            ) {
+              throw new HttpErrors.Unauthorized(
+                AuthErrorKeys.ClientVerificationFailed,
+              );
+            } else {
+              // do nothing
             }
             cb(null, client);
           } catch (err) {
