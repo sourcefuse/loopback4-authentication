@@ -1,3 +1,20 @@
+## Release [v8.0.0](https://github.com/sourcefuse/loopback4-authentication/compare/v7.5.1..v8.0.0) March 27, 2023
+Welcome to the March 27, 2023 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
+
+  - [Making CLient Secret Non Mandatory For Public Clients](https://github.com/sourcefuse/loopback4-authentication/issues/151) :- [feat(provider): added clientType column in auth clients ](https://github.com/sourcefuse/loopback4-authentication/commit/d0866f736720ce8e8bdab61dcbda37ec2d9dc5a0) was commited on March 27, 2023 by [Sunny Tyagi](mailto:107617248+Tyagi-Sunny@users.noreply.github.com)
+    
+      - making client secret non mandatory for public clients
+      
+      -  BREAKING CHANGE:
+      
+      - added clientType column in auth clients
+      
+      -  GH-151
+      
+  
+Clink on the above links to understand the changes in detail.
+  ___
+
 ## Release [v7.5.1](https://github.com/sourcefuse/loopback4-authentication/compare/v7.5.0..v7.5.1) March 10, 2023
 Welcome to the March 10, 2023 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
 
