@@ -38,7 +38,10 @@ describe('Client-password strategy', () => {
 
     const client = await whenIMakeRequestTo(server)
       .post('/test')
-      .send({client_id: 'some id', client_secret: 'some secret'})
+      .send({
+        client_id: 'some id',
+        client_secret: 'some secret',
+      })
       .expect(200);
 
     expect(client.body).to.have.property('clientId');
@@ -56,7 +59,13 @@ describe('Client-password strategy', () => {
 
       @post('/test')
       @authenticateClient(STRATEGY.CLIENT_PASSWORD, {passReqToCallback: false})
-      test(@requestBody() body: {client_id: string; client_secret: string}) {
+      test(
+        @requestBody()
+        body: {
+          client_id: string;
+          client_secret: string;
+        },
+      ) {
         return this.client;
       }
     }
@@ -65,7 +74,10 @@ describe('Client-password strategy', () => {
 
     const client = await whenIMakeRequestTo(server)
       .post('/test')
-      .send({client_id: 'some id', client_secret: 'some secret'})
+      .send({
+        client_id: 'some id',
+        client_secret: 'some secret',
+      })
       .expect(200);
 
     expect(client.body).to.have.property('clientId');
@@ -181,7 +193,10 @@ describe('integration test for client-password and no verifier', () => {
 
     await whenIMakeRequestTo(server)
       .post('/test')
-      .send({client_id: 'some id', client_secret: 'some secret'})
+      .send({
+        client_id: 'some id',
+        client_secret: 'some secret',
+      })
       .expect(401);
   });
 

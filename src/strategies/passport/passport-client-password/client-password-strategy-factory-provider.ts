@@ -1,9 +1,9 @@
 import {inject, Provider} from '@loopback/core';
 import {HttpErrors, Request} from '@loopback/rest';
-import * as ClientPasswordStrategy from 'passport-oauth2-client-password';
+import * as ClientPasswordStrategy from './client-password-strategy';
 
 import {AuthErrorKeys} from '../../../error-keys';
-import {IAuthClient} from '../../../types';
+import {ClientType, IAuthClient} from '../../../types';
 import {Strategies} from '../../keys';
 import {VerifyFunction} from '../../types';
 
@@ -34,52 +34,71 @@ export class ClientPasswordStrategyFactoryProvider
     const verifyFn = verifierPassed ?? this.verifier;
     if (options?.passReqToCallback) {
       return new ClientPasswordStrategy.Strategy(
-        options,
-
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
-          req: Request,
           clientId: string,
-          clientSecret: string,
+          clientSecret: string | undefined,
           cb: (err: Error | null, client?: IAuthClient | false) => void,
+          req: Request | undefined,
         ) => {
           try {
             const client = await verifyFn(clientId, clientSecret, req);
             if (!client) {
               throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
             } else if (
-              !client.clientSecret ||
-              client.clientSecret !== clientSecret
+              client.clientType !== ClientType.public &&
+              !clientSecret
+            ) {
+              throw new HttpErrors.Unauthorized(
+                AuthErrorKeys.ConfidentialClientSecretMissing,
+              );
+            } else if (
+              client.clientType !== ClientType.public &&
+              (!client.clientSecret || client.clientSecret !== clientSecret)
             ) {
               throw new HttpErrors.Unauthorized(
                 AuthErrorKeys.ClientVerificationFailed,
               );
+            } else {
+              // do nothing
             }
+
             cb(null, client);
           } catch (err) {
             cb(err);
           }
         },
+        options,
       );
     } else {
       return new ClientPasswordStrategy.Strategy(
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           clientId: string,
-          clientSecret: string,
+          clientSecret: string | undefined,
           cb: (err: Error | null, client?: IAuthClient | false) => void,
         ) => {
           try {
             const client = await verifyFn(clientId, clientSecret);
+
             if (!client) {
               throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
             } else if (
-              !client.clientSecret ||
-              client.clientSecret !== clientSecret
+              client.clientType !== ClientType.public &&
+              !clientSecret
+            ) {
+              throw new HttpErrors.Unauthorized(
+                AuthErrorKeys.ConfidentialClientSecretMissing,
+              );
+            } else if (
+              client.clientType !== ClientType.public &&
+              (!client.clientSecret || client.clientSecret !== clientSecret)
             ) {
               throw new HttpErrors.Unauthorized(
                 AuthErrorKeys.ClientVerificationFailed,
               );
+            } else {
+              // do nothing
             }
             cb(null, client);
           } catch (err) {

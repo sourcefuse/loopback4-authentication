@@ -11,6 +11,7 @@ export * from './strategies/types';
 export interface IAuthClient {
   clientId: string;
   clientSecret: string;
+  clientType: ClientType;
   redirectUrl?: string;
 }
 
@@ -49,4 +50,9 @@ export interface ClientAuthCode<T extends IAuthUser, ID = number> {
 export interface AuthenticationConfig {
   useClientAuthenticationMiddleware?: boolean;
   useUserAuthenticationMiddleware?: boolean;
+}
+
+export enum ClientType {
+  public = 'public',
+  private = 'private',
 }

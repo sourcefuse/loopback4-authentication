@@ -1,4 +1,4 @@
-import {IAuthUser, IAuthClient} from '../../../types';
+import {IAuthUser, IAuthClient, ClientType} from '../../../types';
 import {expect} from '@loopback/testlab';
 import {
   ResourceOwnerPasswordStrategyFactoryProvider,
@@ -81,6 +81,7 @@ function verifierResourceOwner(
   const clientToPass: IAuthClient = {
     clientId: 'id',
     clientSecret: 'secret',
+    clientType: ClientType.public,
   };
 
   return new Promise(function (resolve, reject) {
