@@ -14,6 +14,17 @@ export interface IAuthClient {
   redirectUrl?: string;
 }
 
+export interface IAuthSecureClient {
+  clientId: string;
+  clientSecret: string;
+  clientType: ClientType;
+  redirectUrl?: string;
+}
+
+export interface IAuthSecureClientConfig {
+  secureClient: boolean;
+}
+
 export interface IAuthUser {
   id?: number | string;
   username: string;

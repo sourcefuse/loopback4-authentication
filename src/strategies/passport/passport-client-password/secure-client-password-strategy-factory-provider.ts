@@ -1,93 +1,105 @@
 import {inject, Provider} from '@loopback/core';
 import {HttpErrors, Request} from '@loopback/rest';
-import * as ClientPasswordStrategy from 'passport-oauth2-client-password';
+import * as ClientPasswordStrategy from './client-password-strategy';
 
 import {AuthErrorKeys} from '../../../error-keys';
-import {IAuthClient} from '../../../types';
+import {ClientType, IAuthClient, IAuthSecureClient} from '../../../types';
 import {Strategies} from '../../keys';
 import {VerifyFunction} from '../../types';
 
-export interface ClientPasswordStrategyFactory {
+export interface SecureClientPasswordStrategyFactory {
   (
     options?: ClientPasswordStrategy.StrategyOptionsWithRequestInterface,
-    verifierPassed?: VerifyFunction.OauthClientPasswordFn,
+    verifierPassed?: VerifyFunction.OauthSecureClientPasswordFn,
   ): ClientPasswordStrategy.Strategy;
 }
 
-export class ClientPasswordStrategyFactoryProvider
-  implements Provider<ClientPasswordStrategyFactory>
+export class SecureClientPasswordStrategyFactoryProvider
+  implements Provider<SecureClientPasswordStrategyFactory>
 {
   constructor(
     @inject(Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER)
-    private readonly verifier: VerifyFunction.OauthClientPasswordFn,
+    private readonly verifier: VerifyFunction.OauthSecureClientPasswordFn,
   ) {}
 
-  value(): ClientPasswordStrategyFactory {
+  value(): SecureClientPasswordStrategyFactory {
     return (options, verifier) =>
-      this.getClientPasswordVerifier(options, verifier);
+      this.getSecureClientPasswordVerifier(options, verifier);
   }
 
-  getClientPasswordVerifier(
+  getSecureClientPasswordVerifier(
     options?: ClientPasswordStrategy.StrategyOptionsWithRequestInterface,
-    verifierPassed?: VerifyFunction.OauthClientPasswordFn,
+    verifierPassed?: VerifyFunction.OauthSecureClientPasswordFn,
   ): ClientPasswordStrategy.Strategy {
     const verifyFn = verifierPassed ?? this.verifier;
     if (options?.passReqToCallback) {
       return new ClientPasswordStrategy.Strategy(
-        options,
-
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
-          req: Request,
           clientId: string,
-          clientSecret: string,
-          cb: (err: Error | null, client?: IAuthClient | false) => void,
+          clientSecret: string | undefined,
+          cb: (err: Error | null, client?: IAuthSecureClient | false) => void,
+          req: Request | undefined,
         ) => {
           try {
             const client = await verifyFn(clientId, clientSecret, req);
             if (!client) {
               throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
-            } else if (!clientSecret) {
+            } else if (
+              client.clientType !== ClientType.public &&
+              !clientSecret
+            ) {
               throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.ClientSecretMissing,
+                AuthErrorKeys.ConfidentialClientSecretMissing,
               );
             } else if (
-              !client.clientSecret ||
+              (client.clientType !== ClientType.public &&
+                !client.clientSecret) ||
               client.clientSecret !== clientSecret
             ) {
               throw new HttpErrors.Unauthorized(
                 AuthErrorKeys.ClientVerificationFailed,
               );
+            } else {
+              // do nothing
             }
+
             cb(null, client);
           } catch (err) {
             cb(err);
           }
         },
+        options,
       );
     } else {
       return new ClientPasswordStrategy.Strategy(
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           clientId: string,
-          clientSecret: string,
+          clientSecret: string | undefined,
           cb: (err: Error | null, client?: IAuthClient | false) => void,
         ) => {
           try {
             const client = await verifyFn(clientId, clientSecret);
+
             if (!client) {
               throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
-            } else if (!clientSecret) {
+            } else if (
+              client.clientType !== ClientType.public &&
+              !clientSecret
+            ) {
               throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.ClientSecretMissing,
+                AuthErrorKeys.ConfidentialClientSecretMissing,
               );
             } else if (
-              !client.clientSecret ||
-              client.clientSecret !== clientSecret
+              client.clientType !== ClientType.public &&
+              (!client.clientSecret || client.clientSecret !== clientSecret)
             ) {
               throw new HttpErrors.Unauthorized(
                 AuthErrorKeys.ClientVerificationFailed,
               );
+            } else {
+              // do nothing
             }
             cb(null, client);
           } catch (err) {

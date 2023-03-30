@@ -39,6 +39,7 @@ import {
   OtpVerifyProvider,
 } from './strategies';
 import {Strategies} from './strategies/keys';
+import {SecureClientPasswordStrategyFactoryProvider} from './strategies/passport/passport-client-password/secure-client-password-strategy-factory-provider';
 import {
   CognitoAuthVerifyProvider,
   CognitoStrategyFactoryProvider,
@@ -47,12 +48,14 @@ import {
   SamlStrategyFactoryProvider,
   SamlVerifyProvider,
 } from './strategies/SAML';
-import {AuthenticationConfig} from './types';
+import {AuthenticationConfig, IAuthSecureClientConfig} from './types';
 
 export class AuthenticationComponent implements Component {
   constructor(
     @inject(AuthenticationBindings.CONFIG, {optional: true})
     private readonly config?: AuthenticationConfig,
+    @inject(AuthenticationBindings.SecureClientConfig, {optional: true})
+    private readonly secureClientConfig?: IAuthSecureClientConfig,
   ) {
     this.providers = {
       [AuthenticationBindings.USER_AUTH_ACTION.key]: AuthenticateActionProvider,
@@ -114,6 +117,14 @@ export class AuthenticationComponent implements Component {
       [Strategies.Passport.AZURE_AD_VERIFIER.key]: AzureADAuthVerifyProvider,
       [Strategies.Passport.KEYCLOAK_VERIFIER.key]: KeycloakVerifyProvider,
     };
+
+    if (this.secureClientConfig?.secureClient) {
+      this.providers = {
+        ...this.providers,
+        [Strategies.Passport.CLIENT_PASSWORD_STRATEGY_FACTORY.key]:
+          SecureClientPasswordStrategyFactoryProvider,
+      };
+    }
     this.bindings = [];
     if (this.config?.useClientAuthenticationMiddleware) {
       this.bindings.push(

@@ -8,6 +8,7 @@ import {
   AuthenticationMetadata,
   EntityWithIdentifier,
   IAuthClient,
+  IAuthSecureClientConfig,
   IAuthUser,
 } from './types';
 
@@ -17,6 +18,10 @@ export * from './strategies/keys';
  * Binding keys used by this component.
  */
 export namespace AuthenticationBindings {
+  export const SecureClientConfig =
+    BindingKey.create<IAuthSecureClientConfig | null>(
+      `auth.secure.client.config`,
+    );
   export const USER_STRATEGY = BindingKey.create<Strategy | undefined>(
     'sf.userAuthentication.strategy',
   );
