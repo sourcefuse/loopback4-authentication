@@ -3,7 +3,7 @@ import {HttpErrors, Request} from '@loopback/rest';
 import * as ClientPasswordStrategy from './client-password-strategy';
 
 import {AuthErrorKeys} from '../../../error-keys';
-import {ClientType, IAuthClient, IAuthSecureClient} from '../../../types';
+import {ClientType, IAuthSecureClient} from '../../../types';
 import {Strategies} from '../../keys';
 import {VerifyFunction} from '../../types';
 
@@ -27,6 +27,26 @@ export class SecureClientPasswordStrategyFactoryProvider
       this.getSecureClientPasswordVerifier(options, verifier);
   }
 
+  secureClientPasswordVerifierHelper(
+    client: IAuthSecureClient | null,
+    clientSecret: string | undefined,
+  ) {
+    if (!client) {
+      throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
+    } else if (client.clientType !== ClientType.public && !clientSecret) {
+      throw new HttpErrors.Unauthorized(
+        AuthErrorKeys.ConfidentialClientSecretMissing,
+      );
+    } else if (
+      client.clientType !== ClientType.public &&
+      (!client.clientSecret || client.clientSecret !== clientSecret)
+    ) {
+      throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientVerificationFailed);
+    } else {
+      // do nothing
+    }
+  }
+
   getSecureClientPasswordVerifier(
     options?: ClientPasswordStrategy.StrategyOptionsWithRequestInterface,
     verifierPassed?: VerifyFunction.OauthSecureClientPasswordFn,
@@ -38,31 +58,12 @@ export class SecureClientPasswordStrategyFactoryProvider
         async (
           clientId: string,
           clientSecret: string | undefined,
-          cb: (err: Error | null, client?: IAuthSecureClient | false) => void,
+          cb: (err: Error | null, client?: IAuthSecureClient | null) => void,
           req: Request | undefined,
         ) => {
           try {
             const client = await verifyFn(clientId, clientSecret, req);
-            if (!client) {
-              throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
-            } else if (
-              client.clientType !== ClientType.public &&
-              !clientSecret
-            ) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.ConfidentialClientSecretMissing,
-              );
-            } else if (
-              (client.clientType !== ClientType.public &&
-                !client.clientSecret) ||
-              client.clientSecret !== clientSecret
-            ) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.ClientVerificationFailed,
-              );
-            } else {
-              // do nothing
-            }
+            this.secureClientPasswordVerifierHelper(client, clientSecret);
 
             cb(null, client);
           } catch (err) {
@@ -77,30 +78,13 @@ export class SecureClientPasswordStrategyFactoryProvider
         async (
           clientId: string,
           clientSecret: string | undefined,
-          cb: (err: Error | null, client?: IAuthClient | false) => void,
+          cb: (err: Error | null, client?: IAuthSecureClient | null) => void,
         ) => {
           try {
             const client = await verifyFn(clientId, clientSecret);
 
-            if (!client) {
-              throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
-            } else if (
-              client.clientType !== ClientType.public &&
-              !clientSecret
-            ) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.ConfidentialClientSecretMissing,
-              );
-            } else if (
-              client.clientType !== ClientType.public &&
-              (!client.clientSecret || client.clientSecret !== clientSecret)
-            ) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.ClientVerificationFailed,
-              );
-            } else {
-              // do nothing
-            }
+            this.secureClientPasswordVerifierHelper(client, clientSecret);
+
             cb(null, client);
           } catch (err) {
             cb(err);

@@ -61,3 +61,8 @@ export interface AuthenticationConfig {
   useClientAuthenticationMiddleware?: boolean;
   useUserAuthenticationMiddleware?: boolean;
 }
+
+export enum ClientType {
+  public = 'public',
+  private = 'private',
+}
