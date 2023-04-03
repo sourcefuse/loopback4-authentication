@@ -31,9 +31,7 @@ export class ClientPasswordStrategyFactoryProvider
     client: IAuthClient | null,
     clientSecret: string | undefined,
   ) {
-    if (!client) {
-      throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
-    } else if (!client.clientSecret || client.clientSecret !== clientSecret) {
+    if (!client?.clientSecret || client.clientSecret !== clientSecret) {
       throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientVerificationFailed);
     } else {
       // do nothing

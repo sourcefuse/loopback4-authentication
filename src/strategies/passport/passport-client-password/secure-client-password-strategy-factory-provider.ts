@@ -31,11 +31,10 @@ export class SecureClientPasswordStrategyFactoryProvider
     client: IAuthSecureClient | null,
     clientSecret: string | undefined,
   ) {
-    if (!client) {
-      throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
-    } else if (
-      client.clientType !== ClientType.public &&
-      (!client.clientSecret || client.clientSecret !== clientSecret)
+    if (
+      !client ||
+      (client.clientType !== ClientType.public &&
+        (!client.clientSecret || client.clientSecret !== clientSecret))
     ) {
       throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientVerificationFailed);
     } else {
