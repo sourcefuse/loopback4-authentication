@@ -141,7 +141,8 @@
     },
     "@semantic-release/npm": {
       "npm": "^9.4.2"
-    }
+    },
+    "@openapi-contrib/openapi-schema-to-json-schema": "3.2.0"
   },
   "release": {
     "branches": [

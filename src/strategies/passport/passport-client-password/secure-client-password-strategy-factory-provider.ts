@@ -3,44 +3,48 @@ import {HttpErrors, Request} from '@loopback/rest';
 import * as ClientPasswordStrategy from './client-password-strategy';
 
 import {AuthErrorKeys} from '../../../error-keys';
-import {IAuthClient} from '../../../types';
+import {ClientType, IAuthSecureClient} from '../../../types';
 import {Strategies} from '../../keys';
 import {VerifyFunction} from '../../types';
 
-export interface ClientPasswordStrategyFactory {
+export interface SecureClientPasswordStrategyFactory {
   (
     options?: ClientPasswordStrategy.StrategyOptionsWithRequestInterface,
-    verifierPassed?: VerifyFunction.OauthClientPasswordFn,
+    verifierPassed?: VerifyFunction.OauthSecureClientPasswordFn,
   ): ClientPasswordStrategy.Strategy;
 }
 
-export class ClientPasswordStrategyFactoryProvider
-  implements Provider<ClientPasswordStrategyFactory>
+export class SecureClientPasswordStrategyFactoryProvider
+  implements Provider<SecureClientPasswordStrategyFactory>
 {
   constructor(
     @inject(Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER)
-    private readonly verifier: VerifyFunction.OauthClientPasswordFn,
+    private readonly verifier: VerifyFunction.OauthSecureClientPasswordFn,
   ) {}
 
-  value(): ClientPasswordStrategyFactory {
+  value(): SecureClientPasswordStrategyFactory {
     return (options, verifier) =>
-      this.getClientPasswordVerifier(options, verifier);
+      this.getSecureClientPasswordVerifier(options, verifier);
   }
 
-  clientPasswordVerifierHelper(
-    client: IAuthClient | null,
+  secureClientPasswordVerifierHelper(
+    client: IAuthSecureClient | null,
     clientSecret: string | undefined,
   ) {
-    if (!client?.clientSecret || client.clientSecret !== clientSecret) {
+    if (
+      !client ||
+      (client.clientType !== ClientType.public &&
+        (!client.clientSecret || client.clientSecret !== clientSecret))
+    ) {
       throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientVerificationFailed);
     } else {
       // do nothing
     }
   }
 
-  getClientPasswordVerifier(
+  getSecureClientPasswordVerifier(
     options?: ClientPasswordStrategy.StrategyOptionsWithRequestInterface,
-    verifierPassed?: VerifyFunction.OauthClientPasswordFn,
+    verifierPassed?: VerifyFunction.OauthSecureClientPasswordFn,
   ): ClientPasswordStrategy.Strategy {
     const verifyFn = verifierPassed ?? this.verifier;
     if (options?.passReqToCallback) {
@@ -49,12 +53,13 @@ export class ClientPasswordStrategyFactoryProvider
         async (
           clientId: string,
           clientSecret: string | undefined,
-          cb: (err: Error | null, client?: IAuthClient | null) => void,
+          cb: (err: Error | null, client?: IAuthSecureClient | null) => void,
           req: Request | undefined,
         ) => {
           try {
             const client = await verifyFn(clientId, clientSecret, req);
-            this.clientPasswordVerifierHelper(client, clientSecret);
+            this.secureClientPasswordVerifierHelper(client, clientSecret);
+
             cb(null, client);
           } catch (err) {
             cb(err);
@@ -68,11 +73,13 @@ export class ClientPasswordStrategyFactoryProvider
         async (
           clientId: string,
           clientSecret: string | undefined,
-          cb: (err: Error | null, client?: IAuthClient | null) => void,
+          cb: (err: Error | null, client?: IAuthSecureClient | null) => void,
         ) => {
           try {
             const client = await verifyFn(clientId, clientSecret);
-            this.clientPasswordVerifierHelper(client, clientSecret);
+
+            this.secureClientPasswordVerifierHelper(client, clientSecret);
+
             cb(null, client);
           } catch (err) {
             cb(err);

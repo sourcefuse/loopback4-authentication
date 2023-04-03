@@ -39,6 +39,7 @@ import {
   OtpVerifyProvider,
 } from './strategies';
 import {Strategies} from './strategies/keys';
+import {SecureClientPasswordStrategyFactoryProvider} from './strategies/passport/passport-client-password/secure-client-password-strategy-factory-provider';
 import {
   CognitoAuthVerifyProvider,
   CognitoStrategyFactoryProvider,
@@ -114,6 +115,14 @@ export class AuthenticationComponent implements Component {
       [Strategies.Passport.AZURE_AD_VERIFIER.key]: AzureADAuthVerifyProvider,
       [Strategies.Passport.KEYCLOAK_VERIFIER.key]: KeycloakVerifyProvider,
     };
+
+    if (this.config?.secureClient) {
+      this.providers = {
+        ...this.providers,
+        [Strategies.Passport.CLIENT_PASSWORD_STRATEGY_FACTORY.key]:
+          SecureClientPasswordStrategyFactoryProvider,
+      };
+    }
     this.bindings = [];
     if (this.config?.useClientAuthenticationMiddleware) {
       this.bindings.push(

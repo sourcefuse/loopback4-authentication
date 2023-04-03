@@ -6,7 +6,7 @@ import * as FacebookStrategy from 'passport-facebook';
 import * as AppleStrategy from 'passport-apple';
 import * as SamlStrategy from '@node-saml/passport-saml';
 import {DecodedIdToken} from 'passport-apple';
-import {Cognito, IAuthClient, IAuthUser} from '../../types';
+import {Cognito, IAuthClient, IAuthSecureClient, IAuthUser} from '../../types';
 import {Keycloak} from './keycloak.types';
 import {Otp} from '../passport';
 
@@ -19,6 +19,11 @@ export type VerifyCallback = (
 
 export namespace VerifyFunction {
   export interface OauthClientPasswordFn<T = IAuthClient>
+    extends GenericAuthFn<T> {
+    (clientId: string, clientSecret: string, req?: Request): Promise<T | null>;
+  }
+
+  export interface OauthSecureClientPasswordFn<T = IAuthSecureClient>
     extends GenericAuthFn<T> {
     (clientId: string, clientSecret: string, req?: Request): Promise<T | null>;
   }
@@ -36,6 +41,19 @@ export namespace VerifyFunction {
   }
 
   export interface ResourceOwnerPasswordFn<T = IAuthClient, S = IAuthUser> {
+    (
+      clientId: string,
+      clientSecret: string,
+      username: string,
+      password: string,
+      req?: Request,
+    ): Promise<{client: T; user: S} | null>;
+  }
+
+  export interface SecureResourceOwnerPasswordFn<
+    T = IAuthSecureClient,
+    S = IAuthUser,
+  > {
     (
       clientId: string,
       clientSecret: string,
