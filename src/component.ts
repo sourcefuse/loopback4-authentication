@@ -48,14 +48,12 @@ import {
   SamlStrategyFactoryProvider,
   SamlVerifyProvider,
 } from './strategies/SAML';
-import {AuthenticationConfig, IAuthSecureClientConfig} from './types';
+import {AuthenticationConfig} from './types';
 
 export class AuthenticationComponent implements Component {
   constructor(
     @inject(AuthenticationBindings.CONFIG, {optional: true})
     private readonly config?: AuthenticationConfig,
-    @inject(AuthenticationBindings.SecureClientConfig, {optional: true})
-    private readonly secureClientConfig?: IAuthSecureClientConfig,
   ) {
     this.providers = {
       [AuthenticationBindings.USER_AUTH_ACTION.key]: AuthenticateActionProvider,
@@ -118,7 +116,7 @@ export class AuthenticationComponent implements Component {
       [Strategies.Passport.KEYCLOAK_VERIFIER.key]: KeycloakVerifyProvider,
     };
 
-    if (this.secureClientConfig?.secureClient) {
+    if (this.config?.secureClient) {
       this.providers = {
         ...this.providers,
         [Strategies.Passport.CLIENT_PASSWORD_STRATEGY_FACTORY.key]:

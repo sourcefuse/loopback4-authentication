@@ -21,10 +21,6 @@ export interface IAuthSecureClient {
   redirectUrl?: string;
 }
 
-export interface IAuthSecureClientConfig {
-  secureClient: boolean;
-}
-
 export interface IAuthUser {
   id?: number | string;
   username: string;
@@ -60,6 +56,7 @@ export interface ClientAuthCode<T extends IAuthUser, ID = number> {
 export interface AuthenticationConfig {
   useClientAuthenticationMiddleware?: boolean;
   useUserAuthenticationMiddleware?: boolean;
+  secureClient?: boolean;
 }
 
 export enum ClientType {
