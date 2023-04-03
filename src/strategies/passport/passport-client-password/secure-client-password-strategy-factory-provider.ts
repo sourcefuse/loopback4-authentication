@@ -33,10 +33,6 @@ export class SecureClientPasswordStrategyFactoryProvider
   ) {
     if (!client) {
       throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
-    } else if (client.clientType !== ClientType.public && !clientSecret) {
-      throw new HttpErrors.Unauthorized(
-        AuthErrorKeys.ConfidentialClientSecretMissing,
-      );
     } else if (
       client.clientType !== ClientType.public &&
       (!client.clientSecret || client.clientSecret !== clientSecret)

@@ -45,11 +45,7 @@ export class Strategy extends passport.Strategy {
   private readonly passReqToCallback: boolean;
   name: string;
   authenticate(req: express.Request, options?: {}): void {
-    if (
-      /* eslint-disable @typescript-eslint/prefer-optional-chain */
-      !req.body ||
-      !req.body['client_id']
-    ) {
+    if (!req?.body?.client_id) {
       return this.fail();
     }
 
