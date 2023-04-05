@@ -19,8 +19,8 @@ import {
   BearerStrategyFactoryProvider,
   BearerTokenVerifyProvider,
   ClientAuthStrategyProvider,
-  ClientPasswordStrategyFactoryProvider,
-  ClientPasswordVerifyProvider,
+  // ClientPasswordStrategyFactoryProvider,
+  // ClientPasswordVerifyProvider,
   GoogleAuthStrategyFactoryProvider,
   GoogleAuthVerifyProvider,
   InstagramAuthStrategyFactoryProvider,
@@ -31,8 +31,8 @@ import {
   AppleAuthVerifyProvider,
   KeycloakStrategyFactoryProvider,
   KeycloakVerifyProvider,
-  LocalPasswordStrategyFactoryProvider,
-  LocalPasswordVerifyProvider,
+  // LocalPasswordStrategyFactoryProvider,
+  // LocalPasswordVerifyProvider,
   ResourceOwnerPasswordStrategyFactoryProvider,
   ResourceOwnerVerifyProvider,
   PassportOtpStrategyFactoryProvider,
@@ -64,12 +64,12 @@ export class AuthenticationComponent implements Component {
       [AuthenticationBindings.CLIENT_STRATEGY.key]: ClientAuthStrategyProvider,
 
       // Strategy function factories
-      [Strategies.Passport.LOCAL_STRATEGY_FACTORY.key]:
-        LocalPasswordStrategyFactoryProvider,
+      // [Strategies.Passport.LOCAL_STRATEGY_FACTORY.key]:
+      //   LocalPasswordStrategyFactoryProvider,
       [Strategies.Passport.OTP_AUTH_STRATEGY_FACTORY.key]:
         PassportOtpStrategyFactoryProvider,
-      [Strategies.Passport.CLIENT_PASSWORD_STRATEGY_FACTORY.key]:
-        ClientPasswordStrategyFactoryProvider,
+      // [Strategies.Passport.CLIENT_PASSWORD_STRATEGY_FACTORY.key]:
+      //   ClientPasswordStrategyFactoryProvider,
       [Strategies.Passport.BEARER_STRATEGY_FACTORY.key]:
         BearerStrategyFactoryProvider,
       [Strategies.Passport.RESOURCE_OWNER_STRATEGY_FACTORY.key]:
@@ -92,10 +92,10 @@ export class AuthenticationComponent implements Component {
         CognitoStrategyFactoryProvider,
 
       // Verifier functions
-      [Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER.key]:
-        ClientPasswordVerifyProvider,
-      [Strategies.Passport.LOCAL_PASSWORD_VERIFIER.key]:
-        LocalPasswordVerifyProvider,
+      // [Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER.key]:
+      //   ClientPasswordVerifyProvider,
+      // [Strategies.Passport.LOCAL_PASSWORD_VERIFIER.key]:
+      //   LocalPasswordVerifyProvider,
       [Strategies.Passport.OTP_VERIFIER.key]: OtpVerifyProvider,
       [Strategies.Passport.BEARER_TOKEN_VERIFIER.key]:
         BearerTokenVerifyProvider,

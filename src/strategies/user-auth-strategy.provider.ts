@@ -14,7 +14,7 @@ import {AuthenticationMetadata} from '../types';
 import {Strategies} from './keys';
 import {BearerStrategyFactory} from './passport/passport-bearer';
 import {GoogleAuthStrategyFactory} from './passport/passport-google-oauth2';
-import {LocalPasswordStrategyFactory} from './passport/passport-local';
+// import {LocalPasswordStrategyFactory} from './passport/passport-local';
 import {
   Oauth2ResourceOwnerPassword,
   ResourceOwnerPasswordStrategyFactory,
@@ -40,8 +40,8 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
   constructor(
     @inject(AuthenticationBindings.USER_METADATA)
     private readonly metadata: AuthenticationMetadata,
-    @inject(Strategies.Passport.LOCAL_STRATEGY_FACTORY)
-    private readonly getLocalStrategyVerifier: LocalPasswordStrategyFactory,
+    /* @inject(Strategies.Passport.LOCAL_STRATEGY_FACTORY)
+    private readonly getLocalStrategyVerifier: LocalPasswordStrategyFactory, */
     @inject(Strategies.Passport.OTP_AUTH_STRATEGY_FACTORY)
     private readonly getOtpVerifier: PassportOtpStrategyFactory,
     @inject(Strategies.Passport.BEARER_STRATEGY_FACTORY)
@@ -82,7 +82,18 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
 
     const name = this.metadata.strategy;
     if (name === STRATEGY.LOCAL) {
-      return this.getLocalStrategyVerifier(
+      const factory = this.ctx.getSync(
+        Strategies.Passport.LOCAL_STRATEGY_FACTORY,
+        {optional: true},
+      );
+
+      if (!factory) {
+        throw new Error(
+          `No factory found for ${Strategies.Passport.LOCAL_STRATEGY_FACTORY}`,
+        );
+      }
+
+      return factory(
         this.metadata.options as
           | PassportLocal.IStrategyOptions
           | PassportLocal.IStrategyOptionsWithRequest,

@@ -4,7 +4,7 @@
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 2.3
 
-import * as passport from 'passport';
+import {Strategy as PassportStrategy} from 'passport';
 import * as express from 'express';
 import {IAuthClient} from '../../../types';
 
@@ -25,7 +25,7 @@ export interface VerifyFunctionWithRequest {
   ): void;
 }
 
-export class Strategy extends passport.Strategy {
+export class Strategy extends PassportStrategy {
   constructor(
     verify: VerifyFunctionWithRequest,
     options?: StrategyOptionsWithRequestInterface,
