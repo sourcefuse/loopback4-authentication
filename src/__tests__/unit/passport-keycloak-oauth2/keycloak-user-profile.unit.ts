@@ -1,10 +1,9 @@
 import {expect, sinon} from '@loopback/testlab';
 import {
-  Keycloak,
   KeycloakStrategyFactory,
   KeycloakStrategyFactoryProvider,
-} from '../../../strategies';
-import {IAuthUser} from '../../../types';
+} from '../../../strategies/passport/passport-keycloak';
+import {IAuthUser, Keycloak} from '../../../types';
 import {AnyObject} from '@loopback/repository';
 
 describe('Keycloak userProfileFn', () => {

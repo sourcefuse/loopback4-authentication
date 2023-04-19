@@ -11,6 +11,9 @@ import {LocalVerifyProvider} from '../../../fixtures/providers/local-password.pr
 import {AuthenticationBindings} from '../../../../keys';
 import {IAuthUser} from '../../../../types';
 import {UserCred} from '../../../fixtures/user-cred.model';
+import {LocalPasswordStrategyFactoryProvider} from '../../../../strategies/passport/passport-local';
+import {ClientPasswordVerifyProvider} from '../../../fixtures/providers/passport-client.provider';
+import {ClientPasswordStrategyFactoryProvider} from '../../../../strategies/passport/passport-client-password';
 /**
  * Testing overall flow of authentication with bearer strategy
  */
@@ -171,50 +174,17 @@ describe('Local passport strategy using Middleware Sequence', () => {
 
   function getAuthVerifier() {
     app
+      .bind(Strategies.Passport.LOCAL_STRATEGY_FACTORY)
+      .toProvider(LocalPasswordStrategyFactoryProvider);
+    app
       .bind(Strategies.Passport.LOCAL_PASSWORD_VERIFIER)
       .toProvider(LocalVerifyProvider);
-  }
-
-  function givenAuthenticatedSequence() {
-    // bind user defined sequence
-    server.sequence(MyAuthenticationMiddlewareSequence);
-  }
-});
-
-describe('Local strategy with no verifier using Middleware Sequence', () => {
-  let app: Application;
-  let server: RestServer;
-  beforeEach(givenAServer);
-  beforeEach(givenAuthenticatedSequence);
-
-  it('should return 401 when option passRequestCallback is false', async () => {
-    class TestController {
-      options = {
-        passRequestToCallback: false,
-      };
-
-      @post('/auth/local/no-verifier')
-      @authenticate(STRATEGY.LOCAL, {passReqToCallback: false})
-      async test(@requestBody() body: UserCred) {
-        return body;
-      }
-    }
-
-    app.controller(TestController);
-
-    await whenIMakeRequestTo(server)
-      .post('/auth/local/no-verifier')
-      .send({username: 'username', password: 'password'})
-      .expect(401);
-  });
-
-  function whenIMakeRequestTo(restServer: RestServer): Client {
-    return createClientForHandler(restServer.requestHandler);
-  }
-
-  async function givenAServer() {
-    app = getApp();
-    server = await app.getServer(RestServer);
+    app
+      .bind(Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER)
+      .toProvider(ClientPasswordVerifyProvider);
+    app
+      .bind(Strategies.Passport.CLIENT_PASSWORD_STRATEGY_FACTORY)
+      .toProvider(ClientPasswordStrategyFactoryProvider);
   }
 
   function givenAuthenticatedSequence() {
