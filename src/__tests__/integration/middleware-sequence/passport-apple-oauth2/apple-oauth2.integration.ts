@@ -1,6 +1,6 @@
 import {Client, createClientForHandler} from '@loopback/testlab';
-import {RestServer} from '@loopback/rest';
-import {Application, Provider} from '@loopback/core';
+import {RestServer, Request} from '@loopback/rest';
+import {Application, Constructor, Provider} from '@loopback/core';
 import {get} from '@loopback/openapi-v3';
 import {authenticate} from '../../../../decorators';
 import {STRATEGY} from '../../../../strategy-name.enum';
@@ -9,14 +9,19 @@ import {MyAuthenticationMiddlewareSequence} from '../../../fixtures/sequences/au
 import {Strategies} from '../../../../strategies/keys';
 import {VerifyFunction} from '../../../../strategies';
 import {userWithoutReqObj} from '../../../fixtures/data/bearer-data';
-import {Request} from '@loopback/rest';
 import AppleStrategy, {DecodedIdToken} from 'passport-apple';
+import {AppleAuthStrategyFactoryProvider} from '../../../../strategies/passport/passport-apple-oauth2';
+import {
+  ClientPasswordStrategyFactoryProvider,
+  ClientPasswordVerifyProvider,
+} from '../../../../strategies/passport/passport-client-password';
 
 describe('getting apple oauth2 strategy with options using Middleware Sequence', () => {
   let app: Application;
   let server: RestServer;
   beforeEach(givenAServer);
   beforeEach(givenAuthenticatedSequence);
+  beforeEach(getAuthVerifier);
   afterEach(closeServer);
 
   it('should return 302 when client id is passed and passReqToCallback is set true', async () => {
@@ -48,6 +53,17 @@ describe('getting apple oauth2 strategy with options using Middleware Sequence',
   }
 
   function getAuthVerifier() {
+    app
+      .bind(Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER)
+      .toProvider(ClientPasswordVerifyProvider);
+    app
+      .bind(Strategies.Passport.CLIENT_PASSWORD_STRATEGY_FACTORY)
+      .toProvider(ClientPasswordStrategyFactoryProvider);
+    app.bind(Strategies.Passport.APPLE_OAUTH2_STRATEGY_FACTORY).toProvider(
+      AppleAuthStrategyFactoryProvider as unknown as Constructor<
+        Provider<AppleAuthStrategyFactoryProvider>
+      >, //To be Fixed
+    );
     app
       .bind(Strategies.Passport.APPLE_OAUTH2_VERIFIER)
       .toProvider(AppleAuthVerifyProvider);

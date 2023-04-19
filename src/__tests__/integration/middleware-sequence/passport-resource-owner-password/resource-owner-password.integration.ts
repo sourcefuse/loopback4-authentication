@@ -12,6 +12,9 @@ import {Strategies} from '../../../../strategies/keys';
 import {ResourceOwnerVerifyProvider} from '../../../fixtures/providers/resource-owner.provider';
 import {AuthenticationBindings} from '../../../../keys';
 import {IAuthUser} from '../../../../types';
+import {ResourceOwnerPasswordStrategyFactoryProvider} from '../../../../strategies/passport/passport-resource-owner-password';
+import {ClientPasswordVerifyProvider} from '../../../fixtures/providers/passport-client.provider';
+import {ClientPasswordStrategyFactoryProvider} from '../../../../strategies/passport/passport-client-password';
 
 describe('Resource-owner-password strategy using Middleware Sequence', () => {
   let app: Application;
@@ -202,8 +205,17 @@ describe('Resource-owner-password strategy using Middleware Sequence', () => {
 
   function getAuthVerifier() {
     app
+      .bind(Strategies.Passport.RESOURCE_OWNER_STRATEGY_FACTORY)
+      .toProvider(ResourceOwnerPasswordStrategyFactoryProvider);
+    app
       .bind(Strategies.Passport.RESOURCE_OWNER_PASSWORD_VERIFIER)
       .toProvider(ResourceOwnerVerifyProvider);
+    app
+      .bind(Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER)
+      .toProvider(ClientPasswordVerifyProvider);
+    app
+      .bind(Strategies.Passport.CLIENT_PASSWORD_STRATEGY_FACTORY)
+      .toProvider(ClientPasswordStrategyFactoryProvider);
   }
 
   function givenAuthenticatedSequence() {

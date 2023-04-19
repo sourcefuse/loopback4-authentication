@@ -10,6 +10,9 @@ import {MyAuthenticationSequence} from '../../../fixtures/sequences/authenticati
 import {Strategies} from '../../../../strategies/keys';
 import {AuthenticationBindings} from '../../../../keys';
 import {BearerTokenVerifyProvider} from '../../../fixtures/providers/bearer-passport.provider';
+import {BearerStrategyFactoryProvider} from '../../../../strategies/passport/passport-bearer';
+import {ClientPasswordVerifyProvider} from '../../../fixtures/providers/passport-client.provider';
+import {ClientPasswordStrategyFactoryProvider} from '../../../../strategies/passport/passport-client-password';
 
 /**
  * Testing overall flow of authentication with bearer strategy
@@ -239,6 +242,15 @@ describe('Bearer-token strategy', () => {
     app
       .bind(Strategies.Passport.BEARER_TOKEN_VERIFIER)
       .toProvider(BearerTokenVerifyProvider);
+    app
+      .bind(Strategies.Passport.BEARER_STRATEGY_FACTORY)
+      .toProvider(BearerStrategyFactoryProvider);
+    app
+      .bind(Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER)
+      .toProvider(ClientPasswordVerifyProvider);
+    app
+      .bind(Strategies.Passport.CLIENT_PASSWORD_STRATEGY_FACTORY)
+      .toProvider(ClientPasswordStrategyFactoryProvider);
   }
 
   function givenAuthenticatedSequence() {

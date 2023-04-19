@@ -1,6 +1,6 @@
 import {Client, createClientForHandler} from '@loopback/testlab';
-import {RestServer} from '@loopback/rest';
-import {Application, Provider} from '@loopback/core';
+import {RestServer, Request} from '@loopback/rest';
+import {Application, Constructor, Provider} from '@loopback/core';
 import {get} from '@loopback/openapi-v3';
 import {authenticate} from '../../../../decorators';
 import {STRATEGY} from '../../../../strategy-name.enum';
@@ -9,8 +9,10 @@ import {MyAuthenticationSequence} from '../../../fixtures/sequences/authenticati
 import {Strategies} from '../../../../strategies/keys';
 import {Keycloak, VerifyFunction} from '../../../../strategies';
 import {userWithoutReqObj} from '../../../fixtures/data/bearer-data';
-import {Request} from '@loopback/rest';
 import {IAuthUser} from '../../../../types';
+import {KeycloakStrategyFactoryProvider} from '../../../../strategies/passport/passport-keycloak';
+import {ClientPasswordVerifyProvider} from '../../../fixtures/providers/passport-client.provider';
+import {ClientPasswordStrategyFactoryProvider} from '../../../../strategies/passport/passport-client-password';
 
 describe('getting keycloak oauth2 strategy with options', () => {
   let app: Application;
@@ -54,8 +56,19 @@ describe('getting keycloak oauth2 strategy with options', () => {
 
   function getAuthVerifier() {
     app
+      .bind(Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER)
+      .toProvider(ClientPasswordVerifyProvider);
+    app
+      .bind(Strategies.Passport.CLIENT_PASSWORD_STRATEGY_FACTORY)
+      .toProvider(ClientPasswordStrategyFactoryProvider);
+    app
       .bind(Strategies.Passport.KEYCLOAK_VERIFIER)
       .toProvider(KeycloakAuthVerifyProvider);
+    app.bind(Strategies.Passport.KEYCLOAK_STRATEGY_FACTORY).toProvider(
+      KeycloakStrategyFactoryProvider as unknown as Constructor<
+        Provider<KeycloakStrategyFactoryProvider>
+      >, //To be fixed
+    );
   }
 
   function givenAuthenticatedSequence() {

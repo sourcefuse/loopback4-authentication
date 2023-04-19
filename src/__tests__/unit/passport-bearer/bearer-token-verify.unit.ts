@@ -2,7 +2,7 @@ import {IAuthUser} from '../../../types';
 import {
   BearerStrategyFactoryProvider,
   BearerStrategyFactory,
-} from '../../../strategies';
+} from '../../../strategies/passport/passport-bearer';
 import * as PassportBearer from 'passport-http-bearer';
 import {expect} from '@loopback/testlab';
 

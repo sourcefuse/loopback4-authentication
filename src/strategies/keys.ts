@@ -7,7 +7,8 @@ import {GoogleAuthStrategyFactoryProvider} from './passport/passport-google-oaut
 import {KeycloakStrategyFactoryProvider} from './passport/passport-keycloak';
 import {AzureADAuthStrategyFactoryProvider} from './passport/passport-azure-ad';
 import {VerifyFunction} from './types';
-import {InstagramAuthStrategyFactoryProvider} from './passport';
+import {InstagramAuthStrategyFactoryProvider} from './passport/passport-insta-oauth2';
+import {PassportOtpStrategyFactory} from './passport/passport-otp';
 import {AppleAuthStrategyFactoryProvider} from './passport/passport-apple-oauth2';
 import {FacebookAuthStrategyFactoryProvider} from './passport/passport-facebook-oauth2';
 import {CognitoStrategyFactoryProvider} from './passport/passport-cognito-oauth2';
@@ -27,13 +28,12 @@ export namespace Strategies {
 
     // Passport-local-with-otp startegy
     export const OTP_AUTH_STRATEGY_FACTORY =
-      BindingKey.create<LocalPasswordStrategyFactory>(
+      BindingKey.create<PassportOtpStrategyFactory>(
         'sf.passport.strategyFactory.otpAuth',
       );
-    export const OTP_VERIFIER =
-      BindingKey.create<VerifyFunction.LocalPasswordFn>(
-        'sf.passport.verifier.otpAuth',
-      );
+    export const OTP_VERIFIER = BindingKey.create<VerifyFunction.OtpAuthFn>(
+      'sf.passport.verifier.otpAuth',
+    );
 
     // Passport-oauth2-client-password strategy
     export const CLIENT_PASSWORD_STRATEGY_FACTORY =

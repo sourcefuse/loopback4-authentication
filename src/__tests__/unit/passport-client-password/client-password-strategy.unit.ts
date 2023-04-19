@@ -2,7 +2,7 @@ import {IAuthClient} from '../../../types';
 import {
   ClientPasswordStrategyFactoryProvider,
   ClientPasswordStrategyFactory,
-} from '../../../strategies';
+} from '../../../strategies/passport/passport-client-password';
 import {expect} from '@loopback/testlab';
 
 /**

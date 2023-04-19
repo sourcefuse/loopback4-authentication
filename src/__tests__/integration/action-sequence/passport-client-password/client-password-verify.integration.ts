@@ -12,6 +12,7 @@ import {MyAuthenticationSequence} from '../../../fixtures/sequences/authenticati
 import {Strategies} from '../../../../strategies/keys';
 import {AuthenticationBindings} from '../../../../keys';
 import {ClientPasswordVerifyProvider} from '../../../fixtures/providers/passport-client.provider';
+import {ClientPasswordStrategyFactoryProvider} from '../../../../strategies/passport/passport-client-password';
 
 describe('Client-password strategy', () => {
   let app: Application;
@@ -143,6 +144,9 @@ describe('Client-password strategy', () => {
     app
       .bind(Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER)
       .toProvider(ClientPasswordVerifyProvider);
+    app
+      .bind(Strategies.Passport.CLIENT_PASSWORD_STRATEGY_FACTORY)
+      .toProvider(ClientPasswordStrategyFactoryProvider);
   }
 
   function givenAuthenticatedSequence() {

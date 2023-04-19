@@ -1,10 +1,9 @@
-import {IAuthUser} from '../../../types';
+import {IAuthUser, Keycloak} from '../../../types';
 import {expect} from '@loopback/testlab';
 import {
-  Keycloak,
   KeycloakStrategyFactory,
   KeycloakStrategyFactoryProvider,
-} from '../../../strategies';
+} from '../../../strategies/passport/passport-keycloak';
 
 describe('getting keycloak-auth strategy with options', () => {
   it('should return strategy by passing required options', async () => {
