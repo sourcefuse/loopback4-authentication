@@ -1,3 +1,16 @@
+## Release [v7.6.1](https://github.com/sourcefuse/loopback4-authentication/compare/v7.6.0..v7.6.1) April 24, 2023
+Welcome to the April 24, 2023 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
+
+  - [Loopback version update](https://github.com/sourcefuse/loopback4-authentication/issues/157) :- [chore(deps): loopback version updates ](https://github.com/sourcefuse/loopback4-authentication/commit/12c6b2383890ae69d167bb383ffc707282f51229) was commited on April 24, 2023 by [RaghavaroraSF](mailto:97958393+RaghavaroraSF@users.noreply.github.com)
+    
+      - loopback version updates
+      
+      -  GH-157
+      
+  
+Clink on the above links to understand the changes in detail.
+  ___
+
 ## Release [v7.6.0](https://github.com/sourcefuse/loopback4-authentication/compare/v7.5.1..v7.6.0) April 4, 2023
 Welcome to the April 4, 2023 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
 
