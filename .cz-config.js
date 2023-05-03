@@ -32,6 +32,7 @@ module.exports = {
     {name: 'provider'},
     {name: 'core'},
     {name: 'middleware'},
+    {name: 'maintenance'},
   ],
 
   appendBranchNameToCommitMessage: true,
