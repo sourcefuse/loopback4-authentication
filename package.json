@@ -59,6 +59,8 @@
     "ajv": "^8.11.0",
     "https-proxy-agent": "^5.0.0",
     "jsonwebtoken": "^9.0.0",
+    "keycloak-js": "^21.1.1",
+    "keycloak-nodejs-connect": "^1.0.7",
     "passport": "^0.6.0",
     "passport-apple": "file:vendor/passport-apple",
     "passport-azure-ad": "^4.3.4",

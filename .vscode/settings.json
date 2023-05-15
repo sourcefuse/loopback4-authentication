@@ -16,7 +16,7 @@
     "**/.hg": true,
     "**/.svn": true,
     "**/CVS": true,
-    "dist": true,
+    "dist": false,
   },
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,

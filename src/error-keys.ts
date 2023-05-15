@@ -13,4 +13,5 @@ export const enum AuthErrorKeys {
   KeyInvalid = 'Key Invalid',
   OtpInvalid = 'Otp Invalid',
   OtpExpired = 'Otp Token Incorrect or Expired',
+  UserNotFound = 'User Not Found',
 }
