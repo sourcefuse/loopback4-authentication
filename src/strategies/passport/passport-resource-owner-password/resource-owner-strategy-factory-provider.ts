@@ -27,9 +27,12 @@ export class ResourceOwnerPasswordStrategyFactoryProvider
     return (options, verifier) =>
       this.getResourceOwnerVerifier(options, verifier);
   }
-
-  getresourceownerStrategy(verifyFn: VerifyFunction.ResourceOwnerPasswordFn) {
-    return async (
+  getResourceOwnerVerifier(
+    options?: Oauth2ResourceOwnerPassword.StrategyOptionsWithRequestInterface,
+    verifierPassed?: VerifyFunction.ResourceOwnerPasswordFn,
+  ): Oauth2ResourceOwnerPassword.Strategy {
+    const verifyFn = verifierPassed ?? this.verifierResourceOwner;
+    const resourceownerStrategy = (
       req: Request,
       clientId: string,
       clientSecret: string,
@@ -41,34 +44,21 @@ export class ResourceOwnerPasswordStrategyFactoryProvider
         user?: IAuthUser | false,
       ) => void,
     ) => {
-      try {
-        const userInfo = await verifyFn(
-          clientId,
-          clientSecret,
-          username,
-          password,
-          req,
-        );
-        if (!userInfo || isEmpty(userInfo)) {
-          throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
-        }
-        cb(null, userInfo.client, userInfo.user);
-      } catch (err) {
-        cb(err);
-      }
+      verifyFn(clientId, clientSecret, username, password, req)
+        .then(userInfo => {
+          if (!userInfo || isEmpty(userInfo)) {
+            throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
+          }
+          cb(null, userInfo.client, userInfo.user);
+        })
+        .catch(err => {
+          cb(err);
+        });
     };
-  }
-
-  getResourceOwnerVerifier(
-    options?: Oauth2ResourceOwnerPassword.StrategyOptionsWithRequestInterface,
-    verifierPassed?: VerifyFunction.ResourceOwnerPasswordFn,
-  ): Oauth2ResourceOwnerPassword.Strategy {
-    const verifyFn = verifierPassed ?? this.verifierResourceOwner;
     if (options?.passReqToCallback) {
       return new Oauth2ResourceOwnerPassword.Strategy(
         options,
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        this.getresourceownerStrategy(verifyFn),
+        resourceownerStrategy,
       );
     } else {
       return new Oauth2ResourceOwnerPassword.Strategy(

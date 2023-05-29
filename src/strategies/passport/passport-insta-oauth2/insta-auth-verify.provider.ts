@@ -10,6 +10,10 @@ import {VerifyCallback, VerifyFunction} from '../../types';
 export class InstagramAuthVerifyProvider
   implements Provider<VerifyFunction.InstagramAuthFn>
 {
+  constructor() {
+    //this is intentional
+  }
+
   value(): VerifyFunction.InstagramAuthFn {
     return async (
       accessToken: string,

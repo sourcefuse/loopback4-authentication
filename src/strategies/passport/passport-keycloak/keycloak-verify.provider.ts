@@ -11,6 +11,10 @@ import {Keycloak, VerifyFunction} from '../../types';
 export class KeycloakVerifyProvider
   implements Provider<VerifyFunction.KeycloakAuthFn>
 {
+  constructor() {
+    //this is intentional
+  }
+
   value(): VerifyFunction.KeycloakAuthFn {
     return async (
       accessToken: string,
