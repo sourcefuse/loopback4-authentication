@@ -55,7 +55,7 @@
     "@exlinc/keycloak-passport": "^1.0.2",
     "@loopback/context": "^6.0.0",
     "@loopback/core": "^5.0.0",
-    "@node-saml/passport-saml": "^4.0.2",
+    "@node-saml/passport-saml": "^4.0.4",
     "ajv": "^8.11.0",
     "https-proxy-agent": "^5.0.0",
     "jsonwebtoken": "^9.0.0",
