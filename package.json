@@ -48,13 +48,13 @@
     "vendor"
   ],
   "peerDependencies": {
-    "@loopback/boot": "^6.0.0",
-    "@loopback/rest": "^13.0.0"
+    "@loopback/boot": "^6.1.0",
+    "@loopback/rest": "^13.1.0"
   },
   "dependencies": {
     "@exlinc/keycloak-passport": "^1.0.2",
-    "@loopback/context": "^6.0.0",
-    "@loopback/core": "^5.0.0",
+    "@loopback/context": "^6.1.0",
+    "@loopback/core": "^5.1.0",
     "@node-saml/passport-saml": "^4.0.2",
     "ajv": "^8.11.0",
     "https-proxy-agent": "^5.0.0",
@@ -76,11 +76,11 @@
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
-    "@loopback/boot": "^6.0.0",
-    "@loopback/build": "^10.0.0",
-    "@loopback/metadata": "^6.0.0",
-    "@loopback/rest": "^13.0.0",
-    "@loopback/testlab": "^6.0.0",
+    "@loopback/boot": "^6.1.0",
+    "@loopback/build": "^10.1.0",
+    "@loopback/metadata": "^6.1.0",
+    "@loopback/rest": "^13.1.0",
+    "@loopback/testlab": "^6.1.0",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/commit-analyzer": "^9.0.2",
     "@semantic-release/git": "^10.0.1",
@@ -103,7 +103,7 @@
     "cz-conventional-changelog": "^3.3.0",
     "cz-customizable": "^6.3.0",
     "cz-customizable-ghooks": "^2.0.0",
-    "eslint": "^8.40.0",
+    "eslint": "^8.44.0",
     "fs-extra": "^10.1.0",
     "git-release-notes": "^5.0.0",
     "husky": "^7.0.4",
