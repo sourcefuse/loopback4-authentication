@@ -25,6 +25,33 @@ Welcome to the July 14, 2023 release of loopback4-authentication. There are many
 Clink on the above links to understand the changes in detail.
   ___
 
+## Release [v9.0.1](https://github.com/sourcefuse/loopback4-authentication/compare/v9.0.0..v9.0.1) July 14, 2023
+Welcome to the July 14, 2023 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
+
+  - [](https://github.com/sourcefuse/loopback4-authentication/issues/0) :- [](https://github.com/sourcefuse/loopback4-authentication/commit/4d3b5e1529595b36f2108ec419f435a55d2e6fe4) was commited on July 14, 2023 by [Shubham P](mailto:shubham.prajapat@sourcefuse.com)
+    
+      - Closes #164, #165
+      
+      - GH-0
+      
+  
+  - [Add ARC Branding in README](https://github.com/sourcefuse/loopback4-authentication/issues/168) :- [docs(chore): add arc branding ](https://github.com/sourcefuse/loopback4-authentication/commit/daa76fca71fb3f03632d21b9a502814199726460) was commited on July 14, 2023 by [Surbhi](mailto:98279679+Surbhi-sharma1@users.noreply.github.com)
+    
+      - add arc branding
+      
+      -  GH-168
+      
+  
+  - [loopback version update](https://github.com/sourcefuse/loopback4-authentication/issues/166) :- [chore(deps): loopback version update ](https://github.com/sourcefuse/loopback4-authentication/commit/c414cb1b439b5dd7adf919731646f56d66758a14) was commited on July 14, 2023 by [Surbhi](mailto:98279679+Surbhi-sharma1@users.noreply.github.com)
+    
+      - loopback version update
+      
+      -  GH-166
+      
+  
+Clink on the above links to understand the changes in detail.
+  ___
+
 ## Release [v9.0.0](https://github.com/sourcefuse/loopback4-authentication/compare/v8.0.0..v9.0.0) June 7, 2023
 Welcome to the June 7, 2023 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
 
