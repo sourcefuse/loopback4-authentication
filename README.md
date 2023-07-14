@@ -1,16 +1,27 @@
-# loopback4-authentication
+<a href="https://sourcefuse.github.io/arc-docs/arc-api-docs" target="_blank"><img src="https://github.com/sourcefuse/loopback4-microservice-catalog/blob/master/docs/assets/logo-dark-bg.png?raw=true" alt="ARC By SourceFuse logo" title="ARC By SourceFuse" align="right" width="150" /></a>
 
-[![LoopBack](<https://github.com/strongloop/loopback-next/raw/master/docs/site/imgs/branding/Powered-by-LoopBack-Badge-(blue)-@2x.png>)](http://loopback.io/)
+# [loopback4-authentication](https://github.com/sourcefuse/loopback4-authentication)
 
-[![Node version](https://img.shields.io/node/v/loopback4-authentication.svg?style=flat-square)](https://nodejs.org/en/download/)
-[![Loopback Core Version](https://img.shields.io/npm/dependency-version/loopback4-authentication/@loopback/core.svg?color=dark%20green&style=flat-square)](https://github.com/strongloop/loopback-next)
-[![Loopback Build Version](https://img.shields.io/npm/dependency-version/loopback4-authentication/dev/@loopback/build.svg?color=dark%20green&style=flat-square)](https://github.com/strongloop/loopback-next/tree/master/packages/build)
-![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/loopback4-authentication?style=flat-square)
+<p align="left">
+<a href="https://www.npmjs.com/package/loopback4-authentication">
+<img src="https://img.shields.io/npm/v/loopback4-authentication.svg" alt="npm version" />
+</a>
+<a href="https://github.com/sourcefuse/loopback4-authentication/graphs/contributors" target="_blank">
+<img alt="GitHub contributors" src="https://img.shields.io/github/contributors/sourcefuse/loopback4-authentication">
+</a>
+<a href="https://www.npmjs.com/package/loopback4-authentication" target="_blank">
+<img alt="downloads" src="https://img.shields.io/npm/dw/loopback4-authentication.svg">
+</a>
+<a href="https://github.com/sourcefuse/loopback4-authentication/blob/master/LICENSE">
+<img src="https://img.shields.io/github/license/sourcefuse/loopback4-authentication.svg" alt="License" />
+</a>
+<a href="https://loopback.io/" target="_blank">
+<img alt="Powered By LoopBack 4" src="https://img.shields.io/badge/Powered%20by-LoopBack 4-brightgreen" />
+</a>
+</p>
 
-[![Latest version](https://img.shields.io/npm/v/loopback4-authentication.svg?style=flat-square)](https://www.npmjs.com/package/loopback4-authentication)
-[![License](https://img.shields.io/github/license/sourcefuse/loopback4-authentication.svg?color=blue&label=License&style=flat-square)](https://github.com/sourcefuse/loopback4-authentication/blob/master/LICENSE)
-[![Downloads](https://img.shields.io/npm/dw/loopback4-authentication.svg?label=Downloads&style=flat-square&color=blue)](https://www.npmjs.com/package/loopback4-authentication)
-[![Total Downloads](https://img.shields.io/npm/dt/loopback4-authentication.svg?label=Total%20Downloads&style=flat-square&color=blue)](https://www.npmjs.com/package/loopback4-authentication)
+
+## Overview
 
 This is a loopback-next extension for adding authentication layer to a REST application in loopback 4.
 This extension is based on the implementation guidelines provided on official [@loopback/authentication](https://github.com/strongloop/loopback-next/blob/master/packages/authentication/README.md) page.
