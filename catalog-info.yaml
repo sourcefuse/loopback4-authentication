@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: loopback4-authentication
+  annotations:
+    github.com/project-slug: sourcefuse/loopback4-authentication
+spec:
+  type: other
+  lifecycle: unknown
+  owner: shubhamp-sf
