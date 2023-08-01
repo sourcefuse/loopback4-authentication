@@ -4,7 +4,21 @@ metadata:
   name: loopback4-authentication
   annotations:
     github.com/project-slug: sourcefuse/loopback4-authentication
+  namespace: arc
+  description: A LoopBack 4 extension for authentication features. Oauth strategies supported.
+  tags:
+    - authentication
+    - saml
+    - passport
+    - keycloak
+    - loopback
+    - extension
+  links:
+    - url: https://npmjs.com/package/loopback4-authentication
+      title: NPM Package
+    - url: https://loopback.io/doc/en/lb4/Extending-LoopBack-4.html#overview
+      title: Extending LoopBack
 spec:
-  type: other
-  lifecycle: unknown
-  owner: shubhamp-sf
+  type: component
+  lifecycle: production
+  owner: sourcefuse
