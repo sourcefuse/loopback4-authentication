@@ -8,12 +8,10 @@ import {Keycloak, VerifyFunction} from '../../types';
 
 export const KeycloakStrategy = require('@exlinc/keycloak-passport');
 
-export interface KeycloakStrategyFactory {
-  (
-    options: Keycloak.StrategyOptions,
-    verifierPassed?: VerifyFunction.KeycloakAuthFn,
-  ): typeof KeycloakStrategy;
-}
+export type KeycloakStrategyFactory = (
+  options: Keycloak.StrategyOptions,
+  verifierPassed?: VerifyFunction.KeycloakAuthFn,
+) => typeof KeycloakStrategy;
 
 export class KeycloakStrategyFactoryProvider
   implements Provider<KeycloakStrategyFactory>
@@ -127,6 +125,8 @@ export class KeycloakStrategyFactoryProvider
     } else if (process.env['HTTPS_PROXY']) {
       httpsProxyAgent = new HttpsProxyAgent(process.env['HTTPS_PROXY']);
       strategy._oauth2.setAgent(httpsProxyAgent);
+    } else {
+      //this is intentional
     }
   }
 }

@@ -12,18 +12,16 @@ export interface StrategyOptionsWithRequestInterface {
   passReqToCallback: boolean;
 }
 
-export interface VerifyFunctionWithRequest {
-  (
-    clientId: string,
-    clientSecret: string | undefined,
-    done: (
-      error: Error | null,
-      client?: IAuthSecureClient | IAuthClient | null,
-      info?: Object | undefined,
-    ) => void,
-    req?: express.Request,
-  ): void;
-}
+export type VerifyFunctionWithRequest = (
+  clientId: string,
+  clientSecret: string | undefined,
+  done: (
+    error: Error | null,
+    client?: IAuthSecureClient | IAuthClient | null,
+    info?: Object | undefined,
+  ) => void,
+  req?: express.Request,
+) => void;
 
 export class Strategy extends passport.Strategy {
   constructor(

@@ -16,12 +16,10 @@ interface ExtendedStrategyOption extends StrategyOption {
   passReqToCallback?: false;
 }
 
-export interface FacebookAuthStrategyFactory {
-  (
-    options: ExtendedStrategyOption | StrategyOptionWithRequest,
-    verifierPassed?: VerifyFunction.FacebookAuthFn,
-  ): Strategy;
-}
+export type FacebookAuthStrategyFactory = (
+  options: ExtendedStrategyOption | StrategyOptionWithRequest,
+  verifierPassed?: VerifyFunction.FacebookAuthFn,
+) => Strategy;
 
 export class FacebookAuthStrategyFactoryProvider
   implements Provider<FacebookAuthStrategyFactory>
@@ -42,7 +40,7 @@ export class FacebookAuthStrategyFactoryProvider
   ): Strategy {
     const verifyFn = verifierPassed ?? this.verifierFacebookAuth;
     let strategy;
-    if (options && options.passReqToCallback === true) {
+    if (options?.passReqToCallback === true) {
       strategy = new Strategy(
         options,
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -111,6 +109,8 @@ export class FacebookAuthStrategyFactoryProvider
     } else if (process.env['HTTPS_PROXY']) {
       httpsProxyAgent = new HttpsProxyAgent(process.env['HTTPS_PROXY']);
       strategy._oauth2.setAgent(httpsProxyAgent);
+    } else {
+      //this is intentional
     }
   }
 }

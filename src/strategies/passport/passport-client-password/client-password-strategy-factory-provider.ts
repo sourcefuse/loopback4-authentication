@@ -10,12 +10,10 @@ import {IAuthClient} from '../../../types';
 import {Strategies} from '../../keys';
 import {VerifyFunction} from '../../types';
 
-export interface ClientPasswordStrategyFactory {
-  (
-    options?: ClientPasswordStrategy.StrategyOptionsWithRequestInterface,
-    verifierPassed?: VerifyFunction.OauthClientPasswordFn,
-  ): ClientPasswordStrategy.Strategy;
-}
+export type ClientPasswordStrategyFactory = (
+  options?: ClientPasswordStrategy.StrategyOptionsWithRequestInterface,
+  verifierPassed?: VerifyFunction.OauthClientPasswordFn,
+) => ClientPasswordStrategy.Strategy;
 
 export class ClientPasswordStrategyFactoryProvider
   implements Provider<ClientPasswordStrategyFactory>
@@ -49,36 +47,38 @@ export class ClientPasswordStrategyFactoryProvider
     const verifyFn = verifierPassed ?? this.verifier;
     if (options?.passReqToCallback) {
       return new ClientPasswordStrategy.Strategy(
-        async (
+        (
           clientId: string,
           clientSecret: string | undefined,
           cb: (err: Error | null, client?: IAuthClient | null) => void,
           req: Request | undefined,
-        ) => { //NOSONAR
-          try {
-            const client = await verifyFn(clientId, clientSecret, req);
-            this.clientPasswordVerifierHelper(client, clientSecret);
-            cb(null, client);
-          } catch (err) {
-            cb(err);
-          }
+        ) => {
+          verifyFn(clientId, clientSecret, req)
+            .then((client) => {
+              this.clientPasswordVerifierHelper(client, clientSecret);
+              cb(null, client);
+            })
+            .catch((err) => {
+              cb(err);
+            });
         },
         options,
       );
     } else {
       return new ClientPasswordStrategy.Strategy(
-        async (
+        (
           clientId: string,
           clientSecret: string | undefined,
           cb: (err: Error | null, client?: IAuthClient | null) => void,
-        ) => { //NOSONAR
-          try {
-            const client = await verifyFn(clientId, clientSecret);
-            this.clientPasswordVerifierHelper(client, clientSecret);
-            cb(null, client);
-          } catch (err) {
-            cb(err);
-          }
+        ) => {
+          verifyFn(clientId, clientSecret)
+            .then((client) => {
+              this.clientPasswordVerifierHelper(client, clientSecret);
+              cb(null, client);
+            })
+            .catch((err) => {
+              cb(err);
+            });
         },
       );
     }

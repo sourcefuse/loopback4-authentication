@@ -41,28 +41,24 @@ export namespace VerifyFunction {
     (token: string, req?: Request): Promise<T | null>;
   }
 
-  export interface ResourceOwnerPasswordFn<T = IAuthClient, S = IAuthUser> {
-    (
-      clientId: string,
-      clientSecret: string,
-      username: string,
-      password: string,
-      req?: Request,
-    ): Promise<{client: T; user: S} | null>;
-  }
+  export type ResourceOwnerPasswordFn<T = IAuthClient, S = IAuthUser> = (
+    clientId: string,
+    clientSecret: string,
+    username: string,
+    password: string,
+    req?: Request,
+  ) => Promise<{client: T; user: S} | null>;
 
-  export interface SecureResourceOwnerPasswordFn<
+  export type SecureResourceOwnerPasswordFn<
     T = IAuthSecureClient,
     S = IAuthUser,
-  > {
-    (
-      clientId: string,
-      clientSecret: string,
-      username: string,
-      password: string,
-      req?: Request,
-    ): Promise<{client: T; user: S} | null>;
-  }
+  > = (
+    clientId: string,
+    clientSecret: string,
+    username: string,
+    password: string,
+    req?: Request,
+  ) => Promise<{client: T; user: S} | null>;
 
   export interface GoogleAuthFn<T = IAuthUser> extends GenericAuthFn<T> {
     (
@@ -143,8 +139,5 @@ export namespace VerifyFunction {
     ): Promise<T | null>;
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  export interface GenericAuthFn<T = any> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (...params: any): Promise<T | null>;
-  }
+  export type GenericAuthFn<T = any> = (...params: any) => Promise<T | null>;
 }

@@ -12,10 +12,6 @@ import {VerifyFunction} from '../../types';
  * It will just throw an error saying Not Implemented
  */
 export class SamlVerifyProvider implements Provider<VerifyFunction.SamlFn> {
-  constructor() {
-    //This is intentional
-  }
-
   value(): VerifyFunction.SamlFn {
     return async (
       profile: SamlStrategy.Profile,

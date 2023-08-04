@@ -14,9 +14,10 @@ import {
 import {AuthErrorKeys} from '../../error-keys';
 import {Strategies} from '../../keys';
 import {VerifyFunction} from '../../types';
-export interface SamlStrategyFactory {
-  (options: SamlConfig, verifierPassed?: VerifyFunction.SamlFn): Strategy;
-}
+export type SamlStrategyFactory = (
+  options: SamlConfig,
+  verifierPassed?: VerifyFunction.SamlFn,
+) => Strategy;
 
 export class SamlStrategyFactoryProvider
   implements Provider<SamlStrategyFactory>

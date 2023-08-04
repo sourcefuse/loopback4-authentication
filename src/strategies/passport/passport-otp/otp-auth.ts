@@ -2,13 +2,11 @@
 import * as passport from 'passport';
 
 export namespace Otp {
-  export interface VerifyFunction {
-    (
-      key: string,
-      otp: string,
-      done: (error: any, user?: any, info?: any) => void,
-    ): void;
-  }
+  export type VerifyFunction = (
+    key: string,
+    otp: string,
+    done: (error: any, user?: any, info?: any) => void,
+  ) => void;
 
   export interface StrategyOptions {
     key?: string;

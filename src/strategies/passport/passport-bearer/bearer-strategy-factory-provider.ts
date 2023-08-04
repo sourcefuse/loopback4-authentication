@@ -9,12 +9,10 @@ import {Strategies} from '../../keys';
 import {VerifyFunction} from '../../types';
 import {isEmpty} from 'lodash';
 
-export interface BearerStrategyFactory {
-  (
-    options?: PassportBearer.IStrategyOptions,
-    verifierPassed?: VerifyFunction.BearerFn,
-  ): PassportBearer.Strategy<VerifyFunction.BearerFn>;
-}
+export type BearerStrategyFactory = (
+  options?: PassportBearer.IStrategyOptions,
+  verifierPassed?: VerifyFunction.BearerFn,
+) => PassportBearer.Strategy<VerifyFunction.BearerFn>;
 
 export class BearerStrategyFactoryProvider
   implements Provider<BearerStrategyFactory>
@@ -29,6 +27,61 @@ export class BearerStrategyFactoryProvider
       this.getBearerStrategyVerifier(options, verifier);
   }
 
+  getBearerStrategyVerifierWithRequest(verifyFn: VerifyFunction.BearerFn) {
+    return async (
+      req: Request,
+      token: string,
+      cb: (err: Error | null, user?: IAuthUser | false) => void,
+    ) => {
+      try {
+        const user = await verifyFn(token, req);
+        if (!user) {
+          throw new HttpErrors.Unauthorized(AuthErrorKeys.TokenInvalid);
+        }
+        cb(null, user);
+      } catch (err) {
+        cb(err);
+      }
+    };
+  }
+
+  getBearerStrategyVerifierWithoutRequest(verifyFn: VerifyFunction.BearerFn) {
+    return async (
+      token: string,
+      cb: (err: Error | null, user?: IAuthUser | false) => void,
+    ) => {
+      try {
+        const user = await verifyFn(token);
+        if (!user) {
+          throw new HttpErrors.Unauthorized(AuthErrorKeys.TokenInvalid);
+        }
+        cb(null, user);
+      } catch (err) {
+        cb(err);
+      }
+    };
+  }
+  getBearerStrategyVerifierDefault(
+    verifyFn: VerifyFunction.BearerFn,
+  ): PassportBearer.Strategy<VerifyFunction.BearerFn> {
+    return new PassportBearer.Strategy(
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      async (
+        token: string,
+        cb: (err: Error | null, user?: IAuthUser | false) => void,
+      ) => {
+        try {
+          const user = await verifyFn(token);
+          if (!user) {
+            throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
+          }
+          cb(null, user);
+        } catch (err) {
+          cb(err);
+        }
+      },
+    );
+  }
   getBearerStrategyVerifier(
     options?: PassportBearer.IStrategyOptions,
     verifierPassed?: VerifyFunction.BearerFn,
@@ -38,62 +91,16 @@ export class BearerStrategyFactoryProvider
       return new PassportBearer.Strategy(
         options,
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        async (
-          req: Request,
-          token: string,
-          cb: (err: Error | null, user?: IAuthUser | false) => void,
-        ) => {
-          try {
-            const user = await verifyFn(token, req);
-            if (!user) {
-              throw new HttpErrors.Unauthorized(AuthErrorKeys.TokenInvalid);
-            }
-            cb(null, user);
-          } catch (err) {
-            cb(err);
-          }
-        },
+        this.getBearerStrategyVerifierWithRequest(verifyFn),
       );
     } else if (!!options && !isEmpty(options)) {
       return new PassportBearer.Strategy(
         options,
-
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        async (
-          token: string,
-          cb: (err: Error | null, user?: IAuthUser | false) => void,
-        ) => {
-          try {
-            const user = await verifyFn(token);
-            if (!user) {
-              throw new HttpErrors.Unauthorized(AuthErrorKeys.TokenInvalid);
-            }
-            cb(null, user);
-          } catch (err) {
-            cb(err);
-          }
-        },
+        this.getBearerStrategyVerifierWithoutRequest(verifyFn),
       );
     } else {
-      return new PassportBearer.Strategy(
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        async (
-          token: string,
-          cb: (err: Error | null, user?: IAuthUser | false) => void,
-        ) => {
-          try {
-            const user = await verifyFn(token);
-            if (!user) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.InvalidCredentials,
-              );
-            }
-            cb(null, user);
-          } catch (err) {
-            cb(err);
-          }
-        },
-      );
+      return this.getBearerStrategyVerifierDefault(verifyFn);
     }
   }
 }

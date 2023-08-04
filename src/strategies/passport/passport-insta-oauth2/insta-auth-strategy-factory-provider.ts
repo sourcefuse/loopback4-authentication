@@ -12,12 +12,10 @@ import {AuthErrorKeys} from '../../../error-keys';
 import {Strategies} from '../../keys';
 import {VerifyCallback, VerifyFunction} from '../../types';
 
-export interface InstagramAuthStrategyFactory {
-  (
-    options: StrategyOption | StrategyOptionWithRequest,
-    verifierPassed?: VerifyFunction.InstagramAuthFn,
-  ): Strategy;
-}
+export type InstagramAuthStrategyFactory = (
+  options: StrategyOption | StrategyOptionWithRequest,
+  verifierPassed?: VerifyFunction.InstagramAuthFn,
+) => Strategy;
 
 export class InstagramAuthStrategyFactoryProvider
   implements Provider<InstagramAuthStrategyFactory>
@@ -38,7 +36,7 @@ export class InstagramAuthStrategyFactoryProvider
   ): Strategy {
     const verifyFn = verifierPassed ?? this.verifierInstagramAuth;
     let strategy;
-    if (options && options.passReqToCallback === true) {
+    if (options?.passReqToCallback === true) {
       strategy = new Strategy(
         options,
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -107,6 +105,8 @@ export class InstagramAuthStrategyFactoryProvider
     } else if (process.env['HTTPS_PROXY']) {
       httpsProxyAgent = new HttpsProxyAgent(process.env['HTTPS_PROXY']);
       strategy._oauth2.setAgent(httpsProxyAgent);
+    } else {
+      //this is intentional
     }
   }
 }
