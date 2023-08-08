@@ -63,9 +63,7 @@ export class LocalPasswordStrategyFactoryProvider
       }
     };
   }
-  getLocalStrategyVerifierUndefinedRequest(
-    verifyFn: VerifyFunction.LocalPasswordFn,
-  ) {
+  getDefaultLocalStrategy(verifyFn: VerifyFunction.LocalPasswordFn) {
     return async (
       username: string,
       password: string,
@@ -105,7 +103,7 @@ export class LocalPasswordStrategyFactoryProvider
     } else {
       return new PassportLocal.Strategy(
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        this.getLocalStrategyVerifierUndefinedRequest(verifyFn),
+        this.getDefaultLocalStrategy(verifyFn),
       );
     }
   }
