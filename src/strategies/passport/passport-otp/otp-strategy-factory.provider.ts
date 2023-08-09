@@ -32,7 +32,7 @@ export class PassportOtpStrategyFactoryProvider
       options,
       (key: string, otp: string, cb: Otp.VerifyCallback) => {
         verifyFn(key, otp)
-          .then((user) => {
+          .then(user => {
             if (!user) {
               throw new HttpErrors.Unauthorized(
                 AuthErrorKeys.InvalidCredentials,
@@ -40,7 +40,7 @@ export class PassportOtpStrategyFactoryProvider
             }
             cb(null, user);
           })
-          .catch((err) => {
+          .catch(err => {
             cb(err);
           });
       },

@@ -139,5 +139,5 @@ export namespace VerifyFunction {
     ): Promise<T | null>;
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  export type GenericAuthFn<T = any> = (...params: any) => Promise<T | null>;
+  export type GenericAuthFn<T = any> = (...params: any) => Promise<T | null>; // NOSONAR
 }

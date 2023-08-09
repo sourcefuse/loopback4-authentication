@@ -10,17 +10,17 @@ module.exports = async function (data, callback) {
     const commitTitle = commit.title;
     commit.title = commitTitle.substring(0, commitTitle.indexOf('#') - 1);
 
-    commit.messageLines = commit.messageLines.filter((message) => {
+    commit.messageLines = commit.messageLines.filter(message => {
       if (message.indexOf('efs/remotes/origin') === -1) return message;
     });
 
-    commit.messageLines.forEach((message) => {
+    commit.messageLines.forEach(message => {
       commit.issueno = message.includes('GH-')
         ? message.replace('GH-', '').trim()
         : null;
     });
 
-    const issueDesc = await getIssueDesc(commit.issueno).then((res) => {
+    const issueDesc = await getIssueDesc(commit.issueno).then(res => {
       return res;
     });
     commit.issueTitle = issueDesc;
@@ -48,9 +48,9 @@ function getIssueDesc(issueNo) {
       `https://github.com/sourcefuse/loopback4-authentication/issues/${encodeURIComponent(
         issueNo,
       )}`,
-      (res) => {
+      res => {
         res.setEncoding('utf8');
-        res.on('data', (chunk) => {
+        res.on('data', chunk => {
           result = result + chunk;
         });
         res.on('end', () => {
@@ -69,7 +69,7 @@ function getIssueDesc(issueNo) {
         });
       },
     );
-    req.on('error', (e) => {
+    req.on('error', e => {
       reject(e);
     });
     req.end();

@@ -54,11 +54,11 @@ export class ClientPasswordStrategyFactoryProvider
           req: Request | undefined,
         ) => {
           verifyFn(clientId, clientSecret, req)
-            .then((client) => {
+            .then(client => {
               this.clientPasswordVerifierHelper(client, clientSecret);
               cb(null, client);
             })
-            .catch((err) => {
+            .catch(err => {
               cb(err);
             });
         },
@@ -72,11 +72,11 @@ export class ClientPasswordStrategyFactoryProvider
           cb: (err: Error | null, client?: IAuthClient | null) => void,
         ) => {
           verifyFn(clientId, clientSecret)
-            .then((client) => {
+            .then(client => {
               this.clientPasswordVerifierHelper(client, clientSecret);
               cb(null, client);
             })
-            .catch((err) => {
+            .catch(err => {
               cb(err);
             });
         },

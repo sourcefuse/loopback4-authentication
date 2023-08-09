@@ -62,13 +62,13 @@ export class ResourceOwnerPasswordStrategyFactoryProvider
       ) => void,
     ) => {
       verifyFn(clientId, clientSecret, username, password, req)
-        .then((userInfo) => {
+        .then(userInfo => {
           if (!userInfo || isEmpty(userInfo)) {
             throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
           }
           cb(null, userInfo.client, userInfo.user);
         })
-        .catch((err) => {
+        .catch(err => {
           cb(err);
         });
     };
@@ -89,13 +89,13 @@ export class ResourceOwnerPasswordStrategyFactoryProvider
       ) => void,
     ) => {
       verifyFn(clientId, clientSecret, username, password)
-        .then((userInfo) => {
+        .then(userInfo => {
           if (!userInfo || isEmpty(userInfo)) {
             throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
           }
           cb(null, userInfo.client, userInfo.user);
         })
-        .catch((err) => {
+        .catch(err => {
           cb(err);
         });
     };
