@@ -70,7 +70,7 @@
     "passport-local": "^1.0.0",
     "passport-oauth2": "^1.6.1",
     "passport-oauth2-client-password": "^0.1.2",
-    "tslib": "^2.6.0"
+    "tslib": "^2.6.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.3",
