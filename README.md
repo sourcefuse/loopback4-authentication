@@ -20,7 +20,6 @@
 </a>
 </p>
 
-
 ## Overview
 
 This is a loopback-next extension for adding authentication layer to a REST application in loopback 4.
@@ -2786,11 +2785,11 @@ After this, you can use decorator to apply auth to controller functions wherever
     {
       accessType: 'offline',
       scope: ['profile', 'email'],
-      authorizationURL: process.env.SAML_URL,
       callbackURL: process.env.SAML_CALLBACK_URL,
-      clientID: process.env.SAML_CLIENT_ID,
-      clientSecret: process.env.SAML_CLIENT_SECRET,
       tokenURL: process.env.SAML_TOKEN_URL,
+      issuer: process.env.SAML_ISSUER,
+      cert: process.env.SAML_META_DATA,
+      entryPoint: process.env.SAML_URL,
     },
     queryGen('body'),
   )
@@ -2825,19 +2824,21 @@ After this, you can use decorator to apply auth to controller functions wherever
     {
       accessType: 'offline',
       scope: ['profile', 'email'],
-      authorizationURL: process.env.SAML_URL,
-      callbackURL: process.env.SAML_CALLBACK_URL,
-      clientID: process.env.SAML_CLIENT_ID,
-      clientSecret: process.env.SAML_CLIENT_SECRET,
-      tokenURL: process.env.SAML_TOKEN_URL,
+      issuer: process.env.SAML_ISSUER,
+      cert: process.env.SAML_CERT,
+      entryPoint: process.env.SAML_URL,
+      audience: process.env.SAML_AUDIENCE,
+      logoutUrl: process.env.SAML_LOGOUT_URL,
+      passReqToCallback: false,
+      validateInResponseTo: true,
     },
     queryGen('query'),
   )
   @authorize({permissions: ['*']})
-  @get('/auth/saml-redirect', {
+  @post(`/auth/saml-redirect`, {
     responses: {
       [STATUS_CODE.OK]: {
-        description: 'Saml Redirect Token Response',
+        description: 'Okta SAML callback',
         content: {
           [CONTENT_TYPE.JSON]: {
             schema: {[X_TS_TYPE]: TokenResponse},
@@ -2846,15 +2847,19 @@ After this, you can use decorator to apply auth to controller functions wherever
       },
     },
   })
-  async samlCallback(
-    @param.query.string('code') code: string, //NOSONAR
-    @param.query.string('state') state: string,
-    @param.query.string('session_state') sessionState: string, //NOSONAR
-    @inject(RestBindings.Http.RESPONSE) response: Response,
+  async oktaSamlCallback(
     @inject(AuthenticationBindings.CURRENT_USER)
     user: AuthUser | undefined,
+    @inject(RestBindings.Http.REQUEST) request: Request,
+    @param.query.string('client') clientId: string,
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+    @requestBody({
+      content: {
+        [CONTENT_TYPE.FORM_URLENCODED]: {},
+      },
+    })
+    oktaData: AnyObject,
   ): Promise<void> {
-    const clientId = new URLSearchParams(state).get('client_id');
     if (!clientId || !user) {
       throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
     }
@@ -2877,6 +2882,13 @@ After this, you can use decorator to apply auth to controller functions wherever
 ```
 
 Please note above that we are creating two new APIs for SAML. The first one is for UI clients to hit. We are authenticating client as well, then passing the details to the SAML. Then, the actual authentication is done by SAML authorization url, which redirects to the second API we created after success. The first API method body is empty as we do not need to handle its response. The SAML provider in this package will do the redirection for you automatically.
+
+Note: For `auth/saml-redirect` one needs to configure the SSO path while incorporating the client ID as a query parameter in existing application set up within your Okta environment for which you intend to enable SSO as follows:
+
+```
+http://localhost:3000/auth/saml-redirect?client=YOUR_CLIENT_ID
+
+```
 
 For accessing the authenticated AuthUser model reference, you can inject the CURRENT_USER provider, provided by the extension, which is populated by the auth action sequence above.
 
