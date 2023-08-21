@@ -2783,15 +2783,19 @@ After this, you can use decorator to apply auth to controller functions wherever
   @authenticate(
     STRATEGY.SAML,
     {
-      accessType: 'offline',
-      scope: ['profile', 'email'],
-      callbackURL: process.env.SAML_CALLBACK_URL,
-      tokenURL: process.env.SAML_TOKEN_URL,
-      issuer: process.env.SAML_ISSUER,
-      cert: process.env.SAML_META_DATA,
-      entryPoint: process.env.SAML_URL,
-    },
-    queryGen('body'),
+    accessType: 'offline',
+    scope: ['profile', 'email'],
+    callbackURL: process.env.SAML_CALLBACK_URL,
+    issuer: process.env.SAML_ISSUER,
+    cert: process.env.SAML_CERT,
+    entryPoint: process.env.SAML_ENTRY_POINT,
+    audience: process.env.SAML_AUDIENCE,
+    logoutUrl: process.env.SAML_LOGOUT_URL,
+    passReqToCallback: !!+(process.env.SAML_AUTH_PASS_REQ_CALLBACK ?? 0),
+    validateInResponseTo: !!+(process.env.VALIDATE_RESPONSE ?? 1),
+    idpIssuer: process.env.IDP_ISSUER,
+    logoutCallbackUrl: process.env.SAML_LOGOUT_CALLBACK_URL,
+    }
   )
   @authorize({permissions: ['*']})
   @post('/auth/saml', {
@@ -2822,17 +2826,19 @@ After this, you can use decorator to apply auth to controller functions wherever
   @authenticate(
     STRATEGY.SAML,
     {
-      accessType: 'offline',
-      scope: ['profile', 'email'],
-      issuer: process.env.SAML_ISSUER,
-      cert: process.env.SAML_CERT,
-      entryPoint: process.env.SAML_URL,
-      audience: process.env.SAML_AUDIENCE,
-      logoutUrl: process.env.SAML_LOGOUT_URL,
-      passReqToCallback: false,
-      validateInResponseTo: true,
-    },
-    queryGen('query'),
+    accessType: 'offline',
+    scope: ['profile', 'email'],
+    callbackURL: process.env.SAML_CALLBACK_URL,
+    issuer: process.env.SAML_ISSUER,
+    cert: process.env.SAML_CERT,
+    entryPoint: process.env.SAML_ENTRY_POINT,
+    audience: process.env.SAML_AUDIENCE,
+    logoutUrl: process.env.SAML_LOGOUT_URL,
+    passReqToCallback: !!+(process.env.SAML_AUTH_PASS_REQ_CALLBACK ?? 0),
+    validateInResponseTo: !!+(process.env.VALIDATE_RESPONSE ?? 1),
+    idpIssuer: process.env.IDP_ISSUER,
+    logoutCallbackUrl: process.env.SAML_LOGOUT_CALLBACK_URL,
+    }
   )
   @authorize({permissions: ['*']})
   @post(`/auth/saml-redirect`, {
@@ -2883,7 +2889,7 @@ After this, you can use decorator to apply auth to controller functions wherever
 
 Please note above that we are creating two new APIs for SAML. The first one is for UI clients to hit. We are authenticating client as well, then passing the details to the SAML. Then, the actual authentication is done by SAML authorization url, which redirects to the second API we created after success. The first API method body is empty as we do not need to handle its response. The SAML provider in this package will do the redirection for you automatically.
 
-Note: For `auth/saml-redirect` one needs to configure the SSO path while incorporating the client ID as a query parameter in existing application set up within your Okta environment for which you intend to enable SSO as follows:
+Note: For `auth/saml-redirect` one needs to configure the SSO path by incorporating the client ID as a query parameter in existing application set up within your Okta environment for which you intend to enable SSO as follows:
 
 ```
 http://localhost:3000/auth/saml-redirect?client=YOUR_CLIENT_ID
