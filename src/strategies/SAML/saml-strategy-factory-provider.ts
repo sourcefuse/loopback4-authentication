@@ -55,14 +55,13 @@ export class SamlStrategyFactoryProvider
     if (options && options.passReqToCallback === true) {
       strategy = new Strategy(
         options,
-        logoutVerify as VerifyWithRequest,
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         func,
+        logoutVerify as VerifyWithRequest,
       );
     } else {
       strategy = new Strategy(
         options,
-        logoutVerify as unknown as VerifyWithoutRequest,
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (profile: Profile | null | undefined, cb: VerifiedCallback) => {
           try {
@@ -77,6 +76,7 @@ export class SamlStrategyFactoryProvider
             cb(err);
           }
         },
+        logoutVerify as unknown as VerifyWithoutRequest,
       );
     }
     this._setupProxy(strategy);
