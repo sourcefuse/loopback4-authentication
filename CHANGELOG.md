@@ -1,3 +1,31 @@
+## Release [v9.0.2](https://github.com/sourcefuse/loopback4-authentication/compare/v9.0.1..v9.0.2) August 24, 2023
+Welcome to the August 24, 2023 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
+
+  - [loopback4-authentication: SAML login functionality is not working ](https://github.com/sourcefuse/loopback4-authentication/issues/177) :- [fix(provider): change order for constructor arguments in saml ](https://github.com/sourcefuse/loopback4-authentication/commit/6ce241f796eeda7f86345e338265704b1f70cc06) was commited on August 24, 2023 by [Surbhi](mailto:98279679+Surbhi-sharma1@users.noreply.github.com)
+    
+      - * fix(provider): changed order for constructor arguments in saml
+      
+      -  changed order for constructor arguments in saml
+      
+      -  GH-177
+      
+      - * fix(provider): update readme file
+      
+      -  update readme file
+      
+      -  GH-177
+      
+  
+  - [](https://github.com/sourcefuse/loopback4-authentication/issues/) :- [chore(backstage): add catalog-info.yaml config file ](https://github.com/sourcefuse/loopback4-authentication/commit/34971e944a9f061cbd0c746725f97250b6e17f94) was commited on August 1, 2023 by [Shubham P](mailto:shubham.prajapat@sourcefuse.com)
+    
+      - * Add catalog-info.yaml config file
+      
+      - * Update catalog-info.yaml
+      
+  
+Clink on the above links to understand the changes in detail.
+  ___
+
 ## Release [v9.0.1](https://github.com/sourcefuse/loopback4-authentication/compare/v9.0.0..v9.0.1) July 14, 2023
 Welcome to the July 14, 2023 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
 
