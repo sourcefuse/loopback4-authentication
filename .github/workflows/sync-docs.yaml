@@ -1,0 +1,97 @@
+name: Sync Docs to arc-docs repo
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  DOCS_REPO: sourcefuse/arc-docs
+  BRANCH_PREFIX: automated-docs-sync/
+  GITHUB_TOKEN: ${{secrets.ARC_DOCS_API_TOKEN_GITHUB}}
+  CONFIG_USERNAME: ${{ vars.DOCS_PR_USERNAME }}
+  CONFIG_EMAIL: ${{ vars.DOCS_PR_EMAIL }}
+
+jobs:
+  sync-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Extension Code
+        uses: actions/checkout@v3
+        with:
+          token: ${{env.GITHUB_TOKEN}}
+          path: './extension/'
+
+      - name: Checkout Docs Repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{env.GITHUB_TOKEN}}
+          repository: ${{env.DOCS_REPO}}
+          path: './arc-docs/'
+
+      - name: Configure GIT
+        id: configure_git
+        working-directory: arc-docs
+        run: |
+          git config --global user.email $CONFIG_EMAIL
+          git config --global user.name $CONFIG_USERNAME
+
+          extension_branch="${{env.BRANCH_PREFIX}}$(basename $GITHUB_REPOSITORY)"
+          echo "extension_branch=$extension_branch" >> $GITHUB_OUTPUT
+
+      - name: Update Files
+        id: update_files
+        working-directory: arc-docs
+        run: |
+          extension_branch="${{ steps.configure_git.outputs.extension_branch }}"
+
+          # Create a new branch if it doesn't exist, or switch to it if it does
+          git checkout -B $extension_branch || git checkout $extension_branch
+
+          # Copy README from the extension repo
+          cp ../extension/README.md docs/arc-api-docs/extensions/$(basename $GITHUB_REPOSITORY)/
+          git add .
+
+          if git diff --quiet --cached; then
+            have_changes="false";
+          else
+            have_changes="true";
+          fi
+
+          echo "Have Changes to be commited: $have_changes"
+          echo "have_changes=$have_changes" >> $GITHUB_OUTPUT
+
+      - name: Commit Changes
+        id: commit
+        working-directory: arc-docs
+        if: steps.update_files.outputs.have_changes == 'true'
+        run: |
+          git commit -m "sync $(basename $GITHUB_REPOSITORY) docs"
+      - name: Push Changes
+        id: push_branch
+        if: steps.update_files.outputs.have_changes == 'true'
+        working-directory: arc-docs
+        run: |
+          extension_branch="${{ steps.configure_git.outputs.extension_branch }}"
+          git push https://oauth2:${GITHUB_TOKEN}@github.com/${{env.DOCS_REPO}}.git HEAD:$extension_branch --force
+
+      - name: Check PR Status
+        id: pr_status
+        if: steps.update_files.outputs.have_changes == 'true'
+        working-directory: arc-docs
+        run: |
+          extension_branch="${{ steps.configure_git.outputs.extension_branch }}"
+          gh pr status --json headRefName >> "${{github.workspace}}/pr-status.json"
+          pr_exists="$(jq --arg extension_branch "$extension_branch" '.createdBy[].headRefName == $extension_branch' "${{github.workspace}}/pr-status.json")"
+          echo "PR Exists: $pr_exists"
+          echo "pr_exists=$pr_exists" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        id: create_pull_request
+        if: steps.pr_status.outputs.pr_exists != 'true' && steps.update_files.outputs.have_changes == 'true'
+        working-directory: arc-docs
+        run: |
+          extension_branch="${{ steps.configure_git.outputs.extension_branch }}"
+
+          gh pr create --head $(git branch --show-current) --title "Sync ${{ github.event.repository.name }} Docs" --body "This Pull Request has been created by the 'sync-docs' action within the '${{ github.event.repository.name }}' repository, with the purpose of updating markdown files."
