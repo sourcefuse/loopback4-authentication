@@ -76,7 +76,7 @@
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
-    "@loopback/boot": "^6.1.0",
+    "@loopback/boot": "^6.1.2",
     "@loopback/build": "^10.1.0",
     "@loopback/metadata": "^6.1.0",
     "@loopback/rest": "^13.1.0",
