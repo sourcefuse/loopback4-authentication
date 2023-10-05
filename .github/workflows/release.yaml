@@ -1,0 +1,50 @@
+# This Manually Executable Workflow is for NPM Releases
+
+name: Release [Manual]
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  Release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # fetch-depth is necessary to get all tags
+          # otherwise lerna can't detect the changes and will end up bumping the versions for all packages
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_COMMIT_GH_PAT }}
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      - name: Configure CI Git User
+        run: |
+          git config --global user.name $CONFIG_USERNAME
+          git config --global user.email $CONFIG_EMAIL
+          git remote set-url origin https://$GITHUB_ACTOR:$GITHUB_PAT@github.com/sourcefuse/loopback4-microservice-catalog
+        env:
+          GITHUB_PAT: ${{ secrets.RELEASE_COMMIT_GH_PAT }}
+          CONFIG_USERNAME: ${{ vars.RELEASE_COMMIT_USERNAME }}
+          CONFIG_EMAIL: ${{ vars.RELEASE_COMMIT_EMAIL }}
+      - name: Authenticate with Registry
+        run: |
+          echo "@${NPM_USERNAME}:registry=https://registry.npmjs.org/" > .npmrc
+          echo "registry=https://registry.npmjs.org/" >> .npmrc
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+          npm whoami
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_USERNAME: ${{ vars.NPM_USERNAME }}
+
+      - name: Install 📌
+        run: |
+          npm install
+      - name: Test 🔧
+        run: npm run test
+      - name: Semantic Publish to NPM 🚀
+        # "HUSKY=0" disables pre-commit-msg check (Needed in order to allow semantic-release perform the release commit)
+        run: HUSKY=0 npx semantic-release
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_COMMIT_GH_PAT }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
