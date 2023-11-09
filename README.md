@@ -1179,6 +1179,18 @@ this.bind(Strategies.Passport.GOOGLE_OAUTH2_VERIFIER).toProvider(
 );
 ```
 
+Now, bind this provider to the application in application.ts.
+
+```ts
+import { GoogleAuthStrategyFactoryProvider } from 'loopback4-authentication/passport-google-oauth2';
+```
+
+```ts
+this.bind(Strategies.Passport.GOOGLE_OAUTH2_STRATEGY_FACTORY.key).toProvider(
+    GoogleAuthStrategyFactoryProvider
+  );
+```
+
 Finally, add the authenticate function as a sequence action to sequence.ts.
 
 ```ts
