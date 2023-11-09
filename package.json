@@ -91,7 +91,7 @@
       "passport-insta-oauth2": [
         "./dist/strategies/passport/passport-insta-oauth2/index.d.ts"
       ],
-      "passport-keycloack": [
+      "passport-keycloak": [
         "./dist/strategies/passport/passport-keycloak/index.d.ts"
       ],
       "passport-local": [

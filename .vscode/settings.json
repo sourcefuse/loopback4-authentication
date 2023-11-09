@@ -1,15 +1,15 @@
 {
-  "editor.rulers": [80],
+  "editor.rulers": [
+    80
+  ],
   "editor.tabCompletion": "on",
   "editor.tabSize": 2,
   "editor.trimAutoWhitespace": true,
   "editor.formatOnSave": true,
-
   "sonarlint.connectedMode.project": {
     "serverId": "sf_sonar",
     "projectKey": "sourcefuse_loopback4-authentication"
   },
-
   "files.exclude": {
     "**/.DS_Store": true,
     "**/.git": true,
@@ -20,6 +20,10 @@
   },
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
-
-  "typescript.tsdk": "./node_modules/typescript/lib"
+  "typescript.tsdk": "./node_modules/typescript/lib",
+  "cSpell.words": [
+    "insta",
+    "keycloack",
+    "keycloak"
+  ]
 }

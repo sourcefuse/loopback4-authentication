@@ -1,5 +1,6 @@
 import {Provider} from '@loopback/context';
 import {HttpErrors, Request} from '@loopback/rest';
+// eslint-disable-next-line @typescript-eslint/naming-convention
 import * as GoogleStrategy from 'passport-google-oauth20';
 
 import {VerifyFunction} from '../../types';

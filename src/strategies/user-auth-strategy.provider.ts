@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-case-declarations */
 import {Context, inject, Provider} from '@loopback/core';
 import {Strategy} from 'passport';
