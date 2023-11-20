@@ -1,20 +1,21 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import {Context, inject, Provider} from '@loopback/core';
-import {Strategy} from 'passport';
-import * as GoogleStrategy from 'passport-google-oauth20';
-import * as AzureADAuthStrategy from 'passport-azure-ad';
-import * as PassportBearer from 'passport-http-bearer';
-import * as PassportLocal from 'passport-local';
-import * as InstagramStrategy from 'passport-instagram';
-import * as FacebookStrategy from 'passport-facebook';
-import * as AppleStrategy from 'passport-apple';
 import {SamlConfig} from '@node-saml/passport-saml';
+import {Strategy} from 'passport';
+import * as AppleStrategy from 'passport-apple';
+import * as AzureADAuthStrategy from 'passport-azure-ad';
+import * as FacebookStrategy from 'passport-facebook';
+import * as GoogleStrategy from 'passport-google-oauth20';
+import * as PassportBearer from 'passport-http-bearer';
+import * as InstagramStrategy from 'passport-instagram';
+import * as PassportLocal from 'passport-local';
 import {AuthenticationBindings} from '../keys';
 import {STRATEGY} from '../strategy-name.enum';
-import {AuthenticationMetadata} from '../types';
+import {AuthenticationMetadata, IAuthUser} from '../types';
 import {Strategies} from './keys';
-import {Oauth2ResourceOwnerPassword} from './passport/passport-resource-owner-password';
 import {Otp} from './passport';
+import {LocalPasswordStrategyFactory} from './passport/passport-local';
+import {Oauth2ResourceOwnerPassword} from './passport/passport-resource-owner-password';
 import {Cognito, Keycloak, VerifyFunction} from './types';
 
 interface ExtendedStrategyOption extends FacebookStrategy.StrategyOption {
@@ -28,6 +29,294 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     @inject.context() private readonly ctx: Context,
   ) {}
 
+  async processLocalFactory(
+    verifier:
+      | LocalPasswordStrategyFactory
+      | VerifyFunction.LocalPasswordFn<IAuthUser>
+      | undefined,
+  ) {
+    const localFactory = this.ctx.getSync(
+      Strategies.Passport.LOCAL_STRATEGY_FACTORY,
+      {optional: true},
+    );
+
+    if (!localFactory) {
+      throw new Error(
+        `No factory found for ${Strategies.Passport.LOCAL_STRATEGY_FACTORY}`,
+      );
+    }
+
+    return localFactory(
+      this.metadata.options as
+        | PassportLocal.IStrategyOptions
+        | PassportLocal.IStrategyOptionsWithRequest,
+      verifier as VerifyFunction.LocalPasswordFn,
+    );
+  }
+
+  async processBearerFactory(
+    verifier:
+      | LocalPasswordStrategyFactory
+      | VerifyFunction.LocalPasswordFn<IAuthUser>
+      | undefined,
+  ) {
+    const bearerFactory = this.ctx.getSync(
+      Strategies.Passport.BEARER_STRATEGY_FACTORY,
+      {optional: true},
+    );
+
+    if (!bearerFactory) {
+      throw new Error(
+        `No factory found for ${Strategies.Passport.BEARER_STRATEGY_FACTORY}`,
+      );
+    }
+
+    return bearerFactory(
+      this.metadata.options as PassportBearer.IStrategyOptions,
+      verifier as VerifyFunction.BearerFn,
+    );
+  }
+
+  async processResourceOwnerFactory(
+    verifier:
+      | LocalPasswordStrategyFactory
+      | VerifyFunction.LocalPasswordFn<IAuthUser>
+      | undefined,
+  ) {
+    const resourceOwnerFactory = this.ctx.getSync(
+      Strategies.Passport.RESOURCE_OWNER_STRATEGY_FACTORY,
+      {optional: true},
+    );
+
+    if (!resourceOwnerFactory) {
+      throw new Error(
+        `No factory found for ${Strategies.Passport.RESOURCE_OWNER_STRATEGY_FACTORY}`,
+      );
+    }
+
+    return resourceOwnerFactory(
+      this.metadata
+        .options as Oauth2ResourceOwnerPassword.StrategyOptionsWithRequestInterface,
+      verifier as VerifyFunction.ResourceOwnerPasswordFn,
+    );
+  }
+
+  async processGoogleFactory(
+    verifier:
+      | LocalPasswordStrategyFactory
+      | VerifyFunction.LocalPasswordFn<IAuthUser>
+      | undefined,
+  ) {
+    const googleFactory = this.ctx.getSync(
+      Strategies.Passport.GOOGLE_OAUTH2_STRATEGY_FACTORY,
+      {optional: true},
+    );
+
+    if (!googleFactory) {
+      throw new Error(
+        `No factory found for ${Strategies.Passport.GOOGLE_OAUTH2_STRATEGY_FACTORY}`,
+      );
+    }
+
+    return googleFactory(
+      this.metadata.options as
+        | GoogleStrategy.StrategyOptions
+        | GoogleStrategy.StrategyOptionsWithRequest,
+      verifier as VerifyFunction.GoogleAuthFn,
+    );
+  }
+
+  async processAzureFactory(
+    verifier:
+      | LocalPasswordStrategyFactory
+      | VerifyFunction.LocalPasswordFn<IAuthUser>
+      | undefined,
+  ) {
+    const azureFactory = this.ctx.getSync(
+      Strategies.Passport.AZURE_AD_STRATEGY_FACTORY,
+      {optional: true},
+    );
+
+    if (!azureFactory) {
+      throw new Error(
+        `No factory found for ${Strategies.Passport.AZURE_AD_STRATEGY_FACTORY}`,
+      );
+    }
+
+    return azureFactory(
+      this.metadata.options as
+        | AzureADAuthStrategy.IOIDCStrategyOptionWithRequest
+        | AzureADAuthStrategy.IOIDCStrategyOptionWithoutRequest,
+      verifier as VerifyFunction.AzureADAuthFn,
+    );
+  }
+
+  async processKeycloakFactory(
+    verifier:
+      | LocalPasswordStrategyFactory
+      | VerifyFunction.LocalPasswordFn<IAuthUser>
+      | undefined,
+  ) {
+    const keycloakFactory = this.ctx.getSync(
+      Strategies.Passport.KEYCLOAK_STRATEGY_FACTORY,
+      {optional: true},
+    );
+
+    if (!keycloakFactory) {
+      throw new Error(
+        `No factory found for ${Strategies.Passport.KEYCLOAK_STRATEGY_FACTORY}`,
+      );
+    }
+
+    return keycloakFactory(
+      this.metadata.options as Keycloak.StrategyOptions,
+      verifier as VerifyFunction.KeycloakAuthFn,
+    );
+  }
+
+  async processInstagramFactory(
+    verifier:
+      | LocalPasswordStrategyFactory
+      | VerifyFunction.LocalPasswordFn<IAuthUser>
+      | undefined,
+  ) {
+    const instagramFactory = this.ctx.getSync(
+      Strategies.Passport.INSTAGRAM_OAUTH2_STRATEGY_FACTORY,
+      {optional: true},
+    );
+
+    if (!instagramFactory) {
+      throw new Error(
+        `No factory found for ${Strategies.Passport.INSTAGRAM_OAUTH2_STRATEGY_FACTORY}`,
+      );
+    }
+
+    return instagramFactory(
+      this.metadata.options as
+        | InstagramStrategy.StrategyOption
+        | InstagramStrategy.StrategyOptionWithRequest,
+      verifier as VerifyFunction.InstagramAuthFn,
+    );
+  }
+
+  async processAppleFactory(
+    verifier:
+      | LocalPasswordStrategyFactory
+      | VerifyFunction.LocalPasswordFn<IAuthUser>
+      | undefined,
+  ) {
+    const appleFactory = this.ctx.getSync(
+      Strategies.Passport.APPLE_OAUTH2_STRATEGY_FACTORY,
+      {optional: true},
+    );
+
+    if (!appleFactory) {
+      throw new Error(
+        `No factory found for ${Strategies.Passport.APPLE_OAUTH2_STRATEGY_FACTORY}`,
+      );
+    }
+    return appleFactory(
+      this.metadata.options as
+        | AppleStrategy.AuthenticateOptions
+        | AppleStrategy.AuthenticateOptionsWithRequest,
+      verifier as VerifyFunction.AppleAuthFn,
+    );
+  }
+
+  async processFacebookFactory(
+    verifier:
+      | LocalPasswordStrategyFactory
+      | VerifyFunction.LocalPasswordFn<IAuthUser>
+      | undefined,
+  ) {
+    const facebookFactory = this.ctx.getSync(
+      Strategies.Passport.FACEBOOK_OAUTH2_STRATEGY_FACTORY,
+      {optional: true},
+    );
+
+    if (!facebookFactory) {
+      throw new Error(
+        `No factory found for ${Strategies.Passport.FACEBOOK_OAUTH2_STRATEGY_FACTORY}`,
+      );
+    }
+
+    return facebookFactory(
+      this.metadata.options as
+        | FacebookStrategy.StrategyOptionWithRequest
+        | ExtendedStrategyOption,
+      verifier as VerifyFunction.FacebookAuthFn,
+    );
+  }
+
+  processCognitoFactory(
+    verifier:
+      | LocalPasswordStrategyFactory
+      | VerifyFunction.LocalPasswordFn<IAuthUser>
+      | undefined,
+  ) {
+    const cognitoFactory = this.ctx.getSync(
+      Strategies.Passport.COGNITO_OAUTH2_STRATEGY_FACTORY,
+      {optional: true},
+    );
+
+    if (!cognitoFactory) {
+      throw new Error(
+        `No factory found for ${Strategies.Passport.COGNITO_OAUTH2_STRATEGY_FACTORY}`,
+      );
+    }
+
+    return cognitoFactory(
+      this.metadata.options as Cognito.StrategyOptions,
+      verifier as VerifyFunction.CognitoAuthFn,
+    );
+  }
+
+  async processOtpAuthFactory(
+    verifier:
+      | LocalPasswordStrategyFactory
+      | VerifyFunction.LocalPasswordFn<IAuthUser>
+      | undefined,
+  ) {
+    const otpFactory = this.ctx.getSync(
+      Strategies.Passport.OTP_AUTH_STRATEGY_FACTORY,
+      {optional: true},
+    );
+
+    if (!otpFactory) {
+      throw new Error(
+        `No factory found for ${Strategies.Passport.OTP_AUTH_STRATEGY_FACTORY}`,
+      );
+    }
+
+    return otpFactory(
+      this.metadata.options as Otp.StrategyOptions,
+      verifier as VerifyFunction.OtpAuthFn,
+    );
+  }
+
+  async processSamlFactory(
+    verifier:
+      | LocalPasswordStrategyFactory
+      | VerifyFunction.LocalPasswordFn<IAuthUser>
+      | undefined,
+  ) {
+    const samlFactory = this.ctx.getSync(
+      Strategies.Passport.SAML_STRATEGY_FACTORY,
+      {optional: true},
+    );
+
+    if (!samlFactory) {
+      throw new Error(
+        `No factory found for ${Strategies.Passport.SAML_STRATEGY_FACTORY}`,
+      );
+    }
+
+    return samlFactory(
+      this.metadata.options as SamlConfig,
+      verifier as VerifyFunction.SamlFn,
+    );
+  }
+
   async value(): Promise<Strategy | undefined> {
     if (!this.metadata) {
       return undefined;
@@ -40,231 +329,44 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
         this.metadata.verifier,
       );
     }
-
     const name = this.metadata.strategy;
-
     switch (name) {
       case STRATEGY.LOCAL: {
-        const localFactory = this.ctx.getSync(
-          Strategies.Passport.LOCAL_STRATEGY_FACTORY,
-          {optional: true},
-        );
-
-        if (!localFactory) {
-          throw new Error(
-            `No factory found for ${Strategies.Passport.LOCAL_STRATEGY_FACTORY}`,
-          );
-        }
-
-        return localFactory(
-          this.metadata.options as
-            | PassportLocal.IStrategyOptions
-            | PassportLocal.IStrategyOptionsWithRequest,
-          verifier as VerifyFunction.LocalPasswordFn,
-        );
+        return this.processLocalFactory(verifier);
       }
       case STRATEGY.BEARER: {
-        const bearerFactory = this.ctx.getSync(
-          Strategies.Passport.BEARER_STRATEGY_FACTORY,
-          {optional: true},
-        );
-
-        if (!bearerFactory) {
-          throw new Error(
-            `No factory found for ${Strategies.Passport.BEARER_STRATEGY_FACTORY}`,
-          );
-        }
-
-        return bearerFactory(
-          this.metadata.options as PassportBearer.IStrategyOptions,
-          verifier as VerifyFunction.BearerFn,
-        );
+        return this.processBearerFactory(verifier);
       }
       case STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT: {
-        const resourceOwnerFactory = this.ctx.getSync(
-          Strategies.Passport.RESOURCE_OWNER_STRATEGY_FACTORY,
-          {optional: true},
-        );
-
-        if (!resourceOwnerFactory) {
-          throw new Error(
-            `No factory found for ${Strategies.Passport.RESOURCE_OWNER_STRATEGY_FACTORY}`,
-          );
-        }
-
-        return resourceOwnerFactory(
-          this.metadata
-            .options as Oauth2ResourceOwnerPassword.StrategyOptionsWithRequestInterface,
-          verifier as VerifyFunction.ResourceOwnerPasswordFn,
-        );
+        return this.processResourceOwnerFactory(verifier);
       }
-
       case STRATEGY.GOOGLE_OAUTH2: {
-        const googleFactory = this.ctx.getSync(
-          Strategies.Passport.GOOGLE_OAUTH2_STRATEGY_FACTORY,
-          {optional: true},
-        );
-
-        if (!googleFactory) {
-          throw new Error(
-            `No factory found for ${Strategies.Passport.GOOGLE_OAUTH2_STRATEGY_FACTORY}`,
-          );
-        }
-
-        return googleFactory(
-          this.metadata.options as
-            | GoogleStrategy.StrategyOptions
-            | GoogleStrategy.StrategyOptionsWithRequest,
-          verifier as VerifyFunction.GoogleAuthFn,
-        );
+        return this.processGoogleFactory(verifier);
       }
       case STRATEGY.AZURE_AD: {
-        const azureFactory = this.ctx.getSync(
-          Strategies.Passport.AZURE_AD_STRATEGY_FACTORY,
-          {optional: true},
-        );
-
-        if (!azureFactory) {
-          throw new Error(
-            `No factory found for ${Strategies.Passport.AZURE_AD_STRATEGY_FACTORY}`,
-          );
-        }
-
-        return azureFactory(
-          this.metadata.options as
-            | AzureADAuthStrategy.IOIDCStrategyOptionWithRequest
-            | AzureADAuthStrategy.IOIDCStrategyOptionWithoutRequest,
-          verifier as VerifyFunction.AzureADAuthFn,
-        );
+        return this.processAzureFactory(verifier);
       }
-
       case STRATEGY.KEYCLOAK: {
-        const keycloakFactory = this.ctx.getSync(
-          Strategies.Passport.KEYCLOAK_STRATEGY_FACTORY,
-          {optional: true},
-        );
-
-        if (!keycloakFactory) {
-          throw new Error(
-            `No factory found for ${Strategies.Passport.KEYCLOAK_STRATEGY_FACTORY}`,
-          );
-        }
-
-        return keycloakFactory(
-          this.metadata.options as Keycloak.StrategyOptions,
-          verifier as VerifyFunction.KeycloakAuthFn,
-        );
+        return this.processKeycloakFactory(verifier);
       }
       case STRATEGY.INSTAGRAM_OAUTH2: {
-        const instagramFactory = this.ctx.getSync(
-          Strategies.Passport.INSTAGRAM_OAUTH2_STRATEGY_FACTORY,
-          {optional: true},
-        );
-
-        if (!instagramFactory) {
-          throw new Error(
-            `No factory found for ${Strategies.Passport.INSTAGRAM_OAUTH2_STRATEGY_FACTORY}`,
-          );
-        }
-
-        return instagramFactory(
-          this.metadata.options as
-            | InstagramStrategy.StrategyOption
-            | InstagramStrategy.StrategyOptionWithRequest,
-          verifier as VerifyFunction.InstagramAuthFn,
-        );
+        return this.processInstagramFactory(verifier);
       }
-
       case STRATEGY.APPLE_OAUTH2: {
-        const appleFactory = this.ctx.getSync(
-          Strategies.Passport.APPLE_OAUTH2_STRATEGY_FACTORY,
-          {optional: true},
-        );
-
-        if (!appleFactory) {
-          throw new Error(
-            `No factory found for ${Strategies.Passport.APPLE_OAUTH2_STRATEGY_FACTORY}`,
-          );
-        }
-        return appleFactory(
-          this.metadata.options as
-            | AppleStrategy.AuthenticateOptions
-            | AppleStrategy.AuthenticateOptionsWithRequest,
-          verifier as VerifyFunction.AppleAuthFn,
-        );
+        return this.processAppleFactory(verifier);
       }
-
       case STRATEGY.FACEBOOK_OAUTH2: {
-        const facebookFactory = this.ctx.getSync(
-          Strategies.Passport.FACEBOOK_OAUTH2_STRATEGY_FACTORY,
-          {optional: true},
-        );
-
-        if (!facebookFactory) {
-          throw new Error(
-            `No factory found for ${Strategies.Passport.FACEBOOK_OAUTH2_STRATEGY_FACTORY}`,
-          );
-        }
-
-        return facebookFactory(
-          this.metadata.options as
-            | FacebookStrategy.StrategyOptionWithRequest
-            | ExtendedStrategyOption,
-          verifier as VerifyFunction.FacebookAuthFn,
-        );
+        return this.processFacebookFactory(verifier);
       }
-
       case STRATEGY.COGNITO_OAUTH2: {
-        const cognitoFactory = this.ctx.getSync(
-          Strategies.Passport.COGNITO_OAUTH2_STRATEGY_FACTORY,
-          {optional: true},
-        );
-
-        if (!cognitoFactory) {
-          throw new Error(
-            `No factory found for ${Strategies.Passport.COGNITO_OAUTH2_STRATEGY_FACTORY}`,
-          );
-        }
-
-        return cognitoFactory(
-          this.metadata.options as Cognito.StrategyOptions,
-          verifier as VerifyFunction.CognitoAuthFn,
-        );
+        return this.processCognitoFactory(verifier);
       }
 
       case STRATEGY.OTP: {
-        const otpFactory = this.ctx.getSync(
-          Strategies.Passport.OTP_AUTH_STRATEGY_FACTORY,
-          {optional: true},
-        );
-
-        if (!otpFactory) {
-          throw new Error(
-            `No factory found for ${Strategies.Passport.OTP_AUTH_STRATEGY_FACTORY}`,
-          );
-        }
-
-        return otpFactory(
-          this.metadata.options as Otp.StrategyOptions,
-          verifier as VerifyFunction.OtpAuthFn,
-        );
+        return this.processOtpAuthFactory(verifier);
       }
       case STRATEGY.SAML: {
-        const samlFactory = this.ctx.getSync(
-          Strategies.Passport.SAML_STRATEGY_FACTORY,
-          {optional: true},
-        );
-
-        if (!samlFactory) {
-          throw new Error(
-            `No factory found for ${Strategies.Passport.SAML_STRATEGY_FACTORY}`,
-          );
-        }
-
-        return samlFactory(
-          this.metadata.options as SamlConfig,
-          verifier as VerifyFunction.SamlFn,
-        );
+        return this.processSamlFactory(verifier);
       }
       default:
         return Promise.reject(`The strategy ${name} is not available.`);
