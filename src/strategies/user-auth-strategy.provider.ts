@@ -22,6 +22,10 @@ interface ExtendedStrategyOption extends FacebookStrategy.StrategyOption {
   passReqToCallback?: false;
 }
 
+export type VerifierType =
+  | LocalPasswordStrategyFactory
+  | VerifyFunction.LocalPasswordFn<IAuthUser>
+  | undefined;
 export class AuthStrategyProvider implements Provider<Strategy | undefined> {
   constructor(
     @inject(AuthenticationBindings.USER_METADATA)
@@ -29,12 +33,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     @inject.context() private readonly ctx: Context,
   ) {}
 
-  async processLocalFactory(
-    verifier:
-      | LocalPasswordStrategyFactory
-      | VerifyFunction.LocalPasswordFn<IAuthUser>
-      | undefined,
-  ) {
+  async processLocalFactory(verifier: VerifierType) {
     const localFactory = this.ctx.getSync(
       Strategies.Passport.LOCAL_STRATEGY_FACTORY,
       {optional: true},
@@ -54,12 +53,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  async processBearerFactory(
-    verifier:
-      | LocalPasswordStrategyFactory
-      | VerifyFunction.LocalPasswordFn<IAuthUser>
-      | undefined,
-  ) {
+  async processBearerFactory(verifier: VerifierType) {
     const bearerFactory = this.ctx.getSync(
       Strategies.Passport.BEARER_STRATEGY_FACTORY,
       {optional: true},
@@ -77,12 +71,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  async processResourceOwnerFactory(
-    verifier:
-      | LocalPasswordStrategyFactory
-      | VerifyFunction.LocalPasswordFn<IAuthUser>
-      | undefined,
-  ) {
+  async processResourceOwnerFactory(verifier: VerifierType) {
     const resourceOwnerFactory = this.ctx.getSync(
       Strategies.Passport.RESOURCE_OWNER_STRATEGY_FACTORY,
       {optional: true},
@@ -101,12 +90,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  async processGoogleFactory(
-    verifier:
-      | LocalPasswordStrategyFactory
-      | VerifyFunction.LocalPasswordFn<IAuthUser>
-      | undefined,
-  ) {
+  async processGoogleFactory(verifier: VerifierType) {
     const googleFactory = this.ctx.getSync(
       Strategies.Passport.GOOGLE_OAUTH2_STRATEGY_FACTORY,
       {optional: true},
@@ -126,12 +110,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  async processAzureFactory(
-    verifier:
-      | LocalPasswordStrategyFactory
-      | VerifyFunction.LocalPasswordFn<IAuthUser>
-      | undefined,
-  ) {
+  async processAzureFactory(verifier: VerifierType) {
     const azureFactory = this.ctx.getSync(
       Strategies.Passport.AZURE_AD_STRATEGY_FACTORY,
       {optional: true},
@@ -151,12 +130,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  async processKeycloakFactory(
-    verifier:
-      | LocalPasswordStrategyFactory
-      | VerifyFunction.LocalPasswordFn<IAuthUser>
-      | undefined,
-  ) {
+  async processKeycloakFactory(verifier: VerifierType) {
     const keycloakFactory = this.ctx.getSync(
       Strategies.Passport.KEYCLOAK_STRATEGY_FACTORY,
       {optional: true},
@@ -174,12 +148,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  async processInstagramFactory(
-    verifier:
-      | LocalPasswordStrategyFactory
-      | VerifyFunction.LocalPasswordFn<IAuthUser>
-      | undefined,
-  ) {
+  async processInstagramFactory(verifier: VerifierType) {
     const instagramFactory = this.ctx.getSync(
       Strategies.Passport.INSTAGRAM_OAUTH2_STRATEGY_FACTORY,
       {optional: true},
@@ -199,12 +168,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  async processAppleFactory(
-    verifier:
-      | LocalPasswordStrategyFactory
-      | VerifyFunction.LocalPasswordFn<IAuthUser>
-      | undefined,
-  ) {
+  async processAppleFactory(verifier: VerifierType) {
     const appleFactory = this.ctx.getSync(
       Strategies.Passport.APPLE_OAUTH2_STRATEGY_FACTORY,
       {optional: true},
@@ -223,12 +187,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  async processFacebookFactory(
-    verifier:
-      | LocalPasswordStrategyFactory
-      | VerifyFunction.LocalPasswordFn<IAuthUser>
-      | undefined,
-  ) {
+  async processFacebookFactory(verifier: VerifierType) {
     const facebookFactory = this.ctx.getSync(
       Strategies.Passport.FACEBOOK_OAUTH2_STRATEGY_FACTORY,
       {optional: true},
@@ -248,12 +207,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  processCognitoFactory(
-    verifier:
-      | LocalPasswordStrategyFactory
-      | VerifyFunction.LocalPasswordFn<IAuthUser>
-      | undefined,
-  ) {
+  processCognitoFactory(verifier: VerifierType) {
     const cognitoFactory = this.ctx.getSync(
       Strategies.Passport.COGNITO_OAUTH2_STRATEGY_FACTORY,
       {optional: true},
@@ -271,12 +225,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  async processOtpAuthFactory(
-    verifier:
-      | LocalPasswordStrategyFactory
-      | VerifyFunction.LocalPasswordFn<IAuthUser>
-      | undefined,
-  ) {
+  async processOtpAuthFactory(verifier: VerifierType) {
     const otpFactory = this.ctx.getSync(
       Strategies.Passport.OTP_AUTH_STRATEGY_FACTORY,
       {optional: true},
@@ -294,12 +243,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  async processSamlFactory(
-    verifier:
-      | LocalPasswordStrategyFactory
-      | VerifyFunction.LocalPasswordFn<IAuthUser>
-      | undefined,
-  ) {
+  async processSamlFactory(verifier: VerifierType) {
     const samlFactory = this.ctx.getSync(
       Strategies.Passport.SAML_STRATEGY_FACTORY,
       {optional: true},

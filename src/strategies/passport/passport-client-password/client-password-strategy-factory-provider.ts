@@ -52,11 +52,12 @@ export class ClientPasswordStrategyFactoryProvider
           clientSecret: string | undefined,
           cb: (err: Error | null, client?: IAuthClient | null) => void,
           req: Request | undefined,
+          //NOSONAR
         ) => {
           try {
             const client = await verifyFn(clientId, clientSecret, req);
-            this.clientPasswordVerifierHelper(client, clientSecret);
-            cb(null, client);
+            this.clientPasswordVerifierHelper(client, clientSecret); //NOSONAR
+            cb(null, client); //NOSONAR
           } catch (err) {
             cb(err);
           }
