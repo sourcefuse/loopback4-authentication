@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable no-case-declarations */
 import {Context, inject, Provider} from '@loopback/core';
 import {Strategy} from 'passport';
 import * as GoogleStrategy from 'passport-google-oauth20';
@@ -45,7 +44,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     const name = this.metadata.strategy;
 
     switch (name) {
-      case STRATEGY.LOCAL:
+      case STRATEGY.LOCAL: {
         const localFactory = this.ctx.getSync(
           Strategies.Passport.LOCAL_STRATEGY_FACTORY,
           {optional: true},
@@ -63,8 +62,8 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
             | PassportLocal.IStrategyOptionsWithRequest,
           verifier as VerifyFunction.LocalPasswordFn,
         );
-
-      case STRATEGY.BEARER:
+      }
+      case STRATEGY.BEARER: {
         const bearerFactory = this.ctx.getSync(
           Strategies.Passport.BEARER_STRATEGY_FACTORY,
           {optional: true},
@@ -80,8 +79,8 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
           this.metadata.options as PassportBearer.IStrategyOptions,
           verifier as VerifyFunction.BearerFn,
         );
-
-      case STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT:
+      }
+      case STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT: {
         const resourceOwnerFactory = this.ctx.getSync(
           Strategies.Passport.RESOURCE_OWNER_STRATEGY_FACTORY,
           {optional: true},
@@ -98,8 +97,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
             .options as Oauth2ResourceOwnerPassword.StrategyOptionsWithRequestInterface,
           verifier as VerifyFunction.ResourceOwnerPasswordFn,
         );
+      }
 
-      case STRATEGY.GOOGLE_OAUTH2:
+      case STRATEGY.GOOGLE_OAUTH2: {
         const googleFactory = this.ctx.getSync(
           Strategies.Passport.GOOGLE_OAUTH2_STRATEGY_FACTORY,
           {optional: true},
@@ -117,8 +117,8 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
             | GoogleStrategy.StrategyOptionsWithRequest,
           verifier as VerifyFunction.GoogleAuthFn,
         );
-
-      case STRATEGY.AZURE_AD:
+      }
+      case STRATEGY.AZURE_AD: {
         const azureFactory = this.ctx.getSync(
           Strategies.Passport.AZURE_AD_STRATEGY_FACTORY,
           {optional: true},
@@ -136,8 +136,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
             | AzureADAuthStrategy.IOIDCStrategyOptionWithoutRequest,
           verifier as VerifyFunction.AzureADAuthFn,
         );
+      }
 
-      case STRATEGY.KEYCLOAK:
+      case STRATEGY.KEYCLOAK: {
         const keycloakFactory = this.ctx.getSync(
           Strategies.Passport.KEYCLOAK_STRATEGY_FACTORY,
           {optional: true},
@@ -153,8 +154,8 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
           this.metadata.options as Keycloak.StrategyOptions,
           verifier as VerifyFunction.KeycloakAuthFn,
         );
-
-      case STRATEGY.INSTAGRAM_OAUTH2:
+      }
+      case STRATEGY.INSTAGRAM_OAUTH2: {
         const instagramFactory = this.ctx.getSync(
           Strategies.Passport.INSTAGRAM_OAUTH2_STRATEGY_FACTORY,
           {optional: true},
@@ -172,8 +173,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
             | InstagramStrategy.StrategyOptionWithRequest,
           verifier as VerifyFunction.InstagramAuthFn,
         );
+      }
 
-      case STRATEGY.APPLE_OAUTH2:
+      case STRATEGY.APPLE_OAUTH2: {
         const appleFactory = this.ctx.getSync(
           Strategies.Passport.APPLE_OAUTH2_STRATEGY_FACTORY,
           {optional: true},
@@ -190,8 +192,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
             | AppleStrategy.AuthenticateOptionsWithRequest,
           verifier as VerifyFunction.AppleAuthFn,
         );
+      }
 
-      case STRATEGY.FACEBOOK_OAUTH2:
+      case STRATEGY.FACEBOOK_OAUTH2: {
         const facebookFactory = this.ctx.getSync(
           Strategies.Passport.FACEBOOK_OAUTH2_STRATEGY_FACTORY,
           {optional: true},
@@ -209,8 +212,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
             | ExtendedStrategyOption,
           verifier as VerifyFunction.FacebookAuthFn,
         );
+      }
 
-      case STRATEGY.COGNITO_OAUTH2:
+      case STRATEGY.COGNITO_OAUTH2: {
         const cognitoFactory = this.ctx.getSync(
           Strategies.Passport.COGNITO_OAUTH2_STRATEGY_FACTORY,
           {optional: true},
@@ -226,8 +230,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
           this.metadata.options as Cognito.StrategyOptions,
           verifier as VerifyFunction.CognitoAuthFn,
         );
+      }
 
-      case STRATEGY.OTP:
+      case STRATEGY.OTP: {
         const otpFactory = this.ctx.getSync(
           Strategies.Passport.OTP_AUTH_STRATEGY_FACTORY,
           {optional: true},
@@ -243,8 +248,8 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
           this.metadata.options as Otp.StrategyOptions,
           verifier as VerifyFunction.OtpAuthFn,
         );
-
-      case STRATEGY.SAML:
+      }
+      case STRATEGY.SAML: {
         const samlFactory = this.ctx.getSync(
           Strategies.Passport.SAML_STRATEGY_FACTORY,
           {optional: true},
@@ -260,7 +265,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
           this.metadata.options as SamlConfig,
           verifier as VerifyFunction.SamlFn,
         );
-
+      }
       default:
         return Promise.reject(`The strategy ${name} is not available.`);
     }
