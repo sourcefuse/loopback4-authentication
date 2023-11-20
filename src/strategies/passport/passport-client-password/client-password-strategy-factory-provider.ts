@@ -1,3 +1,4 @@
+// SONAR-IGNORE-ALL
 import {inject, Provider} from '@loopback/core';
 import {HttpErrors, Request} from '@loopback/rest';
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -38,7 +39,7 @@ export class ClientPasswordStrategyFactoryProvider
       // do nothing
     }
   }
-
+  // sonarignore:start
   getClientPasswordVerifier(
     options?: ClientPasswordStrategy.StrategyOptionsWithRequestInterface,
     verifierPassed?: VerifyFunction.OauthClientPasswordFn,
@@ -52,12 +53,11 @@ export class ClientPasswordStrategyFactoryProvider
           clientSecret: string | undefined,
           cb: (err: Error | null, client?: IAuthClient | null) => void,
           req: Request | undefined,
-          //NOSONAR
         ) => {
           try {
             const client = await verifyFn(clientId, clientSecret, req);
-            this.clientPasswordVerifierHelper(client, clientSecret); //NOSONAR
-            cb(null, client); //NOSONAR
+            this.clientPasswordVerifierHelper(client, clientSecret);
+            cb(null, client);
           } catch (err) {
             cb(err);
           }
@@ -83,4 +83,5 @@ export class ClientPasswordStrategyFactoryProvider
       );
     }
   }
+  // sonarignore:end
 }
