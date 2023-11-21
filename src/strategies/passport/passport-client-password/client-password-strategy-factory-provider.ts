@@ -71,7 +71,7 @@ export class ClientPasswordStrategyFactoryProvider
           clientId: string,
           clientSecret: string | undefined,
           cb: (err: Error | null, client?: IAuthClient | null) => void,
-        ) => {
+        ) => {//NOSONAR
           try {
             const client = await verifyFn(clientId, clientSecret);
             this.clientPasswordVerifierHelper(client, clientSecret);

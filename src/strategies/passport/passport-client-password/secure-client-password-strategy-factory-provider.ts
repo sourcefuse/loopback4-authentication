@@ -1,12 +1,12 @@
-import {inject, Provider} from '@loopback/core';
-import {HttpErrors, Request} from '@loopback/rest';
+import { inject, Provider } from '@loopback/core';
+import { HttpErrors, Request } from '@loopback/rest';
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import * as ClientPasswordStrategy from './client-password-strategy';
 
-import {AuthErrorKeys} from '../../../error-keys';
-import {ClientType, IAuthSecureClient} from '../../../types';
-import {Strategies} from '../../keys';
-import {VerifyFunction} from '../../types';
+import { AuthErrorKeys } from '../../../error-keys';
+import { ClientType, IAuthSecureClient } from '../../../types';
+import { Strategies } from '../../keys';
+import { VerifyFunction } from '../../types';
 
 export interface SecureClientPasswordStrategyFactory {
   (
@@ -21,7 +21,7 @@ export class SecureClientPasswordStrategyFactoryProvider
   constructor(
     @inject(Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER)
     private readonly verifier: VerifyFunction.OauthSecureClientPasswordFn,
-  ) {}
+  ) { }
 
   value(): SecureClientPasswordStrategyFactory {
     return (options, verifier) =>
@@ -56,7 +56,7 @@ export class SecureClientPasswordStrategyFactoryProvider
           clientSecret: string | undefined,
           cb: (err: Error | null, client?: IAuthSecureClient | null) => void,
           req: Request | undefined,
-        ) => {
+        ) => { //NOSONAR
           try {
             const client = await verifyFn(clientId, clientSecret, req);
             this.secureClientPasswordVerifierHelper(client, clientSecret);
@@ -75,7 +75,8 @@ export class SecureClientPasswordStrategyFactoryProvider
           clientId: string,
           clientSecret: string | undefined,
           cb: (err: Error | null, client?: IAuthSecureClient | null) => void,
-        ) => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ) => {// NOSONAR
           try {
             const client = await verifyFn(clientId, clientSecret);
 
