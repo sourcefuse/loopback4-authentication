@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 // SONAR-IGNORE-ALL
 import {inject, Provider} from '@loopback/core';
 import {HttpErrors, Request} from '@loopback/rest';
@@ -39,7 +40,8 @@ export class ClientPasswordStrategyFactoryProvider
       // do nothing
     }
   }
-  // sonarignore:start
+  //prettier-ignore-start
+  // prettier-ignore
   getClientPasswordVerifier(
     options?: ClientPasswordStrategy.StrategyOptionsWithRequestInterface,
     verifierPassed?: VerifyFunction.OauthClientPasswordFn,
@@ -47,14 +49,12 @@ export class ClientPasswordStrategyFactoryProvider
     const verifyFn = verifierPassed ?? this.verifier;
     if (options?.passReqToCallback) {
       return new ClientPasswordStrategy.Strategy(
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           clientId: string,
           clientSecret: string | undefined,
           cb: (err: Error | null, client?: IAuthClient | null) => void,
           req: Request | undefined,
-        ) => {
-          //NOSONAR
+        ) => { //NOSONAR
           try {
             const client = await verifyFn(clientId, clientSecret, req);
             this.clientPasswordVerifierHelper(client, clientSecret);
@@ -67,13 +67,11 @@ export class ClientPasswordStrategyFactoryProvider
       );
     } else {
       return new ClientPasswordStrategy.Strategy(
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           clientId: string,
           clientSecret: string | undefined,
           cb: (err: Error | null, client?: IAuthClient | null) => void,
-        ) => {
-          //NOSONAR
+        ) => { //NOSONAR
           try {
             const client = await verifyFn(clientId, clientSecret);
             this.clientPasswordVerifierHelper(client, clientSecret);
@@ -85,5 +83,5 @@ export class ClientPasswordStrategyFactoryProvider
       );
     }
   }
-  // sonarignore:end
+  //prettier-ignore-end
 }
