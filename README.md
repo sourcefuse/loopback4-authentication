@@ -1022,7 +1022,7 @@ For accessing the authenticated AuthUser model reference, you can inject the CUR
 
 ### Google Oauth 2
 
-In order to use it, run `npm install passport-google-oauth20` or `npm install @types/passport-google-oauth20`.
+In order to use it, run `npm install passport-google-oauth20` and `npm install @types/passport-google-oauth20`.
 First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
 
 ```ts
