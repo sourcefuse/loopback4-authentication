@@ -1,13 +1,13 @@
 // SONAR-IGNORE-ALL
-import { inject, Provider } from '@loopback/core';
-import { HttpErrors, Request } from '@loopback/rest';
+import {inject, Provider} from '@loopback/core';
+import {HttpErrors, Request} from '@loopback/rest';
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import * as ClientPasswordStrategy from './client-password-strategy';
 
-import { AuthErrorKeys } from '../../../error-keys';
-import { IAuthClient } from '../../../types';
-import { Strategies } from '../../keys';
-import { VerifyFunction } from '../../types';
+import {AuthErrorKeys} from '../../../error-keys';
+import {IAuthClient} from '../../../types';
+import {Strategies} from '../../keys';
+import {VerifyFunction} from '../../types';
 
 export interface ClientPasswordStrategyFactory {
   (
@@ -22,7 +22,7 @@ export class ClientPasswordStrategyFactoryProvider
   constructor(
     @inject(Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER)
     private readonly verifier: VerifyFunction.OauthClientPasswordFn,
-  ) { }
+  ) {}
 
   value(): ClientPasswordStrategyFactory {
     return (options, verifier) =>
@@ -53,7 +53,8 @@ export class ClientPasswordStrategyFactoryProvider
           clientSecret: string | undefined,
           cb: (err: Error | null, client?: IAuthClient | null) => void,
           req: Request | undefined,
-        ) => {//NOSONAR
+        ) => {
+          //NOSONAR
           try {
             const client = await verifyFn(clientId, clientSecret, req);
             this.clientPasswordVerifierHelper(client, clientSecret);
@@ -71,7 +72,8 @@ export class ClientPasswordStrategyFactoryProvider
           clientId: string,
           clientSecret: string | undefined,
           cb: (err: Error | null, client?: IAuthClient | null) => void,
-        ) => {//NOSONAR
+        ) => {
+          //NOSONAR
           try {
             const client = await verifyFn(clientId, clientSecret);
             this.clientPasswordVerifierHelper(client, clientSecret);

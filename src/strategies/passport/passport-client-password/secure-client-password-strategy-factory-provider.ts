@@ -1,12 +1,13 @@
-import { inject, Provider } from '@loopback/core';
-import { HttpErrors, Request } from '@loopback/rest';
+/* eslint-disable @typescript-eslint/no-misused-promises */
+import {inject, Provider} from '@loopback/core';
+import {HttpErrors, Request} from '@loopback/rest';
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import * as ClientPasswordStrategy from './client-password-strategy';
 
-import { AuthErrorKeys } from '../../../error-keys';
-import { ClientType, IAuthSecureClient } from '../../../types';
-import { Strategies } from '../../keys';
-import { VerifyFunction } from '../../types';
+import {AuthErrorKeys} from '../../../error-keys';
+import {ClientType, IAuthSecureClient} from '../../../types';
+import {Strategies} from '../../keys';
+import {VerifyFunction} from '../../types';
 
 export interface SecureClientPasswordStrategyFactory {
   (
@@ -21,7 +22,7 @@ export class SecureClientPasswordStrategyFactoryProvider
   constructor(
     @inject(Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER)
     private readonly verifier: VerifyFunction.OauthSecureClientPasswordFn,
-  ) { }
+  ) {}
 
   value(): SecureClientPasswordStrategyFactory {
     return (options, verifier) =>
@@ -42,7 +43,8 @@ export class SecureClientPasswordStrategyFactoryProvider
       // do nothing
     }
   }
-
+  //prettier-ignore-start
+  // prettier-ignore
   getSecureClientPasswordVerifier(
     options?: ClientPasswordStrategy.StrategyOptionsWithRequestInterface,
     verifierPassed?: VerifyFunction.OauthSecureClientPasswordFn,
@@ -50,7 +52,6 @@ export class SecureClientPasswordStrategyFactoryProvider
     const verifyFn = verifierPassed ?? this.verifier;
     if (options?.passReqToCallback) {
       return new ClientPasswordStrategy.Strategy(
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           clientId: string,
           clientSecret: string | undefined,
@@ -70,12 +71,10 @@ export class SecureClientPasswordStrategyFactoryProvider
       );
     } else {
       return new ClientPasswordStrategy.Strategy(
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           clientId: string,
           clientSecret: string | undefined,
           cb: (err: Error | null, client?: IAuthSecureClient | null) => void,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ) => {// NOSONAR
           try {
             const client = await verifyFn(clientId, clientSecret);
@@ -90,4 +89,5 @@ export class SecureClientPasswordStrategyFactoryProvider
       );
     }
   }
+  //prettier-ignore-end
 }
