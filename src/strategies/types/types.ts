@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import {Request} from '@loopback/rest';
 import * as GoogleStrategy from 'passport-google-oauth20';
 import * as AzureADStrategy from 'passport-azure-ad';

@@ -1,5 +1,6 @@
 import {inject, Provider} from '@loopback/core';
 import {HttpErrors, Request} from '@loopback/rest';
+// eslint-disable-next-line @typescript-eslint/naming-convention
 import * as PassportLocal from 'passport-local';
 
 import {AuthErrorKeys} from '../../../error-keys';

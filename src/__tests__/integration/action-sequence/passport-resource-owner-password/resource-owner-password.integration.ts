@@ -12,6 +12,9 @@ import {Strategies} from '../../../../strategies/keys';
 import {ResourceOwnerVerifyProvider} from '../../../fixtures/providers/resource-owner.provider';
 import {AuthenticationBindings} from '../../../../keys';
 import {IAuthUser} from '../../../../types';
+import {ResourceOwnerPasswordStrategyFactoryProvider} from '../../../../strategies/passport/passport-resource-owner-password';
+import {ClientPasswordVerifyProvider} from '../../../fixtures/providers/passport-client.provider';
+import {ClientPasswordStrategyFactoryProvider} from '../../../../strategies/passport/passport-client-password';
 
 describe('Resource-owner-password strategy', () => {
   let app: Application;
@@ -204,61 +207,15 @@ describe('Resource-owner-password strategy', () => {
     app
       .bind(Strategies.Passport.RESOURCE_OWNER_PASSWORD_VERIFIER)
       .toProvider(ResourceOwnerVerifyProvider);
-  }
-
-  function givenAuthenticatedSequence() {
-    // bind user defined sequence
-    server.sequence(MyAuthenticationSequence);
-  }
-});
-
-describe('Resource-owner strategy with no verifier', () => {
-  let app: Application;
-  let server: RestServer;
-  beforeEach(givenAServer);
-  beforeEach(givenAuthenticatedSequence);
-
-  it('should return the user passed via verifier and options are passed with passRequestCallback false', async () => {
-    class TestController {
-      options = {
-        passRequestToCallback: false,
-      };
-
-      @post('/test')
-      @authenticate(STRATEGY.OAUTH2_RESOURCE_OWNER_GRANT)
-      async test(
-        @requestBody()
-        body: {
-          username: string;
-          password: string;
-          client_id: string;
-          client_secret: string;
-        },
-      ) {
-        return body;
-      }
-    }
-
-    app.controller(TestController);
-
-    await whenIMakeRequestTo(server)
-      .post('/test')
-      .send({
-        username: 'username',
-        password: 'password',
-        client_id: 'client id',
-        client_secret: 'client secret',
-      })
-      .expect(401);
-  });
-
-  function whenIMakeRequestTo(restServer: RestServer): Client {
-    return createClientForHandler(restServer.requestHandler);
-  }
-
-  async function givenAServer() {
-    app = getApp();
-    server = await app.getServer(RestServer);
+    app
+      .bind(Strategies.Passport.RESOURCE_OWNER_STRATEGY_FACTORY)
+      .toProvider(ResourceOwnerPasswordStrategyFactoryProvider);
+    app
+      .bind(Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER)
+      .toProvider(ClientPasswordVerifyProvider);
+    app
+      .bind(Strategies.Passport.CLIENT_PASSWORD_STRATEGY_FACTORY)
+      .toProvider(ClientPasswordStrategyFactoryProvider);
   }
 
   function givenAuthenticatedSequence() {

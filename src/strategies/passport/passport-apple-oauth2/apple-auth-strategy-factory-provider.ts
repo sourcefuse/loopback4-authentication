@@ -8,11 +8,11 @@ import {
   VerifyCallback,
   DecodedIdToken,
 } from 'passport-apple';
-
 import {AuthErrorKeys} from '../../../error-keys';
 import {Strategies} from '../../keys';
-import {VerifyFunction} from '../../types';
 
+import {VerifyFunction} from '../../types';
+// eslint-disable-next-line @typescript-eslint/naming-convention
 import Strategy from 'passport-apple';
 export interface AppleAuthStrategyFactory {
   (

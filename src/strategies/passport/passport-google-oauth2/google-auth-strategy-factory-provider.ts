@@ -13,10 +13,9 @@ import {AuthErrorKeys} from '../../../error-keys';
 import {Strategies} from '../../keys';
 import {VerifyFunction} from '../../types';
 
-//import * as GoogleStrategy from 'passport-google-oauth20';
 export interface GoogleAuthStrategyFactory {
   (
-    options: StrategyOptions | StrategyOptionsWithRequest,
+    options?: StrategyOptions | StrategyOptionsWithRequest,
     verifierPassed?: VerifyFunction.GoogleAuthFn,
   ): Strategy;
 }
@@ -31,7 +30,7 @@ export class GoogleAuthStrategyFactoryProvider
 
   value(): GoogleAuthStrategyFactory {
     return (options, verifier) =>
-      this.getGoogleAuthStrategyVerifier(options, verifier);
+      this.getGoogleAuthStrategyVerifier(options as StrategyOptions, verifier);
   }
 
   getGoogleAuthStrategyVerifier(

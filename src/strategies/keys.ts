@@ -3,15 +3,16 @@ import {LocalPasswordStrategyFactory} from './passport/passport-local';
 import {BearerStrategyFactory} from './passport/passport-bearer';
 import {ResourceOwnerPasswordStrategyFactory} from './passport/passport-resource-owner-password';
 import {ClientPasswordStrategyFactory} from './passport/passport-client-password/client-password-strategy-factory-provider';
-import {GoogleAuthStrategyFactoryProvider} from './passport/passport-google-oauth2';
-import {KeycloakStrategyFactoryProvider} from './passport/passport-keycloak';
-import {AzureADAuthStrategyFactoryProvider} from './passport/passport-azure-ad';
+import {GoogleAuthStrategyFactory} from './passport/passport-google-oauth2';
+import {KeycloakStrategyFactory} from './passport/passport-keycloak';
+import {AzureADAuthStrategyFactory} from './passport/passport-azure-ad';
 import {VerifyFunction} from './types';
-import {InstagramAuthStrategyFactoryProvider} from './passport';
-import {AppleAuthStrategyFactoryProvider} from './passport/passport-apple-oauth2';
-import {FacebookAuthStrategyFactoryProvider} from './passport/passport-facebook-oauth2';
-import {CognitoStrategyFactoryProvider} from './passport/passport-cognito-oauth2';
-import {SamlStrategyFactoryProvider} from './SAML';
+import {InstagramAuthStrategyFactory} from './passport/passport-insta-oauth2';
+import {PassportOtpStrategyFactory} from './passport/passport-otp';
+import {AppleAuthStrategyFactory} from './passport/passport-apple-oauth2';
+import {FacebookAuthStrategyFactory} from './passport/passport-facebook-oauth2';
+import {CognitoAuthStrategyFactory} from './passport/passport-cognito-oauth2';
+import {SamlStrategyFactory} from './SAML';
 
 export namespace Strategies {
   export namespace Passport {
@@ -27,13 +28,12 @@ export namespace Strategies {
 
     // Passport-local-with-otp startegy
     export const OTP_AUTH_STRATEGY_FACTORY =
-      BindingKey.create<LocalPasswordStrategyFactory>(
+      BindingKey.create<PassportOtpStrategyFactory>(
         'sf.passport.strategyFactory.otpAuth',
       );
-    export const OTP_VERIFIER =
-      BindingKey.create<VerifyFunction.LocalPasswordFn>(
-        'sf.passport.verifier.otpAuth',
-      );
+    export const OTP_VERIFIER = BindingKey.create<VerifyFunction.OtpAuthFn>(
+      'sf.passport.verifier.otpAuth',
+    );
 
     // Passport-oauth2-client-password strategy
     export const CLIENT_PASSWORD_STRATEGY_FACTORY =
@@ -67,7 +67,7 @@ export namespace Strategies {
 
     // Passport-google-oauth2 strategy
     export const GOOGLE_OAUTH2_STRATEGY_FACTORY =
-      BindingKey.create<GoogleAuthStrategyFactoryProvider>(
+      BindingKey.create<GoogleAuthStrategyFactory>(
         'sf.passport.strategyFactory.googleOauth2',
       );
     export const GOOGLE_OAUTH2_VERIFIER =
@@ -76,7 +76,7 @@ export namespace Strategies {
       );
 
     export const AZURE_AD_STRATEGY_FACTORY =
-      BindingKey.create<AzureADAuthStrategyFactoryProvider>(
+      BindingKey.create<AzureADAuthStrategyFactory>(
         'sf.passport.strategyFactory.azureAd',
       );
     export const AZURE_AD_VERIFIER =
@@ -86,7 +86,7 @@ export namespace Strategies {
 
     // Passport-keycloak strategy
     export const KEYCLOAK_STRATEGY_FACTORY =
-      BindingKey.create<KeycloakStrategyFactoryProvider>(
+      BindingKey.create<KeycloakStrategyFactory>(
         'sf.passport.strategyFactory.keycloak',
       );
     export const KEYCLOAK_VERIFIER =
@@ -96,7 +96,7 @@ export namespace Strategies {
 
     // Passport-instagram startegy
     export const INSTAGRAM_OAUTH2_STRATEGY_FACTORY =
-      BindingKey.create<InstagramAuthStrategyFactoryProvider>(
+      BindingKey.create<InstagramAuthStrategyFactory>(
         'sf.passport.strategyFactory.instagramOauth2',
       );
     export const INSTAGRAM_OAUTH2_VERIFIER =
@@ -106,7 +106,7 @@ export namespace Strategies {
 
     // Passport-facebook startegy
     export const FACEBOOK_OAUTH2_STRATEGY_FACTORY =
-      BindingKey.create<FacebookAuthStrategyFactoryProvider>(
+      BindingKey.create<FacebookAuthStrategyFactory>(
         'sf.passport.strategyFactory.facebookOauth2',
       );
     export const FACEBOOK_OAUTH2_VERIFIER =
@@ -116,7 +116,7 @@ export namespace Strategies {
 
     // Passport-apple-oauth2 strategy
     export const APPLE_OAUTH2_STRATEGY_FACTORY =
-      BindingKey.create<AppleAuthStrategyFactoryProvider>(
+      BindingKey.create<AppleAuthStrategyFactory>(
         'sf.passport.strategyFactory.appleOauth2',
       );
     export const APPLE_OAUTH2_VERIFIER =
@@ -126,7 +126,7 @@ export namespace Strategies {
 
     // Passport-cognito-oauth2 strategy
     export const COGNITO_OAUTH2_STRATEGY_FACTORY =
-      BindingKey.create<CognitoStrategyFactoryProvider>(
+      BindingKey.create<CognitoAuthStrategyFactory>(
         'sf.passport.strategyFactory.cognitoOauth2',
       );
     export const COGNITO_OAUTH2_VERIFIER =
@@ -134,10 +134,9 @@ export namespace Strategies {
         'sf.passport.verifier.cognitoOauth2',
       );
     // SAML strategy
-    export const SAML_STRATEGY_FACTORY =
-      BindingKey.create<SamlStrategyFactoryProvider>(
-        'sf.passport.strategyFactory.saml',
-      );
+    export const SAML_STRATEGY_FACTORY = BindingKey.create<SamlStrategyFactory>(
+      'sf.passport.strategyFactory.saml',
+    );
     export const SAML_VERIFIER = BindingKey.create<VerifyFunction.SamlFn>(
       'sf.passport.verifier.saml',
     );

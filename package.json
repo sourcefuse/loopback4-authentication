@@ -8,7 +8,106 @@
     "loopback-next",
     "authentication"
   ],
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./passport-apple-oauth2": {
+      "type": "./dist/strategies/passport/passport-apple-oauth2/index.d.ts",
+      "default": "./dist/strategies/passport/passport-apple-oauth2/index.js"
+    },
+    "./passport-azure-ad": {
+      "type": "./dist/strategies/passport/passport-azure-ad/index.d.ts",
+      "default": "./dist/strategies/passport/passport-azure-ad/index.js"
+    },
+    "./passport-bearer": {
+      "type": "./dist/strategies/passport/passport-bearer/index.d.ts",
+      "default": "./dist/strategies/passport/passport-bearer/index.js"
+    },
+    "./passport-client-password": {
+      "type": "./dist/strategies/passport/passport-client-password/index.d.ts",
+      "default": "./dist/strategies/passport/passport-client-password/index.js"
+    },
+    "./passport-cognito-oauth2": {
+      "type": "./dist/strategies/passport/passport-cognito-oauth2/index.d.ts",
+      "default": "./dist/strategies/passport/passport-cognito-oauth2/index.js"
+    },
+    "./passport-facebook-oauth2": {
+      "type": "./dist/strategies/passport/passport-facebook-oauth2/index.d.ts",
+      "default": "./dist/strategies/passport/passport-facebook-oauth2/index.js"
+    },
+    "./passport-google-oauth2": {
+      "type": "./dist/strategies/passport/passport-google-oauth2/index.d.ts",
+      "default": "./dist/strategies/passport/passport-google-oauth2/index.js"
+    },
+    "./passport-insta-oauth2": {
+      "type": "./dist/strategies/passport/passport-insta-oauth2/index.d.ts",
+      "default": "./dist/strategies/passport/passport-insta-oauth2/index.js"
+    },
+    "./passport-keycloak": {
+      "type": "./dist/strategies/passport/passport-keycloak/index.d.ts",
+      "default": "./dist/strategies/passport/passport-keycloak/index.js"
+    },
+    "./passport-local": {
+      "type": "./dist/strategies/passport/passport-local/index.d.ts",
+      "default": "./dist/strategies/passport/passport-local/index.js"
+    },
+    "./passport-otp": {
+      "type": "./dist/strategies/passport/passport-otp/index.d.ts",
+      "default": "./dist/strategies/passport/passport-otp/index.js"
+    },
+    "./passport-resource-owner-password": {
+      "type": "./dist/strategies/passport/passport-resource-owner-password/index.d.ts",
+      "default": "./dist/strategies/passport/passport-resource-owner-password/index.js"
+    },
+    "./SAML": {
+      "type": "./dist/strategies/SAML/index.d.ts",
+      "default": "./dist/strategies/SAML/index.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "passport-apple-oauth2": [
+        "./dist/strategies/passport/passport-apple-oauth2/index.d.ts"
+      ],
+      "passport-azure-ad": [
+        "./dist/strategies/passport/passport-azure-ad/index.d.ts"
+      ],
+      "passport-bearer": [
+        "./dist/strategies/passport/passport-bearer/index.d.ts"
+      ],
+      "passport-client-password": [
+        "./dist/strategies/passport/passport-client-password/index.d.ts"
+      ],
+      "passport-cognito-oauth2": [
+        "./dist/strategies/passport/passport-cognito-oauth2/index.d.ts"
+      ],
+      "passport-facebook-oauth2": [
+        "./dist/strategies/passport/passport-facebook-oauth2/index.d.ts"
+      ],
+      "passport-google-oauth2": [
+        "./dist/strategies/passport/passport-google-oauth2/index.d.ts"
+      ],
+      "passport-insta-oauth2": [
+        "./dist/strategies/passport/passport-insta-oauth2/index.d.ts"
+      ],
+      "passport-keycloak": [
+        "./dist/strategies/passport/passport-keycloak/index.d.ts"
+      ],
+      "passport-local": [
+        "./dist/strategies/passport/passport-local/index.d.ts"
+      ],
+      "passport-otp": [
+        "./dist/strategies/passport/passport-otp/index.d.ts"
+      ],
+      "passport-resource-owner-password": [
+        "./dist/strategies/passport/passport-resource-owner-password/index.d.ts"
+      ],
+      "SAML": [
+        "./dist/strategies/SAML/index.d.ts"
+      ]
+    }
+  },
   "engines": {
     "node": ">=18"
   },
@@ -52,24 +151,12 @@
     "@loopback/rest": "13.1.0"
   },
   "dependencies": {
-    "@exlinc/keycloak-passport": "^1.0.2",
     "@loopback/context": "^6.1.3",
     "@loopback/core": "^5.1.3",
-    "@node-saml/passport-saml": "^4.0.4",
     "ajv": "^8.11.0",
     "https-proxy-agent": "^5.0.0",
     "jsonwebtoken": "^9.0.0",
     "passport": "^0.6.0",
-    "passport-apple": "file:vendor/passport-apple",
-    "passport-azure-ad": "^4.3.4",
-    "passport-cognito-oauth2": "^0.1.1",
-    "passport-facebook": "^3.0.0",
-    "passport-google-oauth20": "^2.0.0",
-    "passport-http-bearer": "^1.0.1",
-    "passport-instagram": "^1.0.0",
-    "passport-local": "^1.0.0",
-    "passport-oauth2": "^1.6.1",
-    "passport-oauth2-client-password": "^0.1.2",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
@@ -114,7 +201,19 @@
     "source-map-support": "^0.5.21",
     "ts-node": "^10.7.0",
     "tslint": "^6.1.3",
-    "typescript": "~5.2.2"
+    "typescript": "~5.2.2",
+    "@node-saml/passport-saml": "^4.0.4",
+    "passport-apple": "file:vendor/passport-apple",
+    "passport-azure-ad": "^4.3.4",
+    "passport-cognito-oauth2": "^0.1.1",
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-http-bearer": "^1.0.1",
+    "passport-instagram": "^1.0.0",
+    "passport-local": "^1.0.0",
+    "passport-oauth2": "^1.6.1",
+    "passport-oauth2-client-password": "^0.1.2",
+    "@exlinc/keycloak-passport": "^1.0.2"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"

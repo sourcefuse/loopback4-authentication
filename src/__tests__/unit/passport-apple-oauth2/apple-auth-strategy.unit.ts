@@ -3,7 +3,7 @@ import {expect} from '@loopback/testlab';
 import {
   AppleAuthStrategyFactory,
   AppleAuthStrategyFactoryProvider,
-} from '../../../strategies';
+} from '../../../strategies/passport/passport-apple-oauth2';
 import AppleStrategy, {
   AuthenticateOptions,
   AuthenticateOptionsWithRequest,

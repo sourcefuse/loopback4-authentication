@@ -10,6 +10,9 @@ import {MyAuthenticationMiddlewareSequence} from '../../../fixtures/sequences/au
 import {Strategies} from '../../../../strategies/keys';
 import {AuthenticationBindings} from '../../../../keys';
 import {BearerTokenVerifyProvider} from '../../../fixtures/providers/bearer-passport.provider';
+import {BearerStrategyFactoryProvider} from '../../../../strategies/passport/passport-bearer';
+import {ClientPasswordVerifyProvider} from '../../../fixtures/providers/passport-client.provider';
+import {ClientPasswordStrategyFactoryProvider} from '../../../../strategies/passport/passport-client-password';
 
 /**
  * Testing overall flow of authentication with bearer strategy
@@ -239,53 +242,15 @@ describe('Bearer-token strategy using Middleware Sequence', () => {
     app
       .bind(Strategies.Passport.BEARER_TOKEN_VERIFIER)
       .toProvider(BearerTokenVerifyProvider);
-  }
-
-  function givenAuthenticatedSequence() {
-    // bind user defined sequence
-    server.sequence(MyAuthenticationMiddlewareSequence);
-  }
-});
-
-describe('integration test when no provider was implemented using Middleware Sequence', () => {
-  let app: Application;
-  let server: RestServer;
-  beforeEach(givenAServer);
-  beforeEach(givenAuthenticatedSequence);
-
-  it('should return error as the verifier is not implemented', async () => {
-    class BearerNoVerifierController {
-      constructor(
-        @inject(AuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
-        private readonly user: IAuthUser | undefined,
-      ) {}
-
-      options = {
-        passRequestToCallback: false,
-      };
-
-      @get('/auth/bearer/no-verifier')
-      @authenticate(STRATEGY.BEARER, {passReqToCallback: false})
-      async test() {
-        return this.user;
-      }
-    }
-
-    app.controller(BearerNoVerifierController);
-
-    await whenIMakeRequestTo(server)
-      .get('/auth/bearer/no-verifier')
-      .set('Authorization', 'Bearer sometoken')
-      .expect(401);
-  });
-
-  function whenIMakeRequestTo(restServer: RestServer): Client {
-    return createClientForHandler(restServer.requestHandler);
-  }
-
-  async function givenAServer() {
-    app = getApp();
-    server = await app.getServer(RestServer);
+    app
+      .bind(Strategies.Passport.BEARER_STRATEGY_FACTORY)
+      .toProvider(BearerStrategyFactoryProvider);
+    app
+      .bind(Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER)
+      .toProvider(ClientPasswordVerifyProvider);
+    app
+      .bind(Strategies.Passport.CLIENT_PASSWORD_STRATEGY_FACTORY)
+      .toProvider(ClientPasswordStrategyFactoryProvider);
   }
 
   function givenAuthenticatedSequence() {

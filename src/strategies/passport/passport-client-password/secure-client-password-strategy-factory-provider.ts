@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import {inject, Provider} from '@loopback/core';
 import {HttpErrors, Request} from '@loopback/rest';
+// eslint-disable-next-line @typescript-eslint/naming-convention
 import * as ClientPasswordStrategy from './client-password-strategy';
 
 import {AuthErrorKeys} from '../../../error-keys';
@@ -41,7 +43,8 @@ export class SecureClientPasswordStrategyFactoryProvider
       // do nothing
     }
   }
-
+  //prettier-ignore-start
+  // prettier-ignore
   getSecureClientPasswordVerifier(
     options?: ClientPasswordStrategy.StrategyOptionsWithRequestInterface,
     verifierPassed?: VerifyFunction.OauthSecureClientPasswordFn,
@@ -49,13 +52,12 @@ export class SecureClientPasswordStrategyFactoryProvider
     const verifyFn = verifierPassed ?? this.verifier;
     if (options?.passReqToCallback) {
       return new ClientPasswordStrategy.Strategy(
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           clientId: string,
           clientSecret: string | undefined,
           cb: (err: Error | null, client?: IAuthSecureClient | null) => void,
           req: Request | undefined,
-        ) => {
+        ) => { //NOSONAR
           try {
             const client = await verifyFn(clientId, clientSecret, req);
             this.secureClientPasswordVerifierHelper(client, clientSecret);
@@ -69,12 +71,11 @@ export class SecureClientPasswordStrategyFactoryProvider
       );
     } else {
       return new ClientPasswordStrategy.Strategy(
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           clientId: string,
           clientSecret: string | undefined,
           cb: (err: Error | null, client?: IAuthSecureClient | null) => void,
-        ) => {
+        ) => {// NOSONAR
           try {
             const client = await verifyFn(clientId, clientSecret);
 
@@ -88,4 +89,5 @@ export class SecureClientPasswordStrategyFactoryProvider
       );
     }
   }
+  //prettier-ignore-end
 }

@@ -4,7 +4,7 @@ import {
   ResourceOwnerPasswordStrategyFactoryProvider,
   ResourceOwnerPasswordStrategyFactory,
   Oauth2ResourceOwnerPassword,
-} from '../../../strategies';
+} from '../../../strategies/passport/passport-resource-owner-password';
 import {Request} from '@loopback/rest';
 
 describe('getting resource-owner strategy with options', () => {

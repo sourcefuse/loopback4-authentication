@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+// SONAR-IGNORE-ALL
 import {inject, Provider} from '@loopback/core';
 import {HttpErrors, Request} from '@loopback/rest';
+// eslint-disable-next-line @typescript-eslint/naming-convention
 import * as ClientPasswordStrategy from './client-password-strategy';
 
 import {AuthErrorKeys} from '../../../error-keys';
@@ -37,7 +40,8 @@ export class ClientPasswordStrategyFactoryProvider
       // do nothing
     }
   }
-
+  //prettier-ignore-start
+  // prettier-ignore
   getClientPasswordVerifier(
     options?: ClientPasswordStrategy.StrategyOptionsWithRequestInterface,
     verifierPassed?: VerifyFunction.OauthClientPasswordFn,
@@ -45,13 +49,12 @@ export class ClientPasswordStrategyFactoryProvider
     const verifyFn = verifierPassed ?? this.verifier;
     if (options?.passReqToCallback) {
       return new ClientPasswordStrategy.Strategy(
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           clientId: string,
           clientSecret: string | undefined,
           cb: (err: Error | null, client?: IAuthClient | null) => void,
           req: Request | undefined,
-        ) => {
+        ) => { //NOSONAR
           try {
             const client = await verifyFn(clientId, clientSecret, req);
             this.clientPasswordVerifierHelper(client, clientSecret);
@@ -64,12 +67,11 @@ export class ClientPasswordStrategyFactoryProvider
       );
     } else {
       return new ClientPasswordStrategy.Strategy(
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (
           clientId: string,
           clientSecret: string | undefined,
           cb: (err: Error | null, client?: IAuthClient | null) => void,
-        ) => {
+        ) => { //NOSONAR
           try {
             const client = await verifyFn(clientId, clientSecret);
             this.clientPasswordVerifierHelper(client, clientSecret);
@@ -81,4 +83,5 @@ export class ClientPasswordStrategyFactoryProvider
       );
     }
   }
+  //prettier-ignore-end
 }

@@ -3,7 +3,7 @@ import {expect} from '@loopback/testlab';
 import {
   LocalPasswordStrategyFactoryProvider,
   LocalPasswordStrategyFactory,
-} from '../../../strategies';
+} from '../../../strategies/passport/passport-local';
 import {Request} from '@loopback/rest';
 import * as PassportLocal from 'passport-local';
 
