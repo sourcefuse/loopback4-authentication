@@ -40,7 +40,7 @@ export class AppleAuthStrategyFactoryProvider
   ): Strategy {
     const verifyFn = verifierPassed ?? this.verifierAppleAuth;
     let strategy;
-    if (options && options.passReqToCallback === true) {
+    if (options?.passReqToCallback === true) {
       strategy = new Strategy(
         options,
 

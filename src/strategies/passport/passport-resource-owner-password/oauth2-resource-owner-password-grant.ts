@@ -7,34 +7,30 @@ export namespace Oauth2ResourceOwnerPassword {
     passReqToCallback: boolean;
   }
 
-  export interface VerifyFunctionWithRequest {
-    (
-      req: Request,
-      clientId: string,
-      clientSecret: string,
-      username: string,
-      password: string,
-      done: (
-        error: Error | null,
-        client?: IAuthClient | false,
-        info?: IAuthUser | false,
-      ) => void,
-    ): void;
-  }
+  export type VerifyFunctionWithRequest = (
+    req: Request,
+    clientId: string,
+    clientSecret: string,
+    username: string,
+    password: string,
+    done: (
+      error: Error | null,
+      client?: IAuthClient | false,
+      info?: IAuthUser | false,
+    ) => void,
+  ) => void;
 
-  export interface VerifyFunction {
-    (
-      clientId: string,
-      clientSecret: string,
-      username: string,
-      password: string,
-      done: (
-        error: Error | null,
-        client?: IAuthClient | false,
-        info?: IAuthUser | false,
-      ) => void,
-    ): void;
-  }
+  export type VerifyFunction = (
+    clientId: string,
+    clientSecret: string,
+    username: string,
+    password: string,
+    done: (
+      error: Error | null,
+      client?: IAuthClient | false,
+      info?: IAuthUser | false,
+    ) => void,
+  ) => void;
 
   export class Strategy extends passport.Strategy {
     constructor(verify: VerifyFunction);
@@ -65,8 +61,6 @@ export namespace Oauth2ResourceOwnerPassword {
 
     authenticate(req: Request, options?: {}): void {
       if (
-        /* eslint-disable @typescript-eslint/prefer-optional-chain */
-        !req.body ||
         !req.body?.['client_id'] ||
         !req.body?.['username'] ||
         !req.body?.['password']

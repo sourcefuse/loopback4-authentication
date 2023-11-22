@@ -33,73 +33,71 @@ export class ResourceOwnerPasswordStrategyFactoryProvider
     verifierPassed?: VerifyFunction.ResourceOwnerPasswordFn,
   ): Oauth2ResourceOwnerPassword.Strategy {
     const verifyFn = verifierPassed ?? this.verifierResourceOwner;
+
     if (options?.passReqToCallback) {
       return new Oauth2ResourceOwnerPassword.Strategy(
         options,
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        async (
-          req: Request,
-          clientId: string,
-          clientSecret: string,
-          username: string,
-          password: string,
-          cb: (
-            err: Error | null,
-            client?: IAuthClient | false,
-            user?: IAuthUser | false,
-          ) => void,
-        ) => {
-          try {
-            const userInfo = await verifyFn(
-              clientId,
-              clientSecret,
-              username,
-              password,
-              req,
-            );
-            if (!userInfo || isEmpty(userInfo)) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.InvalidCredentials,
-              );
-            }
-            cb(null, userInfo.client, userInfo.user);
-          } catch (err) {
-            cb(err);
-          }
-        },
+        this.getResourceOwnerStrategyWithRequest(verifyFn),
       );
     } else {
       return new Oauth2ResourceOwnerPassword.Strategy(
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        async (
-          clientId: string,
-          clientSecret: string,
-          username: string,
-          password: string,
-          cb: (
-            err: Error | null,
-            client?: IAuthClient | false,
-            user?: IAuthUser | false,
-          ) => void,
-        ) => {
-          try {
-            const userInfo = await verifyFn(
-              clientId,
-              clientSecret,
-              username,
-              password,
-            );
-            if (!userInfo || isEmpty(userInfo)) {
-              throw new HttpErrors.Unauthorized(
-                AuthErrorKeys.InvalidCredentials,
-              );
-            }
-            cb(null, userInfo.client, userInfo.user);
-          } catch (err) {
-            cb(err);
-          }
-        },
+        this.getResourceOwnerStrategyWithoutRequest(verifyFn),
       );
     }
+  }
+
+  getResourceOwnerStrategyWithRequest(
+    verifyFn: VerifyFunction.ResourceOwnerPasswordFn,
+  ) {
+    return (
+      req: Request,
+      clientId: string,
+      clientSecret: string,
+      username: string,
+      password: string,
+      cb: (
+        err: Error | null,
+        client?: IAuthClient | false,
+        user?: IAuthUser | false,
+      ) => void,
+    ) => {
+      verifyFn(clientId, clientSecret, username, password, req)
+        .then(userInfo => {
+          if (!userInfo || isEmpty(userInfo)) {
+            throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
+          }
+          cb(null, userInfo.client, userInfo.user);
+        })
+        .catch(err => {
+          cb(err);
+        });
+    };
+  }
+
+  getResourceOwnerStrategyWithoutRequest(
+    verifyFn: VerifyFunction.ResourceOwnerPasswordFn,
+  ) {
+    return (
+      clientId: string,
+      clientSecret: string,
+      username: string,
+      password: string,
+      cb: (
+        err: Error | null,
+        client?: IAuthClient | false,
+        user?: IAuthUser | false,
+      ) => void,
+    ) => {
+      verifyFn(clientId, clientSecret, username, password)
+        .then(userInfo => {
+          if (!userInfo || isEmpty(userInfo)) {
+            throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
+          }
+          cb(null, userInfo.client, userInfo.user);
+        })
+        .catch(err => {
+          cb(err);
+        });
+    };
   }
 }

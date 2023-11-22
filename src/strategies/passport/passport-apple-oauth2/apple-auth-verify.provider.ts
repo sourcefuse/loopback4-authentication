@@ -10,8 +10,6 @@ import {VerifyFunction} from '../../types';
 export class AppleAuthVerifyProvider
   implements Provider<VerifyFunction.AppleAuthFn>
 {
-  constructor() {}
-
   value(): VerifyFunction.AppleAuthFn {
     return async (
       accessToken: string,

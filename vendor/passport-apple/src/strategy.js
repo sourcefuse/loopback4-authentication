@@ -77,7 +77,7 @@ function Strategy(options, verify) {
     // Generate the client_secret using the library
     _tokenGenerator
       .generate()
-      .then((client_secret) => {
+      .then(client_secret => {
         params = params || {};
         const codeParam =
           params.grant_type === 'refresh_token' ? 'refresh_token' : 'code';
@@ -107,7 +107,7 @@ function Strategy(options, verify) {
           },
         );
       })
-      .catch((error) => {
+      .catch(error => {
         callback(error);
       });
   };

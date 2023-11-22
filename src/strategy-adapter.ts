@@ -58,10 +58,10 @@ export class StrategyAdapter<T> {
       strategy.error = (error: string) => {
         reject(new HttpErrors.Unauthorized(error));
       };
-
+      const REDIRECT_URL = 302;
       strategy.redirect = (url: string) => {
         if (response) {
-          response.redirect(302, url);
+          response.redirect(REDIRECT_URL, url);
         }
         resolve();
       };

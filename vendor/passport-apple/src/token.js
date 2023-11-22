@@ -88,10 +88,10 @@ class AppleClientSecret {
         exp,
         this._config.key_id,
       )
-        .then((token) => {
+        .then(token => {
           resolve(token);
         })
-        .catch((err) => {
+        .catch(err => {
           reject(err);
         });
     });

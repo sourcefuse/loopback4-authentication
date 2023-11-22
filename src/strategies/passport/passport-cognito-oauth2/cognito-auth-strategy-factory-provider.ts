@@ -7,12 +7,10 @@ import {Cognito, VerifyFunction} from '../../types';
 
 const CognitoStrategy = require('passport-cognito-oauth2');
 
-export interface CognitoAuthStrategyFactory {
-  (
-    options: Cognito.StrategyOptions,
-    verifierPassed?: VerifyFunction.CognitoAuthFn,
-  ): typeof CognitoStrategy;
-}
+export type CognitoAuthStrategyFactory = (
+  options: Cognito.StrategyOptions,
+  verifierPassed?: VerifyFunction.CognitoAuthFn,
+) => typeof CognitoStrategy;
 
 export class CognitoStrategyFactoryProvider
   implements Provider<CognitoAuthStrategyFactory>
@@ -33,7 +31,7 @@ export class CognitoStrategyFactoryProvider
   ): typeof CognitoStrategy {
     const verifyFn = verifierPassed ?? this.verifierCognito;
     let strategy;
-    if (options && options.passReqToCallback === true) {
+    if (options?.passReqToCallback === true) {
       strategy = new CognitoStrategy(
         options,
 
@@ -100,6 +98,8 @@ export class CognitoStrategyFactoryProvider
     } else if (process.env['HTTPS_PROXY']) {
       httpsProxyAgent = new HttpsProxyAgent(process.env['HTTPS_PROXY']);
       strategy._oauth2.setAgent(httpsProxyAgent);
+    } else {
+      //this is intentional
     }
   }
 }
