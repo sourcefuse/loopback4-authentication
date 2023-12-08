@@ -4,6 +4,7 @@ metadata:
   name: loopback4-authentication
   annotations:
     github.com/project-slug: sourcefuse/loopback4-authentication
+    backstage.io/techdocs-ref: value
   namespace: arc
   description: A LoopBack 4 extension for authentication features. Oauth strategies supported.
   tags:
