@@ -1,8 +1,5 @@
 site_name: loopback4-authentication
 site_description: loopback4-authentication
 
-nav:
-  - Introduction: index.md
-
 plugins:
   - techdocs-core
