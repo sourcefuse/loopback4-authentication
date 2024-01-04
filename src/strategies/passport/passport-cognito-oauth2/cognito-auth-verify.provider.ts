@@ -10,8 +10,6 @@ import {Cognito, VerifyFunction} from '../../types';
 export class CognitoAuthVerifyProvider
   implements Provider<VerifyFunction.CognitoAuthFn>
 {
-  constructor() {}
-
   value(): VerifyFunction.CognitoAuthFn {
     return async (
       accessToken: string,

@@ -42,9 +42,10 @@ export interface AuthenticationMetadata<T = void> {
  * interface definition of a function which accepts a request
  * and returns an authenticated user
  */
-export interface AuthenticateFn<T> {
-  (request: Request, response?: Response): Promise<T>;
-}
+export type AuthenticateFn<T> = (
+  request: Request,
+  response?: Response,
+) => Promise<T>;
 
 export interface ClientAuthCode<T extends IAuthUser, ID = number> {
   clientId: string;

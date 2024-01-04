@@ -11,8 +11,6 @@ import {VerifyFunction} from '../../types';
 export class AzureADAuthVerifyProvider
   implements Provider<VerifyFunction.AzureADAuthFn>
 {
-  constructor() {}
-
   value(): VerifyFunction.AzureADAuthFn {
     return async (
       accessToken: string,

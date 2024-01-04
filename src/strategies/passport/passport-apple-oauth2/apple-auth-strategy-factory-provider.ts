@@ -1,25 +1,23 @@
 import {inject, Provider} from '@loopback/core';
+import {AnyObject} from '@loopback/repository';
 import {HttpErrors, Request} from '@loopback/rest';
 import {HttpsProxyAgent} from 'https-proxy-agent';
-import {
-  Profile,
+// eslint-disable-next-line @typescript-eslint/naming-convention
+import Strategy, {
   AuthenticateOptions,
   AuthenticateOptionsWithRequest,
-  VerifyCallback,
   DecodedIdToken,
+  Profile,
+  VerifyCallback,
 } from 'passport-apple';
 import {AuthErrorKeys} from '../../../error-keys';
 import {Strategies} from '../../keys';
-
 import {VerifyFunction} from '../../types';
-// eslint-disable-next-line @typescript-eslint/naming-convention
-import Strategy from 'passport-apple';
-export interface AppleAuthStrategyFactory {
-  (
-    options: AuthenticateOptions | AuthenticateOptionsWithRequest,
-    verifierPassed?: VerifyFunction.AppleAuthFn,
-  ): Strategy;
-}
+
+export type AppleAuthStrategyFactory = (
+  options: AuthenticateOptions | AuthenticateOptionsWithRequest,
+  verifierPassed?: VerifyFunction.AppleAuthFn,
+) => Strategy;
 
 export class AppleAuthStrategyFactoryProvider
   implements Provider<AppleAuthStrategyFactory>
@@ -109,8 +107,7 @@ export class AppleAuthStrategyFactoryProvider
     return strategy;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _setupProxy(strategy: any) {
+  private _setupProxy(strategy: AnyObject) {
     // Setup proxy if any
     let httpsProxyAgent;
     if (process.env['https_proxy']) {
@@ -119,6 +116,6 @@ export class AppleAuthStrategyFactoryProvider
     } else if (process.env['HTTPS_PROXY']) {
       httpsProxyAgent = new HttpsProxyAgent(process.env['HTTPS_PROXY']);
       strategy._oauth2.setAgent(httpsProxyAgent);
-    }
+    } else return;
   }
 }

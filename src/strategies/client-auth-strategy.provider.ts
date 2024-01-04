@@ -29,7 +29,9 @@ export class ClientAuthStrategyProvider
         this.clientMetadata.options as StrategyOptionsWithRequestInterface,
       );
     } else {
-      return Promise.reject(`The strategy ${name} is not available.`);
+      return Promise.reject(
+        new Error(`The strategy ${name} is not available.`),
+      );
     }
   }
 }

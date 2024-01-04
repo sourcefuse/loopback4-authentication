@@ -313,7 +313,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
         return this.processSamlFactory(verifier);
       }
       default:
-        return Promise.reject(`The strategy ${name} is not available.`);
+        return Promise.reject(
+          new Error(`The strategy ${name} is not available.`),
+        );
     }
   }
 }

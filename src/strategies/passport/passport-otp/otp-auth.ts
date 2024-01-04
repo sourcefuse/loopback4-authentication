@@ -1,11 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import {AnyObject} from '@loopback/repository';
+import {Request} from '@loopback/rest';
 import * as passport from 'passport';
 
 export namespace Otp {
   export type VerifyFunction = (
     key: string,
     otp: string,
-    done: (error: any, user?: any, info?: any) => void,
+    done: (
+      error?: string | Error | null,
+      user?: AnyObject,
+      info?: AnyObject,
+    ) => void,
   ) => void;
 
   export interface StrategyOptions {
@@ -15,8 +20,8 @@ export namespace Otp {
 
   export type VerifyCallback = (
     err?: string | Error | null,
-    user?: any,
-    info?: any,
+    user?: AnyObject,
+    info?: AnyObject,
   ) => void;
 
   export class Strategy extends passport.Strategy {
@@ -31,7 +36,7 @@ export namespace Otp {
     name: string;
     private readonly verify: VerifyFunction;
 
-    authenticate(req: any, options?: StrategyOptions): void {
+    authenticate(req: Request, options?: StrategyOptions): void {
       const key = req.body.key || options?.key;
       const otp = req.body.otp || options?.otp;
 
@@ -40,7 +45,11 @@ export namespace Otp {
         return;
       }
 
-      const verified = (err?: any, user?: any, _info?: any) => {
+      const verified = (
+        err?: string | Error | null,
+        user?: AnyObject,
+        _info?: AnyObject,
+      ) => {
         if (err) {
           this.error(err);
           return;

@@ -13,8 +13,6 @@ import {VerifyFunction} from '../../types';
 export class GoogleAuthVerifyProvider
   implements Provider<VerifyFunction.GoogleAuthFn>
 {
-  constructor() {}
-
   value(): VerifyFunction.GoogleAuthFn {
     return async (
       accessToken: string,
