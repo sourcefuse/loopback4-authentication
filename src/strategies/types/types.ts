@@ -1,21 +1,22 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import {AnyObject} from '@loopback/repository';
 import {Request} from '@loopback/rest';
-import * as GoogleStrategy from 'passport-google-oauth20';
-import * as AzureADStrategy from 'passport-azure-ad';
-import * as InstagramStrategy from 'passport-instagram';
-import * as FacebookStrategy from 'passport-facebook';
-import * as AppleStrategy from 'passport-apple';
 import * as SamlStrategy from '@node-saml/passport-saml';
+import * as AppleStrategy from 'passport-apple';
 import {DecodedIdToken} from 'passport-apple';
+import * as AzureADStrategy from 'passport-azure-ad';
+import * as FacebookStrategy from 'passport-facebook';
+import * as GoogleStrategy from 'passport-google-oauth20';
+import * as InstagramStrategy from 'passport-instagram';
 import {Cognito, IAuthClient, IAuthSecureClient, IAuthUser} from '../../types';
-import {Keycloak} from './keycloak.types';
 import {Otp} from '../passport';
+import {Keycloak} from './keycloak.types';
 
 export type VerifyCallback = (
   err?: string | Error | null,
   user?: Express.User,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  info?: any,
+
+  info?: AnyObject,
 ) => void;
 
 export namespace VerifyFunction {

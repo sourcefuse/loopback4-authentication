@@ -1,3 +1,6 @@
+import {AnyObject} from '@loopback/repository';
+import {IAuthUser} from '../../types';
+
 export namespace Keycloak {
   export interface StrategyOptions {
     host: string;
@@ -20,14 +23,14 @@ export namespace Keycloak {
     avatar: string;
     realm: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [key: string]: any;
+    [key: string]: any; // NOSONAR
   }
 
   export type VerifyCallback = (
     err?: string | Error,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    user?: any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    info?: any,
+
+    user?: IAuthUser,
+
+    info?: AnyObject,
   ) => void;
 }
