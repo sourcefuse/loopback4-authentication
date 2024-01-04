@@ -8,7 +8,7 @@ import {
   StrategyOptionsWithRequest,
   VerifyCallback,
 } from 'passport-google-oauth20';
-
+import {AnyObject} from '@loopback/repository';
 import {AuthErrorKeys} from '../../../error-keys';
 import {Strategies} from '../../keys';
 import {VerifyFunction} from '../../types';
@@ -97,8 +97,7 @@ export class GoogleAuthStrategyFactoryProvider
     return strategy;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _setupProxy(strategy: any) {
+  private _setupProxy(strategy: AnyObject) {
     // Setup proxy if any
     let httpsProxyAgent;
     if (process.env['https_proxy']) {

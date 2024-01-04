@@ -4,8 +4,6 @@ import {HttpErrors} from '@loopback/rest';
 import {VerifyFunction} from '../../types';
 
 export class OtpVerifyProvider implements Provider<VerifyFunction.OtpAuthFn> {
-  constructor() {}
-
   value(): VerifyFunction.OtpAuthFn {
     return async (_key: string, _otp: string) => {
       throw new HttpErrors.NotImplemented(

@@ -8,12 +8,10 @@ import {VerifyFunction} from '../../types';
 import {Oauth2ResourceOwnerPassword} from './oauth2-resource-owner-password-grant';
 import {isEmpty} from 'lodash';
 
-export interface ResourceOwnerPasswordStrategyFactory {
-  (
-    options?: Oauth2ResourceOwnerPassword.StrategyOptionsWithRequestInterface,
-    verifierPassed?: VerifyFunction.ResourceOwnerPasswordFn,
-  ): Oauth2ResourceOwnerPassword.Strategy;
-}
+export type ResourceOwnerPasswordStrategyFactory = (
+  options?: Oauth2ResourceOwnerPassword.StrategyOptionsWithRequestInterface,
+  verifierPassed?: VerifyFunction.ResourceOwnerPasswordFn,
+) => Oauth2ResourceOwnerPassword.Strategy;
 
 export class ResourceOwnerPasswordStrategyFactoryProvider
   implements Provider<ResourceOwnerPasswordStrategyFactory>

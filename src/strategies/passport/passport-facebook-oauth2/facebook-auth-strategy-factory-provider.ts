@@ -1,4 +1,5 @@
 import {inject, Provider} from '@loopback/core';
+import {AnyObject} from '@loopback/repository';
 import {HttpErrors, Request} from '@loopback/rest';
 import {HttpsProxyAgent} from 'https-proxy-agent';
 import {
@@ -7,7 +8,6 @@ import {
   StrategyOption,
   StrategyOptionWithRequest,
 } from 'passport-facebook';
-
 import {AuthErrorKeys} from '../../../error-keys';
 import {Strategies} from '../../keys';
 import {VerifyCallback, VerifyFunction} from '../../types';
@@ -99,8 +99,7 @@ export class FacebookAuthStrategyFactoryProvider
     return strategy;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _setupProxy(strategy: any) {
+  private _setupProxy(strategy: AnyObject) {
     // Setup proxy if any
     let httpsProxyAgent;
     if (process.env['https_proxy']) {

@@ -11,8 +11,6 @@ import {VerifyFunction} from '../../types';
 export class LocalPasswordVerifyProvider
   implements Provider<VerifyFunction.LocalPasswordFn>
 {
-  constructor() {}
-
   value(): VerifyFunction.LocalPasswordFn {
     return async (username: string, password: string) => {
       throw new HttpErrors.NotImplemented(

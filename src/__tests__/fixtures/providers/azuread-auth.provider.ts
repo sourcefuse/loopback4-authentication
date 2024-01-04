@@ -7,8 +7,6 @@ import {Request} from '@loopback/rest';
 export class BearerTokenVerifyProvider
   implements Provider<VerifyFunction.AzureADAuthFn>
 {
-  constructor() {}
-
   value(): VerifyFunction.AzureADAuthFn {
     return async (
       accessToken: string,

@@ -11,8 +11,6 @@ import {VerifyCallback, VerifyFunction} from '../../types';
 export class FacebookAuthVerifyProvider
   implements Provider<VerifyFunction.FacebookAuthFn>
 {
-  constructor() {}
-
   value(): VerifyFunction.FacebookAuthFn {
     return async (
       accessToken: string,

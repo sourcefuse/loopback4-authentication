@@ -11,8 +11,6 @@ import {VerifyFunction} from '../../types';
 export class BearerTokenVerifyProvider
   implements Provider<VerifyFunction.BearerFn>
 {
-  constructor() {}
-
   value(): VerifyFunction.BearerFn {
     return async (token: string) => {
       throw new HttpErrors.NotImplemented(

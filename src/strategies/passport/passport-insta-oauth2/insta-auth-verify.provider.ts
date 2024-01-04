@@ -11,8 +11,6 @@ import {VerifyCallback, VerifyFunction} from '../../types';
 export class InstagramAuthVerifyProvider
   implements Provider<VerifyFunction.InstagramAuthFn>
 {
-  constructor() {}
-
   value(): VerifyFunction.InstagramAuthFn {
     return async (
       accessToken: string,
