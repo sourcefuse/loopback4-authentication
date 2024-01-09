@@ -2,6 +2,7 @@
 // Node module: @loopback/authentication
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
+import {AnyObject} from '@loopback/repository';
 import {HttpErrors, Request, Response} from '@loopback/rest';
 import {Strategy} from 'passport';
 
@@ -37,8 +38,7 @@ export class StrategyAdapter<T> {
     return new Promise<T | void>((resolve, reject) => {
       // mix-in passport additions like req.logIn and req.logOut
       for (const key in passportRequestMixin) {
-        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-        (request as any)[key] = passportRequestMixin[key];
+        (request as AnyObject)[key] = passportRequestMixin[key];
       }
 
       // create a prototype chain of an instance of a passport strategy
