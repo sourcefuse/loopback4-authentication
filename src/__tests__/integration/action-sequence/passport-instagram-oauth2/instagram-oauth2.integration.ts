@@ -1,18 +1,16 @@
-import {Client, createClientForHandler} from '@loopback/testlab';
-import {RestServer, Request} from '@loopback/rest';
-import {Application, Constructor, Provider} from '@loopback/core';
+import {Application, Provider} from '@loopback/core';
 import {get} from '@loopback/openapi-v3';
-import {authenticate} from '../../../../decorators';
-import {STRATEGY} from '../../../../strategy-name.enum';
-import {getApp} from '../helpers/helpers';
-import {MyAuthenticationSequence} from '../../../fixtures/sequences/authentication.sequence';
-import {Strategies} from '../../../../strategies/keys';
-import {VerifyCallback, VerifyFunction} from '../../../../strategies';
-import {userWithoutReqObj} from '../../../fixtures/data/bearer-data';
+import {Request, RestServer} from '@loopback/rest';
+import {Client, createClientForHandler} from '@loopback/testlab';
 import * as InstagramStrategy from 'passport-instagram';
+import {authenticate} from '../../../../decorators';
+import {VerifyCallback, VerifyFunction} from '../../../../strategies';
+import {Strategies} from '../../../../strategies/keys';
 import {InstagramAuthStrategyFactoryProvider} from '../../../../strategies/passport/passport-insta-oauth2';
-import {ClientPasswordVerifyProvider} from '../../../fixtures/providers/passport-client.provider';
-import {ClientPasswordStrategyFactoryProvider} from '../../../../strategies/passport/passport-client-password';
+import {STRATEGY} from '../../../../strategy-name.enum';
+import {userWithoutReqObj} from '../../../fixtures/data/bearer-data';
+import {MyAuthenticationSequence} from '../../../fixtures/sequences/authentication.sequence';
+import {getApp} from '../helpers/helpers';
 
 describe('getting instagram oauth2 strategy with options', () => {
   let app: Application;
@@ -49,12 +47,6 @@ describe('getting instagram oauth2 strategy with options', () => {
   }
 
   function getAuthVerifier() {
-    app
-      .bind(Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER)
-      .toProvider(ClientPasswordVerifyProvider);
-    app
-      .bind(Strategies.Passport.CLIENT_PASSWORD_STRATEGY_FACTORY)
-      .toProvider(ClientPasswordStrategyFactoryProvider);
     app
       .bind(Strategies.Passport.INSTAGRAM_OAUTH2_STRATEGY_FACTORY)
       .toProvider(InstagramAuthStrategyFactoryProvider);

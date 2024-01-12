@@ -20,14 +20,6 @@
       "type": "./dist/strategies/passport/passport-azure-ad/index.d.ts",
       "default": "./dist/strategies/passport/passport-azure-ad/index.js"
     },
-    "./passport-bearer": {
-      "type": "./dist/strategies/passport/passport-bearer/index.d.ts",
-      "default": "./dist/strategies/passport/passport-bearer/index.js"
-    },
-    "./passport-client-password": {
-      "type": "./dist/strategies/passport/passport-client-password/index.d.ts",
-      "default": "./dist/strategies/passport/passport-client-password/index.js"
-    },
     "./passport-cognito-oauth2": {
       "type": "./dist/strategies/passport/passport-cognito-oauth2/index.d.ts",
       "default": "./dist/strategies/passport/passport-cognito-oauth2/index.js"
@@ -157,6 +149,8 @@
     "https-proxy-agent": "^5.0.0",
     "jsonwebtoken": "^9.0.0",
     "passport": "^0.6.0",
+    "passport-http-bearer": "^1.0.1",
+    "passport-oauth2-client-password": "^0.1.2",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
@@ -208,11 +202,9 @@
     "passport-cognito-oauth2": "^0.1.1",
     "passport-facebook": "^3.0.0",
     "passport-google-oauth20": "^2.0.0",
-    "passport-http-bearer": "^1.0.1",
     "passport-instagram": "^1.0.0",
     "passport-local": "^1.0.0",
     "passport-oauth2": "^1.6.1",
-    "passport-oauth2-client-password": "^0.1.2",
     "@exlinc/keycloak-passport": "^1.0.2"
   },
   "publishConfig": {

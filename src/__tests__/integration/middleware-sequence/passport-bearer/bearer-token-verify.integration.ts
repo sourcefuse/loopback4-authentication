@@ -1,18 +1,15 @@
-import {IAuthUser} from '../../../../types';
-import {expect, Client, createClientForHandler} from '@loopback/testlab';
-import {RestServer} from '@loopback/rest';
 import {Application, inject} from '@loopback/core';
 import {get} from '@loopback/openapi-v3';
+import {RestServer} from '@loopback/rest';
+import {Client, createClientForHandler, expect} from '@loopback/testlab';
 import {authenticate} from '../../../../decorators';
-import {STRATEGY} from '../../../../strategy-name.enum';
-import {getApp} from '../helpers/helpers';
-import {MyAuthenticationMiddlewareSequence} from '../../../fixtures/sequences/authentication-middleware.sequence';
-import {Strategies} from '../../../../strategies/keys';
 import {AuthenticationBindings} from '../../../../keys';
+import {Strategies} from '../../../../strategies/keys';
+import {STRATEGY} from '../../../../strategy-name.enum';
+import {IAuthUser} from '../../../../types';
 import {BearerTokenVerifyProvider} from '../../../fixtures/providers/bearer-passport.provider';
-import {BearerStrategyFactoryProvider} from '../../../../strategies/passport/passport-bearer';
-import {ClientPasswordVerifyProvider} from '../../../fixtures/providers/passport-client.provider';
-import {ClientPasswordStrategyFactoryProvider} from '../../../../strategies/passport/passport-client-password';
+import {MyAuthenticationMiddlewareSequence} from '../../../fixtures/sequences/authentication-middleware.sequence';
+import {getApp} from '../helpers/helpers';
 
 /**
  * Testing overall flow of authentication with bearer strategy
@@ -242,15 +239,53 @@ describe('Bearer-token strategy using Middleware Sequence', () => {
     app
       .bind(Strategies.Passport.BEARER_TOKEN_VERIFIER)
       .toProvider(BearerTokenVerifyProvider);
-    app
-      .bind(Strategies.Passport.BEARER_STRATEGY_FACTORY)
-      .toProvider(BearerStrategyFactoryProvider);
-    app
-      .bind(Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER)
-      .toProvider(ClientPasswordVerifyProvider);
-    app
-      .bind(Strategies.Passport.CLIENT_PASSWORD_STRATEGY_FACTORY)
-      .toProvider(ClientPasswordStrategyFactoryProvider);
+  }
+
+  function givenAuthenticatedSequence() {
+    // bind user defined sequence
+    server.sequence(MyAuthenticationMiddlewareSequence);
+  }
+});
+
+describe('integration test when no provider was implemented using Middleware Sequence', () => {
+  let app: Application;
+  let server: RestServer;
+  beforeEach(givenAServer);
+  beforeEach(givenAuthenticatedSequence);
+
+  it('should return error as the verifier is not implemented', async () => {
+    class BearerNoVerifierController {
+      constructor(
+        @inject(AuthenticationBindings.CURRENT_USER) // tslint:disable-next-line: no-shadowed-variable
+        private readonly user: IAuthUser | undefined,
+      ) {}
+
+      options = {
+        passRequestToCallback: false,
+      };
+
+      @get('/auth/bearer/no-verifier')
+      @authenticate(STRATEGY.BEARER, {passReqToCallback: false})
+      async test() {
+        return this.user;
+      }
+    }
+
+    app.controller(BearerNoVerifierController);
+
+    await whenIMakeRequestTo(server)
+      .get('/auth/bearer/no-verifier')
+      .set('Authorization', 'Bearer sometoken')
+      .expect(401);
+  });
+
+  function whenIMakeRequestTo(restServer: RestServer): Client {
+    return createClientForHandler(restServer.requestHandler);
+  }
+
+  async function givenAServer() {
+    app = getApp();
+    server = await app.getServer(RestServer);
   }
 
   function givenAuthenticatedSequence() {
