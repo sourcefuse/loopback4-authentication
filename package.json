@@ -1,6 +1,6 @@
 {
   "name": "loopback4-authentication",
-  "version": "11.0.0",
+  "version": "11.0.1",
   "description": "A loopback-next extension for authentication feature. Oauth strategies supported.",
   "keywords": [
     "loopback-extension",
@@ -216,8 +216,8 @@
     }
   },
   "overrides": {
-    "@loopback/rest":{
-      "@openapi-contrib/openapi-schema-to-json-schema":"4.0.5"
+    "@loopback/rest": {
+      "@openapi-contrib/openapi-schema-to-json-schema": "4.0.5"
     },
     "aws-sdk": "2.1360.0",
     "body-parser": {
