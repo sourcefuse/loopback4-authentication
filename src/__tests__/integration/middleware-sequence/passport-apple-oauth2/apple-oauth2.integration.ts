@@ -1,20 +1,16 @@
-import {Client, createClientForHandler} from '@loopback/testlab';
-import {RestServer, Request} from '@loopback/rest';
-import {Application, Constructor, Provider} from '@loopback/core';
+import {Application, Provider} from '@loopback/core';
 import {get} from '@loopback/openapi-v3';
-import {authenticate} from '../../../../decorators';
-import {STRATEGY} from '../../../../strategy-name.enum';
-import {getApp} from '../helpers/helpers';
-import {MyAuthenticationMiddlewareSequence} from '../../../fixtures/sequences/authentication-middleware.sequence';
-import {Strategies} from '../../../../strategies/keys';
-import {VerifyFunction} from '../../../../strategies';
-import {userWithoutReqObj} from '../../../fixtures/data/bearer-data';
+import {Request, RestServer} from '@loopback/rest';
+import {Client, createClientForHandler} from '@loopback/testlab';
 import AppleStrategy, {DecodedIdToken} from 'passport-apple';
+import {authenticate} from '../../../../decorators';
+import {VerifyFunction} from '../../../../strategies';
+import {Strategies} from '../../../../strategies/keys';
 import {AppleAuthStrategyFactoryProvider} from '../../../../strategies/passport/passport-apple-oauth2';
-import {
-  ClientPasswordStrategyFactoryProvider,
-  ClientPasswordVerifyProvider,
-} from '../../../../strategies/passport/passport-client-password';
+import {STRATEGY} from '../../../../strategy-name.enum';
+import {userWithoutReqObj} from '../../../fixtures/data/bearer-data';
+import {MyAuthenticationMiddlewareSequence} from '../../../fixtures/sequences/authentication-middleware.sequence';
+import {getApp} from '../helpers/helpers';
 
 describe('getting apple oauth2 strategy with options using Middleware Sequence', () => {
   let app: Application;
@@ -53,12 +49,6 @@ describe('getting apple oauth2 strategy with options using Middleware Sequence',
   }
 
   function getAuthVerifier() {
-    app
-      .bind(Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER)
-      .toProvider(ClientPasswordVerifyProvider);
-    app
-      .bind(Strategies.Passport.CLIENT_PASSWORD_STRATEGY_FACTORY)
-      .toProvider(ClientPasswordStrategyFactoryProvider);
     app
       .bind(Strategies.Passport.APPLE_OAUTH2_STRATEGY_FACTORY)
       .toProvider(AppleAuthStrategyFactoryProvider);

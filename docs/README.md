@@ -87,7 +87,6 @@ Once this is done, you are ready to configure any of the available strategy in t
 
 ### Oauth2-client-password
 
-In order to use it, run `npm install passport-oauth2-client-password`.
 First, create an AuthClient model implementing the IAuthClient interface. The purpose of this model is to store oauth registered clients for the app in the DB. See sample below.
 
 ```ts
@@ -250,7 +249,6 @@ For accessing the authenticated AuthClient model reference, you can inject the C
 
 ### Http-bearer
 
-In order to use it, run `npm install passport-http-bearer`.
 First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
 
 ```ts

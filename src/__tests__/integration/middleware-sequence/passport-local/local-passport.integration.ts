@@ -1,19 +1,17 @@
-import {Client, createClientForHandler, expect} from '@loopback/testlab';
-import {RestServer} from '@loopback/rest';
 import {Application, inject} from '@loopback/core';
 import {post, requestBody} from '@loopback/openapi-v3';
+import {RestServer} from '@loopback/rest';
+import {Client, createClientForHandler, expect} from '@loopback/testlab';
 import {authenticate} from '../../../../decorators';
-import {STRATEGY} from '../../../../strategy-name.enum';
-import {getApp} from '../helpers/helpers';
-import {MyAuthenticationMiddlewareSequence} from '../../../fixtures/sequences/authentication-middleware.sequence';
-import {Strategies} from '../../../../strategies/keys';
-import {LocalVerifyProvider} from '../../../fixtures/providers/local-password.provider';
 import {AuthenticationBindings} from '../../../../keys';
-import {IAuthUser} from '../../../../types';
-import {UserCred} from '../../../fixtures/user-cred.model';
+import {Strategies} from '../../../../strategies/keys';
 import {LocalPasswordStrategyFactoryProvider} from '../../../../strategies/passport/passport-local';
-import {ClientPasswordVerifyProvider} from '../../../fixtures/providers/passport-client.provider';
-import {ClientPasswordStrategyFactoryProvider} from '../../../../strategies/passport/passport-client-password';
+import {STRATEGY} from '../../../../strategy-name.enum';
+import {IAuthUser} from '../../../../types';
+import {LocalVerifyProvider} from '../../../fixtures/providers/local-password.provider';
+import {MyAuthenticationMiddlewareSequence} from '../../../fixtures/sequences/authentication-middleware.sequence';
+import {UserCred} from '../../../fixtures/user-cred.model';
+import {getApp} from '../helpers/helpers';
 /**
  * Testing overall flow of authentication with bearer strategy
  */
@@ -179,12 +177,6 @@ describe('Local passport strategy using Middleware Sequence', () => {
     app
       .bind(Strategies.Passport.LOCAL_PASSWORD_VERIFIER)
       .toProvider(LocalVerifyProvider);
-    app
-      .bind(Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER)
-      .toProvider(ClientPasswordVerifyProvider);
-    app
-      .bind(Strategies.Passport.CLIENT_PASSWORD_STRATEGY_FACTORY)
-      .toProvider(ClientPasswordStrategyFactoryProvider);
   }
 
   function givenAuthenticatedSequence() {
