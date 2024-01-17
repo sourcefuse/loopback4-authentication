@@ -37,8 +37,8 @@ export namespace Otp {
     private readonly verify: VerifyFunction;
 
     authenticate(req: Request, options?: StrategyOptions): void {
-      const key = req.body.key || options?.key;
-      const otp = req.body.otp || options?.otp;
+      const key = req.body.key ?? options?.key;
+      const otp = req.body.otp ?? options?.otp;
 
       if (!key) {
         this.fail();
