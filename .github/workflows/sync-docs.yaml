@@ -50,7 +50,7 @@ jobs:
           git checkout -B $extension_branch || git checkout $extension_branch
 
           # Copy README from the extension repo
-          cp ../extension/README.md docs/arc-api-docs/extensions/$(basename $GITHUB_REPOSITORY)/
+          cp ../extension/docs/README.md docs/arc-api-docs/extensions/$(basename $GITHUB_REPOSITORY)/
           git add .
 
           if git diff --quiet --cached; then
