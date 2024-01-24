@@ -9,8 +9,8 @@ import * as FacebookStrategy from 'passport-facebook';
 import * as GoogleStrategy from 'passport-google-oauth20';
 import * as InstagramStrategy from 'passport-instagram';
 import {Cognito, IAuthClient, IAuthSecureClient, IAuthUser} from '../../types';
-import {Otp} from '../passport';
 import {Keycloak} from './keycloak.types';
+import {Otp} from '../passport/passport-otp';
 
 export type VerifyCallback = (
   err?: string | Error | null,
