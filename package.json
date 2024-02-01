@@ -65,12 +65,6 @@
       "passport-azure-ad": [
         "./dist/strategies/passport/passport-azure-ad/index.d.ts"
       ],
-      "passport-bearer": [
-        "./dist/strategies/passport/passport-bearer/index.d.ts"
-      ],
-      "passport-client-password": [
-        "./dist/strategies/passport/passport-client-password/index.d.ts"
-      ],
       "passport-cognito-oauth2": [
         "./dist/strategies/passport/passport-cognito-oauth2/index.d.ts"
       ],

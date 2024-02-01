@@ -13,8 +13,8 @@ import {AuthenticationBindings} from '../keys';
 import {STRATEGY} from '../strategy-name.enum';
 import {AuthenticationMetadata, IAuthUser} from '../types';
 import {Strategies} from './keys';
-import {Otp} from './passport';
 import {LocalPasswordStrategyFactory} from './passport/passport-local';
+import {Otp} from './passport/passport-otp';
 import {Oauth2ResourceOwnerPassword} from './passport/passport-resource-owner-password';
 import {Cognito, Keycloak, VerifyFunction} from './types';
 
