@@ -2,7 +2,7 @@ import {inject, Provider} from '@loopback/core';
 import {AnyObject} from '@loopback/repository';
 import {HttpErrors, Request} from '@loopback/rest';
 import {HttpsProxyAgent} from 'https-proxy-agent';
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
 import Strategy, {
   AuthenticateOptions,
   AuthenticateOptionsWithRequest,
