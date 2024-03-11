@@ -133,28 +133,28 @@
     "vendor"
   ],
   "peerDependencies": {
-    "@loopback/boot": "^6.1.5",
-    "@loopback/rest": "^13.1.5"
+    "@loopback/boot": "^7.0.0",
+    "@loopback/rest": "^14.0.0"
   },
   "dependencies": {
-    "@loopback/context": "^6.1.5",
-    "@loopback/core": "^5.1.5",
+    "@loopback/context": "^7.0.0",
+    "@loopback/core": "^6.0.0",
     "ajv": "^8.11.0",
     "https-proxy-agent": "^5.0.0",
     "jsonwebtoken": "^9.0.0",
     "passport": "^0.7.0",
     "passport-http-bearer": "^1.0.1",
     "passport-oauth2-client-password": "^0.1.2",
-    "tslib": "^2.6.2"
+    "tslib": "^2.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.7.1",
     "@commitlint/config-conventional": "^17.7.0",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
-    "@loopback/boot": "^6.1.5",
-    "@loopback/build": "^10.1.5",
-    "@loopback/metadata": "^6.1.5",
-    "@loopback/testlab": "^6.1.5",
+    "@loopback/boot": "^7.0.0",
+    "@loopback/build": "^11.0.0",
+    "@loopback/metadata": "^7.0.0",
+    "@loopback/testlab": "^7.0.0",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/commit-analyzer": "^9.0.2",
     "@semantic-release/git": "^10.0.1",
@@ -177,8 +177,8 @@
     "cz-conventional-changelog": "^3.3.0",
     "cz-customizable": "^6.3.0",
     "cz-customizable-ghooks": "^2.0.0",
-    "eslint": "^8.51.0",
-    "fs-extra": "^11.1.1",
+    "eslint": "^8.57.0",
+    "fs-extra": "^11.2.0",
     "git-release-notes": "^5.0.0",
     "husky": "^7.0.4",
     "jsdom": "^21.0.0",

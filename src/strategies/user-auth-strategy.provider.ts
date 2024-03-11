@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import {Context, inject, Provider} from '@loopback/core';
 import {SamlConfig} from '@node-saml/passport-saml';
 import {Strategy} from 'passport';
