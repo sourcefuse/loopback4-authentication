@@ -42,7 +42,7 @@ export class AuthenticationComponent implements Component {
       [Strategies.Passport.BEARER_STRATEGY_FACTORY.key]:
         BearerStrategyFactoryProvider,
 
-      //  Strategy Verifier Functions
+      // Strategy Verifier Functions
       [Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER.key]:
         ClientPasswordVerifyProvider,
       [Strategies.Passport.BEARER_TOKEN_VERIFIER.key]:
