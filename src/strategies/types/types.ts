@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import {AnyObject} from '@loopback/repository';
 import {Request} from '@loopback/rest';
 import * as SamlStrategy from '@node-saml/passport-saml';

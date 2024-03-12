@@ -43,8 +43,9 @@ export class AuthenticateActionProvider
       throw new HttpErrors.Unauthorized(AuthErrorKeys.UnknownError);
     }
 
-    // Read decorator metadata to fetch options
-    // to be passed on to authenticate method of strategy
+    /**
+     * Read decorator metadata to fetch options
+     * to be passed on to authenticate method of strategy */
     const metadata = await this.getMetadata();
     let authOpts;
     if (metadata?.authOptions) {

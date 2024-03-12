@@ -1,6 +1,6 @@
 import {Provider} from '@loopback/context';
 import {HttpErrors, Request} from '@loopback/rest';
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
 import * as FacebookStrategy from 'passport-facebook';
 import {VerifyCallback, VerifyFunction} from '../../types';
 /**
