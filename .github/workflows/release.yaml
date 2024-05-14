@@ -48,3 +48,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.RELEASE_COMMIT_GH_PAT }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Changelog 📝
+        run: cd src/release_notes && HUSKY=0 node release-notes.js
