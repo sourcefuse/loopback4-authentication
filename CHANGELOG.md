@@ -1,3 +1,30 @@
+## Release [v12.0.1](https://github.com/sourcefuse/loopback4-authentication/compare/v12.0.0..v12.0.1) May 14, 2024
+Welcome to the May 14, 2024 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
+
+  - [CI tests missing](https://github.com/sourcefuse/loopback4-authentication/issues/228) :- [fix(core): add the ci tests ](https://github.com/sourcefuse/loopback4-authentication/commit/ab4a2ef01b54dcf436d34cd1992ef02c5b58efe9) was commited on May 14, 2024 by [yeshamavani](mailto:83634146+yeshamavani@users.noreply.github.com)
+    
+      - dummy commit for version bump
+      
+      -  GH-228
+      
+  
+  - [Changelog not being generated after release ](https://github.com/sourcefuse/loopback4-authentication/issues/226) :- [chore(ci-cd): changelog step ](https://github.com/sourcefuse/loopback4-authentication/commit/3bd2a68abea4894321e51c607ae940808463037c) was commited on May 14, 2024 by [yeshamavani](mailto:83634146+yeshamavani@users.noreply.github.com)
+    
+      - added changelog step in workflow after release
+      
+      -  GH-226
+      
+  
+  - [Copy the Readme to root as well](https://github.com/sourcefuse/loopback4-authentication/issues/224) :- [docs(chore): copy the readme to root as well ](https://github.com/sourcefuse/loopback4-authentication/commit/fc856a829af4b2e6926b2ce55c008cff2d8f8fd7) was commited on May 7, 2024 by [arpit1503khanna](mailto:108673359+arpit1503khanna@users.noreply.github.com)
+    
+      - copy the readme to root as well
+      
+      -  GH-224
+      
+  
+Clink on the above links to understand the changes in detail.
+  ___
+
 ## Release [v9.0.2](https://github.com/sourcefuse/loopback4-authentication/compare/v9.0.1..v9.0.2) August 24, 2023
 Welcome to the August 24, 2023 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
 
