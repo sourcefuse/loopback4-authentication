@@ -22,7 +22,7 @@ jobs:
         run: |
           git config --global user.name $CONFIG_USERNAME
           git config --global user.email $CONFIG_EMAIL
-          git remote set-url origin https://$GITHUB_ACTOR:$GITHUB_PAT@github.com/sourcefuse/loopback4-microservice-catalog
+          git remote set-url origin https://$GITHUB_ACTOR:$GITHUB_PAT@github.com/sourcefuse/loopback4-authentication
         env:
           GITHUB_PAT: ${{ secrets.RELEASE_COMMIT_GH_PAT }}
           CONFIG_USERNAME: ${{ vars.RELEASE_COMMIT_USERNAME }}
