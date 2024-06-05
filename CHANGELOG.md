@@ -1,3 +1,34 @@
+## Release [v12.0.2](https://github.com/sourcefuse/loopback4-authentication/compare/v12.0.1..v12.0.2) June 5, 2024
+Welcome to the June 5, 2024 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
+
+  - [loopback version updates](https://github.com/sourcefuse/loopback4-authentication/issues/232) :- [revert(deps): revert sematic-release version update ](https://github.com/sourcefuse/loopback4-authentication/commit/b39276e6b5d30399730de4174c89a2c254b3b437) was commited on June 5, 2024 by [Surbhi](mailto:98279679+Surbhi-sharma1@users.noreply.github.com)
+    
+      - revert sematic-release version update
+      
+      -  GH-232
+      
+  
+  - [loopback version updates](https://github.com/sourcefuse/loopback4-authentication/issues/232) :- [chore(deps): loopback version update ](https://github.com/sourcefuse/loopback4-authentication/commit/6c66f5040d13d9669a11a9e703f09ffce45309de) was commited on June 4, 2024 by [Surbhi](mailto:98279679+Surbhi-sharma1@users.noreply.github.com)
+    
+      - * chore(deps): loopback version update
+      
+      -  loopback version update
+      
+      -  GH-232
+      
+      - * chore(deps): semantic release version update
+      
+      -  semantic release version update
+      
+      -  GH-232
+      
+  
+  - [](https://github.com/sourcefuse/loopback4-authentication/issues/) :- [chore(ci-cd):Update release workflow file ](https://github.com/sourcefuse/loopback4-authentication/commit/4ad30e74e72f9dbf629bd315be15d5fe390dcc81) was commited on May 14, 2024 by [yeshamavani](mailto:83634146+yeshamavani@users.noreply.github.com)
+    
+  
+Clink on the above links to understand the changes in detail.
+  ___
+
 ## Release [v12.0.1](https://github.com/sourcefuse/loopback4-authentication/compare/v12.0.0..v12.0.1) May 14, 2024
 Welcome to the May 14, 2024 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
 
