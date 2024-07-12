@@ -151,7 +151,7 @@
     "@commitlint/cli": "^17.7.1",
     "@commitlint/config-conventional": "^17.7.0",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
-    "@loopback/boot": "^7.0.2",
+    "@loopback/boot": "^7.0.3",
     "@loopback/build": "^11.0.2",
     "@loopback/metadata": "^7.0.2",
     "@loopback/testlab": "^7.0.2",
