@@ -137,21 +137,21 @@
     "@loopback/rest": "^14.0.2"
   },
   "dependencies": {
-    "@loopback/context": "^7.0.2",
-    "@loopback/core": "^6.0.2",
-    "ajv": "^8.11.0",
+    "@loopback/context": "^7.0.5",
+    "@loopback/core": "^6.1.2",
+    "ajv": "^8.17.1",
     "https-proxy-agent": "^5.0.0",
     "jsonwebtoken": "^9.0.0",
     "passport": "^0.7.0",
     "passport-http-bearer": "^1.0.1",
     "passport-oauth2-client-password": "^0.1.2",
-    "tslib": "^2.6.2"
+    "tslib": "^2.7.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.7.1",
     "@commitlint/config-conventional": "^17.7.0",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
-    "@loopback/boot": "^7.0.2",
+    "@loopback/boot": "^7.0.5",
     "@loopback/build": "^11.0.2",
     "@loopback/metadata": "^7.0.2",
     "@loopback/testlab": "^7.0.2",
