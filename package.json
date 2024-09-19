@@ -137,8 +137,8 @@
     "@loopback/rest": "^14.0.2"
   },
   "dependencies": {
-    "@loopback/context": "^7.0.2",
-    "@loopback/core": "^6.0.2",
+    "@loopback/context": "^7.0.5",
+    "@loopback/core": "^6.1.2",
     "ajv": "^8.11.0",
     "https-proxy-agent": "^5.0.0",
     "jsonwebtoken": "^9.0.0",
@@ -151,7 +151,7 @@
     "@commitlint/cli": "^17.7.1",
     "@commitlint/config-conventional": "^17.7.0",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
-    "@loopback/boot": "^7.0.2",
+    "@loopback/boot": "^7.0.5",
     "@loopback/build": "^11.0.2",
     "@loopback/metadata": "^7.0.2",
     "@loopback/testlab": "^7.0.2",
