@@ -13,6 +13,7 @@ import {AppleAuthStrategyFactory} from './passport/passport-apple-oauth2';
 import {FacebookAuthStrategyFactory} from './passport/passport-facebook-oauth2';
 import {CognitoAuthStrategyFactory} from './passport/passport-cognito-oauth2';
 import {SamlStrategyFactory} from './SAML';
+import {Auth0StrategyFactory} from './passport/passport-auth0';
 
 export namespace Strategies {
   export namespace Passport {
@@ -139,6 +140,14 @@ export namespace Strategies {
     );
     export const SAML_VERIFIER = BindingKey.create<VerifyFunction.SamlFn>(
       'sf.passport.verifier.saml',
+    );
+
+    export const AUTH0_STRATEGY_FACTORY =
+      BindingKey.create<Auth0StrategyFactory>(
+        'sf.passport.strategyFactory.auth0',
+      );
+    export const AUTH0_VERIFIER = BindingKey.create<VerifyFunction.Auth0Fn>(
+      'sf.passport.verifier.auth0',
     );
   }
 }

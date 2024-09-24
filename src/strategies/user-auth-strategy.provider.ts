@@ -241,6 +241,25 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
       verifier as VerifyFunction.OtpAuthFn,
     );
   }
+  async processAuth0Factory(verifier: VerifierType) {
+    const auth0Factory = this.ctx.getSync(
+      Strategies.Passport.AUTH0_STRATEGY_FACTORY,
+      {optional: true},
+    );
+
+    if (!auth0Factory) {
+      throw new Error(
+        `No factory found for ${Strategies.Passport.AUTH0_STRATEGY_FACTORY}`,
+      );
+    }
+
+    // Cast the factory output to `Strategy` type
+    return auth0Factory(
+      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+      this.metadata.options as any, //NOSONAR
+      verifier as VerifyFunction.Auth0Fn,
+    );
+  }
 
   async processSamlFactory(verifier: VerifierType) {
     const samlFactory = this.ctx.getSync(
@@ -310,6 +329,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
       }
       case STRATEGY.SAML: {
         return this.processSamlFactory(verifier);
+      }
+      case STRATEGY.AUTH0: {
+        return this.processAuth0Factory(verifier);
       }
       default:
         return Promise.reject(
