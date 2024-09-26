@@ -3,17 +3,17 @@ import {expect} from '@loopback/testlab';
 import * as Auth0Strategy from 'passport-auth0';
 
 import {
-  Auth0StrategyOptions,
   Auth0StrategyFactoryProvider,
   Auth0StrategyFactory,
 } from '../../../strategies/passport/passport-auth0';
+import {Auth0} from '../../../strategies/types/auth0.types';
 
 describe('getting auth0 strategy with options', () => {
   it('should return strategy by passing options and passReqToCallback as true', async () => {
     const strategyVerifier: Auth0StrategyFactory = await getStrategy();
 
     const options:
-      | Auth0StrategyOptions
+      | Auth0.Auth0StrategyOptions
       | Auth0Strategy.StrategyOptionWithRequest = {
       clientID: 'string',
       clientSecret: 'string',
@@ -34,7 +34,7 @@ describe('getting auth0 strategy with options', () => {
     const strategyVerifier: Auth0StrategyFactory = await getStrategy();
 
     const options:
-      | Auth0StrategyOptions
+      | Auth0.Auth0StrategyOptions
       | Auth0Strategy.StrategyOptionWithRequest = {
       clientID: 'string',
       clientSecret: 'string',

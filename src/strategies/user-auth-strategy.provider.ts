@@ -8,6 +8,7 @@ import * as GoogleStrategy from 'passport-google-oauth20';
 import * as PassportBearer from 'passport-http-bearer';
 import * as InstagramStrategy from 'passport-instagram';
 import * as PassportLocal from 'passport-local';
+import * as Auth0Strategy from 'passport-auth0';
 import {AuthenticationBindings} from '../keys';
 import {STRATEGY} from '../strategy-name.enum';
 import {AuthenticationMetadata, IAuthUser} from '../types';
@@ -15,7 +16,7 @@ import {Strategies} from './keys';
 import {LocalPasswordStrategyFactory} from './passport/passport-local';
 import {Otp} from './passport/passport-otp';
 import {Oauth2ResourceOwnerPassword} from './passport/passport-resource-owner-password';
-import {Cognito, Keycloak, VerifyFunction} from './types';
+import {Auth0, Cognito, Keycloak, VerifyFunction} from './types';
 
 interface ExtendedStrategyOption extends FacebookStrategy.StrategyOption {
   passReqToCallback?: false;
@@ -255,8 +256,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
 
     // Cast the factory output to `Strategy` type
     return auth0Factory(
-      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-      this.metadata.options as any, //NOSONAR
+      this.metadata.options as
+        | Auth0.Auth0StrategyOptions
+        | Auth0Strategy.StrategyOptionWithRequest,
       verifier as VerifyFunction.Auth0Fn,
     );
   }

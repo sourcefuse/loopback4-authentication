@@ -8,7 +8,13 @@ import * as FacebookStrategy from 'passport-facebook';
 import * as GoogleStrategy from 'passport-google-oauth20';
 import * as InstagramStrategy from 'passport-instagram';
 import * as Auth0Strategy from 'passport-auth0';
-import {Cognito, IAuthClient, IAuthSecureClient, IAuthUser} from '../../types';
+import {
+  Auth0,
+  Cognito,
+  IAuthClient,
+  IAuthSecureClient,
+  IAuthUser,
+} from '../../types';
 import {Keycloak} from './keycloak.types';
 import {Otp} from '../passport/passport-otp';
 
@@ -126,8 +132,7 @@ export namespace VerifyFunction {
       accessToken: string,
       refreshToken: string,
       profile: Auth0Strategy.Profile,
-      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-      cb: (error: any, user?: T, info?: any) => void,
+      cb: Auth0.VerifyCallback,
       req?: Request,
     ): Promise<T | null>;
   }

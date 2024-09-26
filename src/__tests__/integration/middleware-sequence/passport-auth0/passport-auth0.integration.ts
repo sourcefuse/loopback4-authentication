@@ -6,10 +6,8 @@ import Auth0Strategy from 'passport-auth0';
 import {authenticate} from '../../../../decorators';
 import {VerifyFunction} from '../../../../strategies';
 import {Strategies} from '../../../../strategies/keys';
-import {
-  Auth0StrategyFactoryProvider,
-  VerifyCallback,
-} from '../../../../strategies/passport/passport-auth0';
+import {Auth0StrategyFactoryProvider} from '../../../../strategies/passport/passport-auth0';
+import {Auth0} from '../../../../strategies/types/auth0.types';
 import {STRATEGY} from '../../../../strategy-name.enum';
 import {userWithoutReqObj} from '../../../fixtures/data/bearer-data';
 
@@ -82,7 +80,7 @@ class Auth0VerifyProvider implements Provider<VerifyFunction.Auth0Fn> {
       accessToken: string,
       refreshToken: string,
       profile: Auth0Strategy.Profile,
-      cd: VerifyCallback,
+      cd: Auth0.VerifyCallback,
       req?: Request,
     ) => {
       return userWithoutReqObj;

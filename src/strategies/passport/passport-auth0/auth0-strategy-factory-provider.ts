@@ -3,27 +3,19 @@ import {HttpErrors} from '@loopback/rest';
 import {Strategies} from '../../../keys';
 import {VerifyFunction} from '../../../types';
 import {AuthErrorKeys} from '../../../error-keys';
+import {Auth0} from '../../types';
 import {
   ExtraVerificationParams,
   Profile,
   Strategy,
-  StrategyOption,
   StrategyOptionWithRequest,
 } from 'passport-auth0';
 import {Request} from 'express';
 
-export interface Auth0StrategyOptions extends StrategyOption {
-  passReqToCallback?: false | undefined;
-}
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-export type VerifyCallback = (err?: any, user?: any, info?: any) => void;
-
-export interface Auth0StrategyFactory {
-  (
-    options: Auth0StrategyOptions | StrategyOptionWithRequest,
-    verifierPassed?: VerifyFunction.Auth0Fn,
-  ): Strategy;
-}
+export type Auth0StrategyFactory = (
+  options: Auth0.Auth0StrategyOptions | StrategyOptionWithRequest,
+  verifierPassed?: VerifyFunction.Auth0Fn,
+) => Strategy;
 
 export class Auth0StrategyFactoryProvider
   implements Provider<Auth0StrategyFactory>
@@ -38,7 +30,7 @@ export class Auth0StrategyFactoryProvider
   }
 
   getAuth0Strategy(
-    options: Auth0StrategyOptions | StrategyOptionWithRequest,
+    options: Auth0.Auth0StrategyOptions | StrategyOptionWithRequest,
     verifier?: VerifyFunction.Auth0Fn,
   ): Strategy {
     const verifyFn = verifier ?? this.auth0Verifier;
@@ -53,7 +45,7 @@ export class Auth0StrategyFactoryProvider
           refreshToken: string,
           extraParams: ExtraVerificationParams,
           profile: Profile,
-          cb: VerifyCallback,
+          cb: Auth0.VerifyCallback,
         ) => {
           try {
             const user = await verifyFn(
@@ -83,7 +75,7 @@ export class Auth0StrategyFactoryProvider
           refreshToken: string,
           extraParams: ExtraVerificationParams,
           profile: Profile,
-          cb: VerifyCallback,
+          cb: Auth0.VerifyCallback,
         ) => {
           try {
             const user = await verifyFn(accessToken, refreshToken, profile, cb);
