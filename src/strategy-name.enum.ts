@@ -12,4 +12,5 @@ export const enum STRATEGY {
   KEYCLOAK = 'keycloak',
   OTP = 'otp',
   SAML = 'saml',
+  AUTH0 = 'auth0',
 }

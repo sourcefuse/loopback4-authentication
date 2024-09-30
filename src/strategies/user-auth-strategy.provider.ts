@@ -8,6 +8,7 @@ import * as GoogleStrategy from 'passport-google-oauth20';
 import * as PassportBearer from 'passport-http-bearer';
 import * as InstagramStrategy from 'passport-instagram';
 import * as PassportLocal from 'passport-local';
+import * as Auth0Strategy from 'passport-auth0';
 import {AuthenticationBindings} from '../keys';
 import {STRATEGY} from '../strategy-name.enum';
 import {AuthenticationMetadata, IAuthUser} from '../types';
@@ -15,7 +16,7 @@ import {Strategies} from './keys';
 import {LocalPasswordStrategyFactory} from './passport/passport-local';
 import {Otp} from './passport/passport-otp';
 import {Oauth2ResourceOwnerPassword} from './passport/passport-resource-owner-password';
-import {Cognito, Keycloak, VerifyFunction} from './types';
+import {Auth0, Cognito, Keycloak, VerifyFunction} from './types';
 
 interface ExtendedStrategyOption extends FacebookStrategy.StrategyOption {
   passReqToCallback?: false;
@@ -241,6 +242,26 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
       verifier as VerifyFunction.OtpAuthFn,
     );
   }
+  async processAuth0Factory(verifier: VerifierType) {
+    const auth0Factory = this.ctx.getSync(
+      Strategies.Passport.AUTH0_STRATEGY_FACTORY,
+      {optional: true},
+    );
+
+    if (!auth0Factory) {
+      throw new Error(
+        `No factory found for ${Strategies.Passport.AUTH0_STRATEGY_FACTORY}`,
+      );
+    }
+
+    // Cast the factory output to `Strategy` type
+    return auth0Factory(
+      this.metadata.options as
+        | Auth0.Auth0StrategyOptions
+        | Auth0Strategy.StrategyOptionWithRequest,
+      verifier as VerifyFunction.Auth0Fn,
+    );
+  }
 
   async processSamlFactory(verifier: VerifierType) {
     const samlFactory = this.ctx.getSync(
@@ -310,6 +331,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
       }
       case STRATEGY.SAML: {
         return this.processSamlFactory(verifier);
+      }
+      case STRATEGY.AUTH0: {
+        return this.processAuth0Factory(verifier);
       }
       default:
         return Promise.reject(

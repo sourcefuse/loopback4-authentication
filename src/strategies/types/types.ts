@@ -1,5 +1,5 @@
 import {AnyObject} from '@loopback/repository';
-import {Request} from '@loopback/rest';
+import {Request} from '@loopback/express';
 import * as SamlStrategy from '@node-saml/passport-saml';
 import * as AppleStrategy from 'passport-apple';
 import {DecodedIdToken} from 'passport-apple';
@@ -7,7 +7,14 @@ import * as AzureADStrategy from 'passport-azure-ad';
 import * as FacebookStrategy from 'passport-facebook';
 import * as GoogleStrategy from 'passport-google-oauth20';
 import * as InstagramStrategy from 'passport-instagram';
-import {Cognito, IAuthClient, IAuthSecureClient, IAuthUser} from '../../types';
+import * as Auth0Strategy from 'passport-auth0';
+import {
+  Auth0,
+  Cognito,
+  IAuthClient,
+  IAuthSecureClient,
+  IAuthUser,
+} from '../../types';
 import {Keycloak} from './keycloak.types';
 import {Otp} from '../passport/passport-otp';
 
@@ -117,6 +124,15 @@ export namespace VerifyFunction {
       refreshToken: string,
       profile: Cognito.Profile,
       cb: Cognito.VerifyCallback,
+      req?: Request,
+    ): Promise<T | null>;
+  }
+  export interface Auth0Fn<T = IAuthUser> extends GenericAuthFn<T> {
+    (
+      accessToken: string,
+      refreshToken: string,
+      profile: Auth0Strategy.Profile,
+      cb: Auth0.VerifyCallback,
       req?: Request,
     ): Promise<T | null>;
   }
