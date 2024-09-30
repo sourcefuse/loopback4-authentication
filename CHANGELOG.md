@@ -1,3 +1,24 @@
+## Release [v12.1.0](https://github.com/sourcefuse/loopback4-authentication/compare/v12.0.2..v12.1.0) September 30, 2024
+Welcome to the September 30, 2024 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
+
+  - [Authentication using Auth0 strategy](https://github.com/sourcefuse/loopback4-authentication/issues/244) :- [feat(provider): new strategy for auth0 ](https://github.com/sourcefuse/loopback4-authentication/commit/cd805238005f4bd0fdf2e6abff1755699bc6686f) was commited on September 30, 2024 by [yeshamavani](mailto:83634146+yeshamavani@users.noreply.github.com)
+    
+      - * feat(provider): new strategy for auth0
+      
+      -  passport based strategy
+      
+      -  GH-244
+      
+      - * feat(provider): new auth0 strategy
+      
+      -  sonar fix
+      
+      -  GH-244
+      
+  
+Clink on the above links to understand the changes in detail.
+  ___
+
 ## Release [v12.0.2](https://github.com/sourcefuse/loopback4-authentication/compare/v12.0.1..v12.0.2) June 5, 2024
 Welcome to the June 5, 2024 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
 
