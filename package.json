@@ -152,7 +152,7 @@
     "passport": "^0.7.0",
     "passport-http-bearer": "^1.0.1",
     "passport-oauth2-client-password": "^0.1.2",
-    "tslib": "^2.6.2"
+    "tslib": "^2.8.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.7.1",
