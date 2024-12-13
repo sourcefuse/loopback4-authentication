@@ -159,7 +159,7 @@
     "@commitlint/config-conventional": "^17.7.0",
     "@exlinc/keycloak-passport": "^1.0.2",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
-    "@loopback/boot": "^7.0.2",
+    "@loopback/boot": "^7.0.9",
     "@loopback/build": "^11.0.2",
     "@loopback/metadata": "^7.0.2",
     "@loopback/testlab": "^7.0.2",
