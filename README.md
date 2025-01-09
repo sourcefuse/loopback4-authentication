@@ -2978,6 +2978,47 @@ this.component(AuthenticationComponent);
 This binding needs to be done before adding the Authentication component to your application.
 Apart from this all other steps for authentication for all strategies remain the same.
 
+### Custom Sequence Support
+
+You can also configure `ClientAuthenticationMiddlewareProvider` and `UserAuthenticationMiddlewareProvider` options, which can be invoked using a custom sequence. See the sample below.
+
+`custom-sequence.ts`
+
+```ts title="custom-sequence.ts"
+export class CustomSequence implements SequenceHandler {
+  @inject(SequenceActions.INVOKE_MIDDLEWARE, {optional: true})
+  protected invokeMiddleware: InvokeMiddleware = () => false;
+  ...
+
+  async handle(context: RequestContext) {
+    ...
+    ...
+    // call custom registered middlewares in the pre-invoke chain
+    let finished = await this.invokeMiddleware(context, {
+      chain: CustomMiddlewareChain.PRE_INVOKE,
+    });
+      if (finished) return;
+      const result = await this.invoke(route, args);
+      this.send(response, result);
+   ...
+  }
+}
+```
+
+`application.ts`
+
+```ts title="application.ts"
+import {ClientAuthenticationMiddlewareProvider} from 'loopback4-authentication';
+...
+...
+
+// bind middleware with custom options
+this.middleware(ClientAuthenticationMiddlewareProvider, {
+  chain: CustomMiddlwareChain.PRE_INVOKE
+});
+
+```
+
 ### Passport Auth0
 
 In order to use it, run `npm install passport-auth0` and `npm install @types/passport-auth0`.
