@@ -1,3 +1,20 @@
+## Release [v12.2.0](https://github.com/sourcefuse/loopback4-authentication/compare/v12.1.1..v12.2.0) January 9, 2025
+Welcome to the January 9, 2025 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
+
+  - [](https://github.com/sourcefuse/loopback4-authentication/issues/) :- [feat(middleware): export client and user authentication middlewares ](https://github.com/sourcefuse/loopback4-authentication/commit/4f8e849d64162a9d911d4ed9599eec681eb49459) was commited on January 9, 2025 by [rashisf](mailto:60036453+rashisf@users.noreply.github.com)
+    
+      - * feat(middleware): export client and user authentication middlewares
+      
+      -  256
+      
+      - * docs(docs): update README.md file
+      
+      -  256
+      
+  
+Clink on the above links to understand the changes in detail.
+  ___
+
 ## Release [v12.1.1](https://github.com/sourcefuse/loopback4-authentication/compare/v12.1.0..v12.1.1) December 17, 2024
 Welcome to the December 17, 2024 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
 
