@@ -56,7 +56,7 @@ npm install loopback4-authentication
 
 ## Quick Starter
 
-For a quick starter guide, you can refer to our [loopback 4 starter](https://github.com/sourcefuse/loopback4-starter) application which utilizes all of the above auth strategies from the extension in a simple multi-tenant application. Refer to the auth module [there](https://github.com/sourcefuse/loopback4-starter/tree/master/src/modules/auth) for specific details on authentication.
+For a quick starter guide, you can refer to our [loopback 4 starter](https://github.com/sourcefuse/loopback4-starter) application which utilizes all of the above auth strategies from the extension in a simple multi-tenant application. Refer to the auth module [there](https://github.com/sourcefuse/loopback4-starter/tree/master/src/modules/auth) for specific details on authentication mechanism.
 
 ## Detailed Usage
 
