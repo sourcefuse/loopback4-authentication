@@ -144,7 +144,7 @@
     "@loopback/rest": "^14.0.9"
   },
   "dependencies": {
-    "@loopback/context": "^7.0.9",
+    "@loopback/context": "^7.0.10",
     "@loopback/core": "^6.1.6",
     "ajv": "^8.11.0",
     "https-proxy-agent": "^5.0.0",
