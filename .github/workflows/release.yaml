@@ -4,6 +4,7 @@ name: Release [Manual]
 on: workflow_dispatch
 permissions:
   contents: write
+  id-token: write   # required for trusted publishing
 jobs:
   Release:
     runs-on: ubuntu-latest
@@ -27,15 +28,15 @@ jobs:
           GITHUB_PAT: ${{ secrets.RELEASE_COMMIT_GH_PAT }}
           CONFIG_USERNAME: ${{ vars.RELEASE_COMMIT_USERNAME }}
           CONFIG_EMAIL: ${{ vars.RELEASE_COMMIT_EMAIL }}
-      - name: Authenticate with Registry
-        run: |
-          echo "@${NPM_USERNAME}:registry=https://registry.npmjs.org/" > .npmrc
-          echo "registry=https://registry.npmjs.org/" >> .npmrc
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
-          npm whoami
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_USERNAME: ${{ vars.NPM_USERNAME }}
+      # - name: Authenticate with Registry
+      #   run: |
+      #     echo "@${NPM_USERNAME}:registry=https://registry.npmjs.org/" > .npmrc
+      #     echo "registry=https://registry.npmjs.org/" >> .npmrc
+      #     echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+      #     npm whoami
+      #   env:
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      #     NPM_USERNAME: ${{ vars.NPM_USERNAME }}
 
       - name: Install 📌
         run: |
@@ -44,9 +45,12 @@ jobs:
         run: npm run test
       - name: Semantic Publish to NPM 🚀
         # "HUSKY=0" disables pre-commit-msg check (Needed in order to allow semantic-release perform the release commit)
-        run: HUSKY=0 npx semantic-release
+        run: |
+          npm config set provenance true
+          HUSKY=0 npx semantic-release
         env:
           GH_TOKEN: ${{ secrets.RELEASE_COMMIT_GH_PAT }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # npm token not needed got trusted publishing
+          # NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Changelog 📝
         run: cd src/release_notes && HUSKY=0 node release-notes.js
