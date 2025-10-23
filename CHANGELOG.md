@@ -1,3 +1,26 @@
+## Release [v13.0.1](https://github.com/sourcefuse/loopback4-authentication/compare/v13.0.0..v13.0.1) October 23, 2025
+Welcome to the October 23, 2025 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
+
+  - [](https://github.com/sourcefuse/loopback4-authentication/issues/) :- [](https://github.com/sourcefuse/loopback4-authentication/commit/03e4c682dea1b0469af99858e6ceaea1aa86abf7) was commited on October 23, 2025 by [yeshamavani](mailto:83634146+yeshamavani@users.noreply.github.com)
+    
+  
+  - [](https://github.com/sourcefuse/loopback4-authentication/issues/269) :- [fix(ci-cd): update the semantic plugins to latest ](https://github.com/sourcefuse/loopback4-authentication/commit/f8aba61da3c09feeedea22fb0315d0b20134375e) was commited on October 23, 2025 by [yeshamavani](mailto:83634146+yeshamavani@users.noreply.github.com)
+    
+      - marked fix for patch release
+      
+      - GH-269
+      
+  
+  - [](https://github.com/sourcefuse/loopback4-authentication/issues/269) :- [chore(ci-cd): changes to publish package via trusted oidc method ](https://github.com/sourcefuse/loopback4-authentication/commit/da978ecec9867ee78b09641ed4c223791bb37f8e) was commited on October 23, 2025 by [yeshamavani](mailto:83634146+yeshamavani@users.noreply.github.com)
+    
+      - discontinue using tokens to publish
+      
+      - GH-269
+      
+  
+Clink on the above links to understand the changes in detail.
+  ___
+
 ## Release [v13.0.0](https://github.com/sourcefuse/loopback4-authentication/compare/v12.2.0..v13.0.0) September 8, 2025
 Welcome to the September 8, 2025 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
 
