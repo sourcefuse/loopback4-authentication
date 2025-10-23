@@ -47,7 +47,7 @@ jobs:
         # "HUSKY=0" disables pre-commit-msg check (Needed in order to allow semantic-release perform the release commit)
         run: |
           npm config set provenance true
-          HUSKY=0 npx semantic-release
+          HUSKY=0 npx semantic-release --debug
         env:
           GH_TOKEN: ${{ secrets.RELEASE_COMMIT_GH_PAT }}
           # npm token not needed got trusted publishing
