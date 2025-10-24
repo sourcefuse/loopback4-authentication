@@ -261,7 +261,14 @@
         }
       ],
       "@semantic-release/release-notes-generator",
+      [
       "@semantic-release/npm",
+      {
+        "npmPublish": true,
+        "pkgRoot": ".",
+        "tarballDir": "dist"
+      }
+    ],
       [
         "@semantic-release/git",
         {
@@ -274,6 +281,6 @@
       ],
       "@semantic-release/github"
     ],
-    "repositoryUrl": "git@github.com:sourcefuse/loopback4-authentication.git"
+    "repositoryUrl": "https://github.com/sourcefuse/loopback4-authentication.git"
   }
 }
