@@ -43,15 +43,12 @@ jobs:
       - name: Test 🔧
         run: npm run test
 
-      - name: Debug npm config
-        run: |
-          npm config list
-          echo "Registry link ---: $(npm config get registry)" # remove this later
-
       # ✅ CHANGED THIS SECTION
       - name: Semantic Publish to NPM 🚀
         run: |
           npm config set provenance true
+          npm config list
+          echo "Registry link ---: $(npm config get registry)"
           HUSKY=0 npx semantic-release --debug
         env:
           GH_TOKEN: ${{ secrets.RELEASE_COMMIT_GH_PAT }}
