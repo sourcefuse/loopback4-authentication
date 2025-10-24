@@ -1,3 +1,24 @@
+## Release [v13.0.3](https://github.com/sourcefuse/loopback4-authentication/compare/v13.0.2..v13.0.3) October 24, 2025
+Welcome to the October 24, 2025 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
+
+  - [](https://github.com/sourcefuse/loopback4-authentication/issues/269) :- [fix(ci-cd): trusted publisher ](https://github.com/sourcefuse/loopback4-authentication/commit/dd5da1089dbae80964677619ada92b51aeef9805) was commited on October 24, 2025 by [yeshamavani](mailto:83634146+yeshamavani@users.noreply.github.com)
+    
+      - * fix(ci-cd): trusted publisher
+      
+      - changed the provenance
+      
+      - GH-269
+      
+      - * fix(ci-cd): trusted publisher
+      
+      - removed the override for semantic release npm
+      
+      - GH-269
+      
+  
+Clink on the above links to understand the changes in detail.
+  ___
+
 ## Release [v13.0.1](https://github.com/sourcefuse/loopback4-authentication/compare/v13.0.0..v13.0.1) October 23, 2025
 Welcome to the October 23, 2025 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
 
