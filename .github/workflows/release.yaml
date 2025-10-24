@@ -21,11 +21,11 @@ jobs:
           token: ${{ secrets.RELEASE_COMMIT_GH_PAT }}
 
       - name: Setup Node
-        uses: actions/setup-node@v4  # ✅ UPDATED to v4
+        uses: actions/setup-node@v4  # UPDATED to v4
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
-          always-auth: false  # ✅ ADD THIS - important for trusted publishing
+          always-auth: false  # for trusted publishing
 
       - name: Configure CI Git User
         run: |
@@ -43,16 +43,14 @@ jobs:
       - name: Test 🔧
         run: npm run test
 
-      # ✅ CHANGED THIS SECTION
+      # CHANGED THIS SECTION
       - name: Semantic Publish to NPM 🚀
         run: |
           npm config set provenance true
-          npm config list
-          echo "Registry link ---: $(npm config get registry)"
-          HUSKY=0 npx semantic-release --debug
+          HUSKY=0 npx semantic-release
         env:
           GH_TOKEN: ${{ secrets.RELEASE_COMMIT_GH_PAT }}
-          # ✅ REMOVED: NPM_TOKEN is not needed with trusted publishing
+          # NPM_TOKEN is not needed with trusted publishing
           # The id-token: write permission above handles authentication
 
       - name: Changelog 📝
