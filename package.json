@@ -237,9 +237,6 @@
       "ejs": "^3.1.8",
       "yargs": "^17.6.2"
     },
-    "@semantic-release/npm": {
-      "npm": "^9.4.2"
-    },
     "@openapi-contrib/openapi-schema-to-json-schema": "3.2.0"
   },
   "release": {
@@ -261,7 +258,14 @@
         }
       ],
       "@semantic-release/release-notes-generator",
+      [
       "@semantic-release/npm",
+      {
+        "npmPublish": true,
+        "pkgRoot": ".",
+        "tarballDir": "dist"
+      }
+    ],
       [
         "@semantic-release/git",
         {
@@ -274,6 +278,6 @@
       ],
       "@semantic-release/github"
     ],
-    "repositoryUrl": "git@github.com:sourcefuse/loopback4-authentication.git"
+    "repositoryUrl": "https://github.com/sourcefuse/loopback4-authentication.git"
   }
 }
