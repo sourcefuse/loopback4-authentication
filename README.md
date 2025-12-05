@@ -2289,6 +2289,481 @@ For accessing the authenticated AuthUser model reference, you can inject the CUR
   private readonly getCurrentUser: Getter<User>,
 ```
 
+### AWS Cognito OAuth2
+
+In order to use it, run `npm install passport-cognito-oauth2`.
+
+AWS Cognito provides user authentication and authorization for web and mobile applications. This strategy uses OAuth 2.0 to authenticate users via AWS Cognito User Pools.
+
+#### Prerequisites
+
+Before implementing Cognito authentication in your LoopBack 4 application, you need to set up AWS Cognito:
+
+1. **Create a Cognito User Pool**
+   - Log in to AWS Console and navigate to Amazon Cognito
+   - Click "Create user pool"
+   - Configure sign-in options (email, username, phone number)
+   - Configure security requirements (password policy, MFA)
+   - Complete the user pool creation
+
+2. **Configure App Client**
+   - In your User Pool, go to "App integration" tab
+   - Under "App clients and analytics", create a new app client
+   - Enable "Generate client secret"
+   - Configure OAuth 2.0 settings:
+     - Grant types: Select "Authorization code grant"
+     - OAuth Scopes: Select required scopes (openid, email, profile, phone, etc.)
+     - Add callback URLs (e.g., `http://localhost:3000/auth/cognito-oauth-redirect`)
+     - Add sign-out URLs if needed
+
+3. **Note Down Configuration Details**
+   - User Pool ID (found in User Pool overview)
+   - App Client ID
+   - App Client Secret
+   - AWS Region (e.g., us-east-1)
+   - Cognito Domain (from App integration > Domain name)
+
+#### Implementation Steps
+
+First, create a AuthUser model implementing the IAuthUser interface. You can implement the interface in the user model itself. See sample below.
+
+```ts
+@model({
+  name: 'users',
+})
+export class User extends Entity implements IAuthUser {
+  @property({
+    type: 'number',
+    id: true,
+  })
+  id?: number;
+
+  @property({
+    type: 'string',
+    required: true,
+    name: 'first_name',
+  })
+  firstName: string;
+
+  @property({
+    type: 'string',
+    name: 'last_name',
+  })
+  lastName: string;
+
+  @property({
+    type: 'string',
+    name: 'middle_name',
+  })
+  middleName?: string;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
+  username: string;
+
+  @property({
+    type: 'string',
+  })
+  email?: string;
+
+  // Auth provider - 'cognito'
+  @property({
+    type: 'string',
+    required: true,
+    name: 'auth_provider',
+  })
+  authProvider: string;
+
+  // Id from external provider (Cognito sub)
+  @property({
+    type: 'string',
+    name: 'auth_id',
+  })
+  authId?: string;
+
+  @property({
+    type: 'string',
+    name: 'auth_token',
+  })
+  authToken?: string;
+
+  @property({
+    type: 'string',
+  })
+  password?: string;
+
+  constructor(data?: Partial<User>) {
+    super(data);
+  }
+}
+```
+
+Now bind this model to USER_MODEL key in application.ts
+
+```ts
+this.bind(AuthenticationBindings.USER_MODEL).to(User);
+```
+
+Create CRUD repository for the above model. Use loopback CLI.
+
+```sh
+lb4 repository
+```
+
+Add the verifier function for the strategy. You need to create a provider for the same. You can add your application specific business logic for client auth here. Here is a simple example.
+
+```ts
+import {Provider} from '@loopback/context';
+import {repository} from '@loopback/repository';
+import {HttpErrors} from '@loopback/rest';
+import {AuthErrorKeys, VerifyFunction} from 'loopback4-authentication';
+
+import {Tenant} from '../../../models';
+import {UserCredentialsRepository, UserRepository} from '../../../repositories';
+import {AuthUser} from '../models/auth-user.model';
+
+export class CognitoOauth2VerifyProvider
+  implements Provider<VerifyFunction.CognitoAuthFn>
+{
+  constructor(
+    @repository(UserRepository)
+    public userRepository: UserRepository,
+    @repository(UserCredentialsRepository)
+    public userCredsRepository: UserCredentialsRepository,
+  ) {}
+
+  value(): VerifyFunction.CognitoAuthFn {
+    return async (accessToken, refreshToken, profile) => {
+      // Profile contains user information from Cognito
+      // profile.sub - unique user identifier
+      // profile.email - user's email
+      // profile.username - username
+      // profile.phone_number - phone number (if requested in scope)
+
+      const user = await this.userRepository.findOne({
+        where: {
+          email: profile.email,
+        },
+      });
+
+      if (!user) {
+        throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
+      }
+
+      if (
+        !user ||
+        user.authProvider !== 'cognito' ||
+        user.authId !== profile.sub
+      ) {
+        throw new HttpErrors.Unauthorized(AuthErrorKeys.InvalidCredentials);
+      }
+
+      const authUser: AuthUser = new AuthUser(user);
+      authUser.permissions = [];
+      authUser.externalAuthToken = accessToken;
+      authUser.externalRefreshToken = refreshToken;
+      authUser.tenant = new Tenant({id: user.defaultTenant});
+      return authUser;
+    };
+  }
+}
+```
+
+Please note the Verify function type _VerifyFunction.CognitoAuthFn_
+
+Now bind this provider to the application in application.ts.
+
+```ts
+import {AuthenticationComponent, Strategies} from 'loopback4-authentication';
+```
+
+```ts
+// Add authentication component
+this.component(AuthenticationComponent);
+// Customize authentication verify handlers
+this.bind(Strategies.Passport.COGNITO_OAUTH2_VERIFIER).toProvider(
+  CognitoOauth2VerifyProvider,
+);
+```
+
+Now, bind the strategy factory provider to the application in application.ts.
+
+```ts
+import {CognitoStrategyFactoryProvider} from 'loopback4-authentication/passport-cognito-oauth2';
+```
+
+```ts
+this.bind(Strategies.Passport.COGNITO_OAUTH2_STRATEGY_FACTORY).toProvider(
+  CognitoStrategyFactoryProvider,
+);
+```
+
+Finally, add the authenticate function as a sequence action to sequence.ts.
+
+```ts
+export class MySequence implements SequenceHandler {
+  constructor(
+    @inject(SequenceActions.FIND_ROUTE) protected findRoute: FindRoute,
+    @inject(SequenceActions.PARSE_PARAMS) protected parseParams: ParseParams,
+    @inject(SequenceActions.INVOKE_METHOD) protected invoke: InvokeMethod,
+    @inject(SequenceActions.SEND) public send: Send,
+    @inject(SequenceActions.REJECT) public reject: Reject,
+    @inject(AuthenticationBindings.USER_AUTH_ACTION)
+    protected authenticateRequest: AuthenticateFn<AuthUser>,
+  ) {}
+
+  async handle(context: RequestContext) {
+    try {
+      const {request, response} = context;
+
+      const route = this.findRoute(request);
+      const args = await this.parseParams(request, route);
+      request.body = args[args.length - 1];
+      const authUser: AuthUser = await this.authenticateRequest(
+        request,
+        response,
+      );
+      const result = await this.invoke(route, args);
+      this.send(response, result);
+    } catch (err) {
+      this.reject(context, err);
+    }
+  }
+}
+```
+
+After this, you can use decorator to apply auth to controller functions wherever needed. See below.
+
+```ts
+@authenticateClient(STRATEGY.CLIENT_PASSWORD)
+  @authenticate(
+    STRATEGY.COGNITO_OAUTH2,
+    {
+      region: process.env.COGNITO_REGION, // e.g., 'us-east-1'
+      clientDomain: process.env.COGNITO_CLIENT_DOMAIN, // e.g., 'your-domain.auth.us-east-1.amazoncognito.com'
+      clientID: process.env.COGNITO_CLIENT_ID,
+      clientSecret: process.env.COGNITO_CLIENT_SECRET,
+      callbackURL: process.env.COGNITO_CALLBACK_URL, // e.g., 'http://localhost:3000/auth/cognito-oauth-redirect'
+    },
+    (req: Request) => {
+      return {
+        state: Object.keys(req.query)
+          .map(key => key + '=' + req.query[key])
+          .join('&'),
+      };
+    },
+  )
+  @authorize(['*'])
+  @get('/auth/cognito', {
+    responses: {
+      [STATUS_CODE.OK]: {
+        description: 'Token Response',
+        content: {
+          [CONTENT_TYPE.JSON]: {
+            schema: {'x-ts-type': TokenResponse},
+          },
+        },
+      },
+    },
+  })
+  async loginViaCognito(
+    @param.query.string('client_id')
+    clientId?: string,
+    @param.query.string('client_secret')
+    clientSecret?: string,
+  ): Promise<void> {}
+
+  @authenticate(
+    STRATEGY.COGNITO_OAUTH2,
+    {
+      region: process.env.COGNITO_REGION,
+      clientDomain: process.env.COGNITO_CLIENT_DOMAIN,
+      clientID: process.env.COGNITO_CLIENT_ID,
+      clientSecret: process.env.COGNITO_CLIENT_SECRET,
+      callbackURL: process.env.COGNITO_CALLBACK_URL,
+    },
+    (req: Request) => {
+      return {
+        state: Object.keys(req.query)
+          .map(key => `${key}=${req.query[key]}`)
+          .join('&'),
+      };
+    },
+  )
+  @authorize(['*'])
+  @get('/auth/cognito-oauth-redirect', {
+    responses: {
+      [STATUS_CODE.OK]: {
+        description: 'Token Response',
+        content: {
+          [CONTENT_TYPE.JSON]: {
+            schema: {'x-ts-type': TokenResponse},
+          },
+        },
+      },
+    },
+  })
+  async cognitoCallback(
+    @param.query.string('code') code: string,
+    @param.query.string('state') state: string,
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+  ): Promise<void> {
+    const clientId = new URLSearchParams(state).get('client_id');
+    if (!clientId || !this.user) {
+      throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
+    }
+    const client = await this.authClientRepository.findOne({
+      where: {
+        clientId: clientId,
+      },
+    });
+    if (!client || !client.redirectUrl) {
+      throw new HttpErrors.Unauthorized(AuthErrorKeys.ClientInvalid);
+    }
+    try {
+      const codePayload: ClientAuthCode<User> = {
+        clientId,
+        user: this.user,
+      };
+      const token = jwt.sign(codePayload, client.secret, {
+        expiresIn: client.authCodeExpiration,
+        audience: clientId,
+        subject: this.user.username,
+        issuer: process.env.JWT_ISSUER,
+      });
+      response.redirect(`${client.redirectUrl}?code=${token}`);
+    } catch (error) {
+      throw new HttpErrors.InternalServerError(AuthErrorKeys.UnknownError);
+    }
+  }
+```
+
+#### Environment Variables
+
+Create a `.env` file in your project root with the following variables:
+
+```env
+# AWS Cognito Configuration
+COGNITO_REGION=us-east-1
+COGNITO_CLIENT_DOMAIN=your-domain.auth.us-east-1.amazoncognito.com
+COGNITO_CLIENT_ID=your_app_client_id
+COGNITO_CLIENT_SECRET=your_app_client_secret
+COGNITO_CALLBACK_URL=http://localhost:3000/auth/cognito-oauth-redirect
+
+# JWT Configuration (for your application)
+JWT_SECRET=your_jwt_secret
+JWT_ISSUER=your_app_name
+```
+
+#### OAuth 2.0 Flow
+
+The Cognito OAuth 2.0 authentication flow works as follows:
+
+1. User hits the `/auth/cognito` endpoint with client credentials
+2. The application redirects the user to AWS Cognito's authorization URL
+3. User authenticates with AWS Cognito (sign in or sign up)
+4. Cognito redirects back to your callback URL (`/auth/cognito-oauth-redirect`) with an authorization code
+5. The strategy exchanges the authorization code for access and refresh tokens
+6. Your verify function is called with the tokens and user profile
+7. The application creates a session and redirects the user to the client application
+
+#### Cognito Profile Object
+
+The profile object returned by Cognito contains the following properties (depending on your OAuth scopes):
+
+```ts
+{
+  sub: 'uuid',              // Unique user identifier
+  email: 'user@example.com',
+  username: 'username',
+  phone_number: '+1234567890', // if phone scope is requested
+  name: 'Full Name',           // if profile scope is requested
+  // Additional custom attributes if configured
+}
+```
+
+#### Advanced Configuration
+
+**Custom Scopes**
+
+You can request specific OAuth scopes by configuring your app client in AWS Cognito:
+
+- `openid` - Required for OpenID Connect
+- `email` - User's email address
+- `profile` - User's profile information
+- `phone` - User's phone number
+- `aws.cognito.signin.user.admin` - Grants access to Amazon Cognito User Pools API operations
+
+**passReqToCallback Option**
+
+To access the request object in your verify function:
+
+```ts
+@authenticate(
+  STRATEGY.COGNITO_OAUTH2,
+  {
+    region: process.env.COGNITO_REGION,
+    clientDomain: process.env.COGNITO_CLIENT_DOMAIN,
+    clientID: process.env.COGNITO_CLIENT_ID,
+    clientSecret: process.env.COGNITO_CLIENT_SECRET,
+    callbackURL: process.env.COGNITO_CALLBACK_URL,
+    passReqToCallback: true,
+  },
+)
+```
+
+Update your verify function signature:
+
+```ts
+value(): VerifyFunction.CognitoAuthFn {
+  return async (accessToken, refreshToken, profile, cb, req) => {
+    // req is now available
+    // Your logic here
+  };
+}
+```
+
+**Https Proxy Support**
+
+If you need to use an HTTPS proxy for Cognito authentication, add one of these environment variables:
+
+```env
+HTTPS_PROXY=http://proxy.example.com:8080
+# or
+https_proxy=http://proxy.example.com:8080
+```
+
+The extension will automatically configure the proxy agent for Cognito OAuth requests.
+
+#### Troubleshooting
+
+**Common Issues:**
+
+1. **Redirect URI Mismatch**
+   - Ensure the `callbackURL` in your code exactly matches one of the callback URLs configured in your Cognito App Client
+   - URLs are case-sensitive
+
+2. **Invalid Client Error**
+   - Verify that `clientID` and `clientSecret` are correct
+   - Ensure the app client has OAuth flows enabled
+
+3. **User Not Found**
+   - Make sure users exist in your database with `authProvider: 'cognito'`
+   - The `authId` field should store the Cognito `sub` (user's unique identifier)
+
+4. **Scope Issues**
+   - Verify that requested scopes are enabled in your Cognito App Client OAuth settings
+   - Some attributes require specific scopes (e.g., email requires `email` scope)
+
+For accessing the authenticated AuthUser model reference, you can inject the CURRENT_USER provider, provided by the extension, which is populated by the auth action sequence above.
+
+```ts
+  @inject.getter(AuthenticationBindings.CURRENT_USER)
+  private readonly getCurrentUser: Getter<User>,
+```
+
 ### Keycloak
 
 In order to use it, run `npm install @exlinc/keycloak-passport`.
