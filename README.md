@@ -2470,8 +2470,9 @@ export class CognitoOauth2VerifyProvider
   }
 }
 ```
+**Note**: Please ensure that the user or tenant record you are trying to access exists in your database. Alternatively, adjust your verifier implementation to handle cases where the record may not be present.
 
-Please note the Verify function type _VerifyFunction.CognitoAuthFn_
+Please note the Verify function type _VerifyFunction.CognitoAuthFn_ & you can also write application specific definition of verifier fucntion
 
 Now bind this provider to the application in application.ts.
 
