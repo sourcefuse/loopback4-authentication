@@ -10,6 +10,7 @@ import {
   SamlConfig,
   VerifyWithRequest,
   VerifyWithoutRequest,
+  PassportSamlConfig,
 } from '@node-saml/passport-saml';
 import {AuthErrorKeys} from '../../error-keys';
 import {Strategies} from '../../keys';
@@ -33,7 +34,7 @@ export class SamlStrategyFactoryProvider
   }
 
   getSamlStrategyVerifier(
-    options: SamlConfig,
+    options: PassportSamlConfig,
     verifierPassed?: VerifyFunction.SamlFn,
   ): Strategy {
     const verifyFn = verifierPassed ?? this.verifierSaml;
