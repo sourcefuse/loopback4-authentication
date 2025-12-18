@@ -17,9 +17,7 @@ export type AzureADAuthStrategyFactory = (
   verifierPassed?: VerifyFunction.AzureADAuthFn,
 ) => OIDCStrategy;
 
-export class AzureADAuthStrategyFactoryProvider
-  implements Provider<AzureADAuthStrategyFactory>
-{
+export class AzureADAuthStrategyFactoryProvider implements Provider<AzureADAuthStrategyFactory> {
   constructor(
     @inject(Strategies.Passport.AZURE_AD_VERIFIER)
     private readonly verifierAzureADAuth: VerifyFunction.AzureADAuthFn,

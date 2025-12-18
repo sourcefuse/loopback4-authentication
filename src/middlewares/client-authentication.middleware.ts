@@ -19,9 +19,7 @@ import {AuthenticationMiddlewareGroups} from './middleware-groups.enum';
     ],
   }),
 )
-export class ClientAuthenticationMiddlewareProvider
-  implements Provider<Middleware>
-{
+export class ClientAuthenticationMiddlewareProvider implements Provider<Middleware> {
   constructor(
     @inject(AuthenticationBindings.CLIENT_AUTH_ACTION)
     private authenticateClient: AuthenticateFn<IAuthClient | undefined>,

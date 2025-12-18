@@ -4,9 +4,7 @@ import * as GoogleStrategy from 'passport-google-oauth20';
 import {IAuthUser} from '../../../types';
 import {Request} from '@loopback/rest';
 
-export class BearerTokenVerifyProvider
-  implements Provider<VerifyFunction.GoogleAuthFn>
-{
+export class BearerTokenVerifyProvider implements Provider<VerifyFunction.GoogleAuthFn> {
   constructor() {}
 
   value(): VerifyFunction.GoogleAuthFn {

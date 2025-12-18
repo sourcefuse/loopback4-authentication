@@ -8,9 +8,7 @@ import {VerifyFunction} from '../../types';
  *
  * It will just throw an error saying Not Implemented
  */
-export class LocalPasswordVerifyProvider
-  implements Provider<VerifyFunction.LocalPasswordFn>
-{
+export class LocalPasswordVerifyProvider implements Provider<VerifyFunction.LocalPasswordFn> {
   value(): VerifyFunction.LocalPasswordFn {
     return async (username: string, password: string) => {
       throw new HttpErrors.NotImplemented(

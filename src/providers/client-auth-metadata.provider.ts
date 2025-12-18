@@ -4,9 +4,9 @@ import {CoreBindings} from '@loopback/core';
 import {getClientAuthenticateMetadata} from '../decorators';
 import {AuthenticationMetadata} from '../types';
 
-export class ClientAuthMetadataProvider
-  implements Provider<AuthenticationMetadata | undefined>
-{
+export class ClientAuthMetadataProvider implements Provider<
+  AuthenticationMetadata | undefined
+> {
   constructor(
     @inject(CoreBindings.CONTROLLER_CLASS, {optional: true})
     private readonly controllerClass: Constructor<{}>,

@@ -8,9 +8,7 @@ import {VerifyFunction} from '../../types';
  *
  * It will just throw an error saying Not Implemented
  */
-export class AzureADAuthVerifyProvider
-  implements Provider<VerifyFunction.AzureADAuthFn>
-{
+export class AzureADAuthVerifyProvider implements Provider<VerifyFunction.AzureADAuthFn> {
   value(): VerifyFunction.AzureADAuthFn {
     return async (
       accessToken: string,

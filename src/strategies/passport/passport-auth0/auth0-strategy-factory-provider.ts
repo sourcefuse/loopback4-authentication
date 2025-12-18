@@ -17,9 +17,7 @@ export type Auth0StrategyFactory = (
   verifierPassed?: VerifyFunction.Auth0Fn,
 ) => Strategy;
 
-export class Auth0StrategyFactoryProvider
-  implements Provider<Auth0StrategyFactory>
-{
+export class Auth0StrategyFactoryProvider implements Provider<Auth0StrategyFactory> {
   constructor(
     @inject(Strategies.Passport.AUTH0_VERIFIER)
     private readonly auth0Verifier: VerifyFunction.Auth0Fn,

@@ -61,9 +61,7 @@ describe('getting cognito oauth2 strategy with options', () => {
   }
 });
 
-class CognitoAuthVerifyProvider
-  implements Provider<VerifyFunction.CognitoAuthFn>
-{
+class CognitoAuthVerifyProvider implements Provider<VerifyFunction.CognitoAuthFn> {
   constructor() {}
 
   value(): VerifyFunction.CognitoAuthFn {

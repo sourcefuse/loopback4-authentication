@@ -26,13 +26,15 @@ export type VerifyCallback = (
 ) => void;
 
 export namespace VerifyFunction {
-  export interface OauthClientPasswordFn<T = IAuthClient>
-    extends GenericAuthFn<T> {
+  export interface OauthClientPasswordFn<
+    T = IAuthClient,
+  > extends GenericAuthFn<T> {
     (clientId: string, clientSecret: string, req?: Request): Promise<T | null>;
   }
 
-  export interface OauthSecureClientPasswordFn<T = IAuthSecureClient>
-    extends GenericAuthFn<T> {
+  export interface OauthSecureClientPasswordFn<
+    T = IAuthSecureClient,
+  > extends GenericAuthFn<T> {
     (clientId: string, clientSecret: string, req?: Request): Promise<T | null>;
   }
 
@@ -96,8 +98,9 @@ export namespace VerifyFunction {
     ): Promise<T | null>;
   }
 
-  export interface InstagramAuthFn<T = IAuthUser>
-    extends VerifyFunction.GenericAuthFn<T> {
+  export interface InstagramAuthFn<
+    T = IAuthUser,
+  > extends VerifyFunction.GenericAuthFn<T> {
     (
       accessToken: string,
       refreshToken: string,
@@ -107,8 +110,9 @@ export namespace VerifyFunction {
     ): Promise<T | null>;
   }
 
-  export interface FacebookAuthFn<T = IAuthUser>
-    extends VerifyFunction.GenericAuthFn<T> {
+  export interface FacebookAuthFn<
+    T = IAuthUser,
+  > extends VerifyFunction.GenericAuthFn<T> {
     (
       accessToken: string,
       refreshToken: string,

@@ -4,9 +4,7 @@ import * as InstagramStrategy from 'passport-instagram';
 import {IAuthUser} from '../../../types';
 import {Request} from '@loopback/rest';
 
-export class BearerTokenVerifyProvider
-  implements Provider<VerifyFunction.InstagramAuthFn>
-{
+export class BearerTokenVerifyProvider implements Provider<VerifyFunction.InstagramAuthFn> {
   constructor() {}
 
   value() {

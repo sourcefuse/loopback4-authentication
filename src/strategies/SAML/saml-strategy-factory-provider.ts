@@ -19,9 +19,7 @@ export type SamlStrategyFactory = (
   verifierPassed?: VerifyFunction.SamlFn,
 ) => Strategy;
 
-export class SamlStrategyFactoryProvider
-  implements Provider<SamlStrategyFactory>
-{
+export class SamlStrategyFactoryProvider implements Provider<SamlStrategyFactory> {
   constructor(
     @inject(Strategies.Passport.SAML_VERIFIER)
     private readonly verifierSaml: VerifyFunction.SamlFn,

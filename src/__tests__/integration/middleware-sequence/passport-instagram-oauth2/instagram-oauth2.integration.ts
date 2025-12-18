@@ -61,9 +61,7 @@ describe('getting instagram oauth2 strategy with options using Middleware Sequen
   }
 });
 
-class InstagramAuthVerifyProvider
-  implements Provider<VerifyFunction.InstagramAuthFn>
-{
+class InstagramAuthVerifyProvider implements Provider<VerifyFunction.InstagramAuthFn> {
   constructor() {}
 
   value(): VerifyFunction.InstagramAuthFn {

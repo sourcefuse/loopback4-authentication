@@ -10,9 +10,7 @@ export type PassportOtpStrategyFactory = (
   verifierPassed?: VerifyFunction.OtpAuthFn,
 ) => Otp.Strategy;
 
-export class PassportOtpStrategyFactoryProvider
-  implements Provider<PassportOtpStrategyFactory>
-{
+export class PassportOtpStrategyFactoryProvider implements Provider<PassportOtpStrategyFactory> {
   constructor(
     @inject(Strategies.Passport.OTP_VERIFIER)
     private readonly verifierOtp: VerifyFunction.OtpAuthFn,

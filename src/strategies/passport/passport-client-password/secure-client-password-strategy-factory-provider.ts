@@ -13,9 +13,7 @@ export type SecureClientPasswordStrategyFactory = (
   verifierPassed?: VerifyFunction.OauthSecureClientPasswordFn,
 ) => ClientPasswordStrategy.Strategy;
 
-export class SecureClientPasswordStrategyFactoryProvider
-  implements Provider<SecureClientPasswordStrategyFactory>
-{
+export class SecureClientPasswordStrategyFactoryProvider implements Provider<SecureClientPasswordStrategyFactory> {
   constructor(
     @inject(Strategies.Passport.OAUTH2_CLIENT_PASSWORD_VERIFIER)
     private readonly verifier: VerifyFunction.OauthSecureClientPasswordFn,

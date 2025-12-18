@@ -61,9 +61,7 @@ describe('getting google oauth2 strategy using Custom Sequence', () => {
   }
 });
 
-class GoogleAuthVerifyProvider
-  implements Provider<VerifyFunction.GoogleAuthFn>
-{
+class GoogleAuthVerifyProvider implements Provider<VerifyFunction.GoogleAuthFn> {
   constructor() {}
 
   value(): VerifyFunction.GoogleAuthFn {

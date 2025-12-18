@@ -8,9 +8,7 @@ import {Keycloak, VerifyFunction} from '../../types';
  *
  * It will just throw an error saying Not Implemented
  */
-export class KeycloakVerifyProvider
-  implements Provider<VerifyFunction.KeycloakAuthFn>
-{
+export class KeycloakVerifyProvider implements Provider<VerifyFunction.KeycloakAuthFn> {
   value(): VerifyFunction.KeycloakAuthFn {
     return async (
       accessToken: string,

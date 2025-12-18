@@ -67,9 +67,7 @@ describe('getting keycloak oauth2 strategy using Custom Sequence', () => {
   }
 });
 
-class KeycloakAuthVerifyProvider
-  implements Provider<VerifyFunction.KeycloakAuthFn>
-{
+class KeycloakAuthVerifyProvider implements Provider<VerifyFunction.KeycloakAuthFn> {
   constructor() {}
 
   value(): VerifyFunction.KeycloakAuthFn {
