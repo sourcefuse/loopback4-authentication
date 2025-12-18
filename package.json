@@ -224,6 +224,7 @@
       "@openapi-contrib/openapi-schema-to-json-schema": "4.0.5"
     },
     "aws-sdk": "2.1360.0",
+    "validator": "13.15.22",
     "body-parser": {
       "debug": "^4.3.4"
     },
