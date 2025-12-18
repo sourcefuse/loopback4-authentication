@@ -7,9 +7,7 @@ import {Cognito, IAuthUser, VerifyFunction} from '../../../types';
  *
  * It will just throw an error saying Not Implemented
  */
-export class BearerTokenVerifyProvider
-  implements Provider<VerifyFunction.CognitoAuthFn>
-{
+export class BearerTokenVerifyProvider implements Provider<VerifyFunction.CognitoAuthFn> {
   constructor() {}
 
   value(): VerifyFunction.CognitoAuthFn {

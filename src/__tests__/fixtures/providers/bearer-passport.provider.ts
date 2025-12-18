@@ -8,9 +8,7 @@ import {
   validToken,
 } from '../data/bearer-data';
 
-export class BearerTokenVerifyProvider
-  implements Provider<VerifyFunction.BearerFn>
-{
+export class BearerTokenVerifyProvider implements Provider<VerifyFunction.BearerFn> {
   constructor() {}
 
   value(): VerifyFunction.BearerFn {

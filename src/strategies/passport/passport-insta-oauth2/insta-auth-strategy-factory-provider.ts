@@ -17,9 +17,7 @@ export type InstagramAuthStrategyFactory = (
   verifierPassed?: VerifyFunction.InstagramAuthFn,
 ) => Strategy;
 
-export class InstagramAuthStrategyFactoryProvider
-  implements Provider<InstagramAuthStrategyFactory>
-{
+export class InstagramAuthStrategyFactoryProvider implements Provider<InstagramAuthStrategyFactory> {
   constructor(
     @inject(Strategies.Passport.INSTAGRAM_OAUTH2_VERIFIER)
     private readonly verifierInstagramAuth: VerifyFunction.InstagramAuthFn,

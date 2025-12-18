@@ -4,9 +4,7 @@ import * as AzureADAuthStrategy from 'passport-azure-ad';
 import {IAuthUser} from '../../../types';
 import {Request} from '@loopback/rest';
 
-export class BearerTokenVerifyProvider
-  implements Provider<VerifyFunction.AzureADAuthFn>
-{
+export class BearerTokenVerifyProvider implements Provider<VerifyFunction.AzureADAuthFn> {
   value(): VerifyFunction.AzureADAuthFn {
     return async (
       accessToken: string,

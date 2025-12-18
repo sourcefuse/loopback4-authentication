@@ -18,9 +18,7 @@ export type GoogleAuthStrategyFactory = (
   verifierPassed?: VerifyFunction.GoogleAuthFn,
 ) => Strategy;
 
-export class GoogleAuthStrategyFactoryProvider
-  implements Provider<GoogleAuthStrategyFactory>
-{
+export class GoogleAuthStrategyFactoryProvider implements Provider<GoogleAuthStrategyFactory> {
   constructor(
     @inject(Strategies.Passport.GOOGLE_OAUTH2_VERIFIER)
     private readonly verifierGoogleAuth: VerifyFunction.GoogleAuthFn,

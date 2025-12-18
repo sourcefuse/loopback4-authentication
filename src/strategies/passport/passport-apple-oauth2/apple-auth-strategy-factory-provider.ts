@@ -19,9 +19,7 @@ export type AppleAuthStrategyFactory = (
   verifierPassed?: VerifyFunction.AppleAuthFn,
 ) => Strategy;
 
-export class AppleAuthStrategyFactoryProvider
-  implements Provider<AppleAuthStrategyFactory>
-{
+export class AppleAuthStrategyFactoryProvider implements Provider<AppleAuthStrategyFactory> {
   constructor(
     @inject(Strategies.Passport.APPLE_OAUTH2_VERIFIER)
     private readonly verifierAppleAuth: VerifyFunction.AppleAuthFn,

@@ -12,9 +12,7 @@ export type CognitoAuthStrategyFactory = (
   verifierPassed?: VerifyFunction.CognitoAuthFn,
 ) => typeof CognitoStrategy;
 
-export class CognitoStrategyFactoryProvider
-  implements Provider<CognitoAuthStrategyFactory>
-{
+export class CognitoStrategyFactoryProvider implements Provider<CognitoAuthStrategyFactory> {
   constructor(
     @inject(Strategies.Passport.COGNITO_OAUTH2_VERIFIER)
     private readonly verifierCognito: VerifyFunction.CognitoAuthFn,

@@ -16,9 +16,7 @@ import {AuthenticationMiddlewareGroups} from './middleware-groups.enum';
     downstreamGroups: RestMiddlewareGroups.INVOKE_METHOD,
   }),
 )
-export class UserAuthenticationMiddlewareProvider
-  implements Provider<Middleware>
-{
+export class UserAuthenticationMiddlewareProvider implements Provider<Middleware> {
   constructor(
     @inject(AuthenticationBindings.USER_AUTH_ACTION)
     private authenticateUser: AuthenticateFn<IAuthUser | undefined>,

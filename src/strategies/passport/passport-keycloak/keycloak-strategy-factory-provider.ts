@@ -13,9 +13,7 @@ export type KeycloakStrategyFactory = (
   verifierPassed?: VerifyFunction.KeycloakAuthFn,
 ) => typeof KeycloakStrategy;
 
-export class KeycloakStrategyFactoryProvider
-  implements Provider<KeycloakStrategyFactory>
-{
+export class KeycloakStrategyFactoryProvider implements Provider<KeycloakStrategyFactory> {
   constructor(
     @inject(Strategies.Passport.KEYCLOAK_VERIFIER)
     private readonly verifierKeycloak: VerifyFunction.KeycloakAuthFn,

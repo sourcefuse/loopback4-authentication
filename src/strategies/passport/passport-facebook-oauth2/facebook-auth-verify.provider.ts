@@ -8,9 +8,7 @@ import {VerifyCallback, VerifyFunction} from '../../types';
  *
  * It will just throw an error saying Not Implemented
  */
-export class FacebookAuthVerifyProvider
-  implements Provider<VerifyFunction.FacebookAuthFn>
-{
+export class FacebookAuthVerifyProvider implements Provider<VerifyFunction.FacebookAuthFn> {
   value(): VerifyFunction.FacebookAuthFn {
     return async (
       accessToken: string,

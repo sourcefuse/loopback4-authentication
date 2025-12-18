@@ -13,9 +13,7 @@ export type ResourceOwnerPasswordStrategyFactory = (
   verifierPassed?: VerifyFunction.ResourceOwnerPasswordFn,
 ) => Oauth2ResourceOwnerPassword.Strategy;
 
-export class ResourceOwnerPasswordStrategyFactoryProvider
-  implements Provider<ResourceOwnerPasswordStrategyFactory>
-{
+export class ResourceOwnerPasswordStrategyFactoryProvider implements Provider<ResourceOwnerPasswordStrategyFactory> {
   constructor(
     @inject(Strategies.Passport.RESOURCE_OWNER_PASSWORD_VERIFIER)
     private readonly verifierResourceOwner: VerifyFunction.ResourceOwnerPasswordFn,

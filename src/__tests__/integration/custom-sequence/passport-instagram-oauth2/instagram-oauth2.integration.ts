@@ -61,9 +61,7 @@ describe('getting instagram oauth2 strategy using Custom Sequence', () => {
   }
 });
 
-class InstagramAuthVerifyProvider
-  implements Provider<VerifyFunction.InstagramAuthFn>
-{
+class InstagramAuthVerifyProvider implements Provider<VerifyFunction.InstagramAuthFn> {
   constructor() {}
 
   value(): VerifyFunction.InstagramAuthFn {

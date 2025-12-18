@@ -14,9 +14,7 @@ export type BearerStrategyFactory = (
   verifierPassed?: VerifyFunction.BearerFn,
 ) => PassportBearer.Strategy<VerifyFunction.BearerFn>;
 
-export class BearerStrategyFactoryProvider
-  implements Provider<BearerStrategyFactory>
-{
+export class BearerStrategyFactoryProvider implements Provider<BearerStrategyFactory> {
   constructor(
     @inject(Strategies.Passport.BEARER_TOKEN_VERIFIER)
     private readonly verifierBearer: VerifyFunction.BearerFn,

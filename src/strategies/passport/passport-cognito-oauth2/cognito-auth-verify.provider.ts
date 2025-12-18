@@ -7,9 +7,7 @@ import {Cognito, VerifyFunction} from '../../types';
  *
  * It will just throw an error saying Not Implemented
  */
-export class CognitoAuthVerifyProvider
-  implements Provider<VerifyFunction.CognitoAuthFn>
-{
+export class CognitoAuthVerifyProvider implements Provider<VerifyFunction.CognitoAuthFn> {
   value(): VerifyFunction.CognitoAuthFn {
     return async (
       accessToken: string,

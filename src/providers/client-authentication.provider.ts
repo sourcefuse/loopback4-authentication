@@ -7,9 +7,9 @@ import {StrategyAdapter} from '../strategy-adapter';
 import {IAuthClient, AuthenticateFn} from '../types';
 import {isObjectLike, isEmpty} from 'lodash';
 
-export class ClientAuthenticateActionProvider
-  implements Provider<AuthenticateFn<IAuthClient | undefined>>
-{
+export class ClientAuthenticateActionProvider implements Provider<
+  AuthenticateFn<IAuthClient | undefined>
+> {
   constructor(
     @inject.getter(AuthenticationBindings.CLIENT_STRATEGY)
     readonly getStrategy: Getter<Strategy>,

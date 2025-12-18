@@ -3,9 +3,7 @@ import {VerifyFunction} from '../../../strategies';
 import {Request} from 'express';
 import {IAuthUser, IAuthClient} from '../../../types';
 
-export class ResourceOwnerVerifyProvider
-  implements Provider<VerifyFunction.ResourceOwnerPasswordFn>
-{
+export class ResourceOwnerVerifyProvider implements Provider<VerifyFunction.ResourceOwnerPasswordFn> {
   constructor() {}
 
   value(): VerifyFunction.ResourceOwnerPasswordFn {
