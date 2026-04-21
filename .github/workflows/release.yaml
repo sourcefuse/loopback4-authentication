@@ -13,7 +13,7 @@ jobs:
     # environment: production  # Uncomment if you set an environment name in npm trusted publisher settings
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           # fetch-depth is necessary to get all tags
           # otherwise lerna can't detect the changes and will end up bumping the versions for all packages
@@ -38,7 +38,7 @@ jobs:
           CONFIG_EMAIL: ${{ vars.RELEASE_COMMIT_EMAIL }}
 
       - name: Install 📌
-        run: npm install
+        run: npm ci --ignore-scripts
 
       - name: Test 🔧
         run: npm run test

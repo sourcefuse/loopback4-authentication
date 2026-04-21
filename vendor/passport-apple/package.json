@@ -31,8 +31,8 @@
   },
   "homepage": "https://github.com/ananay/passport-apple#readme",
   "dependencies": {
-    "jsonwebtoken": "^9.0.0",
-    "passport-oauth2": "^1.5.0"
+    "jsonwebtoken": "^9.0.3",
+    "passport-oauth2": "^1.8.0"
   },
   "overrides": {
     "jws": "^3.2.3",
