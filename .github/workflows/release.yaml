@@ -38,7 +38,7 @@ jobs:
           CONFIG_EMAIL: ${{ vars.RELEASE_COMMIT_EMAIL }}
 
       - name: Install 📌
-        run: npm install
+        run: npm ci --ignore-scripts
 
       - name: Test 🔧
         run: npm run test
