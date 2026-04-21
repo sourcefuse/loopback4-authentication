@@ -1,3 +1,37 @@
+## Release [v13.1.0](https://github.com/sourcefuse/loopback4-authentication/compare/v13.0.4..v13.1.0) April 21, 2026
+Welcome to the April 21, 2026 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
+
+  - [](https://github.com/sourcefuse/loopback4-authentication/issues/) :- [chore(deps): upgraded to latest dependencies ](https://github.com/sourcefuse/loopback4-authentication/commit/757a4914ec15389323bd1ff727c7825f158062b9) was commited on April 21, 2026 by [Sourav](mailto:sourav.kashyap@sourcefuse.com)
+    
+      - * chore(deps): upgraded to latest dependencies
+      
+      - * chore(deps): upgraded to latest dependencies, comment fixes
+      
+      - * chore(ci-cd): Change npm install to npm ci in release workflow
+      
+      - * chore(ci-cd): Modify npm ci command to ignore scripts
+      
+      - * chore(cic-cd): dummy commit for ci checks to re run
+      
+      - Removed a period from the description field.
+      
+      - ---------
+      
+      - Co-authored-by: Vinay Gupta &lt;vinay.gupta@sourcefuse.com&gt; Co-authored-by:
+      
+      - yeshamavani &lt;83634146+yeshamavani@users.noreply.github.com&gt;
+      
+  
+  - [](https://github.com/sourcefuse/loopback4-authentication/issues/) :- [feat(ci-cd): add trivy scan instead of synk ](https://github.com/sourcefuse/loopback4-authentication/commit/db3ae7c4e8beb843fcb75667af73835f404816c0) was commited on December 18, 2025 by [Vaibhav Bhalla](mailto:vaibhav.bhalla@sourcefuse.com)
+    
+      - * feat(ci-cd): add trivy scan instead of synk
+      
+      - * corrected prettier format
+      
+  
+Clink on the above links to understand the changes in detail.
+  ___
+
 ## Release [v13.0.4](https://github.com/sourcefuse/loopback4-authentication/compare/v13.0.3..v13.0.4) October 31, 2025
 Welcome to the October 31, 2025 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
 
