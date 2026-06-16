@@ -1,3 +1,18 @@
+## Release [v14.0.0](https://github.com/sourcefuse/loopback4-authentication/compare/v13.1.0..v14.0.0) June 16, 2026
+Welcome to the June 16, 2026 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
+
+  - [](https://github.com/sourcefuse/loopback4-authentication/issues/281) :- [refactor(chore): remove Node js 20 support ](https://github.com/sourcefuse/loopback4-authentication/commit/e945d1f97db164c245636a19dfe510900314391a) was commited on June 16, 2026 by [Sourav](mailto:sourav.kashyap@sourcefuse.com)
+    
+      - remove Node js 20 support
+      
+      - BREAKING CHANGE: yes
+      
+      - GH-281
+      
+  
+Clink on the above links to understand the changes in detail.
+  ___
+
 ## Release [v13.1.0](https://github.com/sourcefuse/loopback4-authentication/compare/v13.0.4..v13.1.0) April 21, 2026
 Welcome to the April 21, 2026 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
 
