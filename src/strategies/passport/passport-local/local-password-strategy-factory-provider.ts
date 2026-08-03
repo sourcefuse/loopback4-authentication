@@ -11,8 +11,7 @@ import {isEmpty} from 'lodash';
 
 export type LocalPasswordStrategyFactory = (
   options?:
-    | PassportLocal.IStrategyOptions
-    | PassportLocal.IStrategyOptionsWithRequest,
+    PassportLocal.IStrategyOptions | PassportLocal.IStrategyOptionsWithRequest,
   verifierPassed?: VerifyFunction.LocalPasswordFn,
 ) => PassportLocal.Strategy;
 
