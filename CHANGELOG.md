@@ -1,3 +1,16 @@
+## Release [v14.0.1](https://github.com/sourcefuse/loopback4-authentication/compare/v14.0.0..v14.0.1) August 11, 2026
+Welcome to the August 11, 2026 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
+
+  - [](https://github.com/sourcefuse/loopback4-authentication/issues/283) :- [chore(deps): upgrade undici fixing five security advisories ](https://github.com/sourcefuse/loopback4-authentication/commit/252c459823c5b36b237ebf3c4f209b89dfc16c60) was commited on August 11, 2026 by [Piyush Singh Gaur](mailto:piyush.singh@sourcefuse.com)
+    
+      - upgrade undici fixing five security advisories
+      
+      - GH-283
+      
+  
+Clink on the above links to understand the changes in detail.
+  ___
+
 ## Release [v14.0.0](https://github.com/sourcefuse/loopback4-authentication/compare/v13.1.0..v14.0.0) June 16, 2026
 Welcome to the June 16, 2026 release of loopback4-authentication. There are many updates in this version that we hope you will like, the key highlights include:
 
