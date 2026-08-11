@@ -239,7 +239,7 @@
       "yargs": "^17.6.2"
     },
     "@openapi-contrib/openapi-schema-to-json-schema": "3.2.0",
-    "undici": "6.24.0",
+    "undici": "6.28.0",
     "axios": "1.15.0"
   },
   "release": {

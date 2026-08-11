@@ -13,8 +13,7 @@ describe('getting auth0 strategy with options', () => {
     const strategyVerifier: Auth0StrategyFactory = await getStrategy();
 
     const options:
-      | Auth0.Auth0StrategyOptions
-      | Auth0Strategy.StrategyOptionWithRequest = {
+      Auth0.Auth0StrategyOptions | Auth0Strategy.StrategyOptionWithRequest = {
       clientID: 'string',
       clientSecret: 'string',
       callbackURL: 'string',
@@ -34,8 +33,7 @@ describe('getting auth0 strategy with options', () => {
     const strategyVerifier: Auth0StrategyFactory = await getStrategy();
 
     const options:
-      | Auth0.Auth0StrategyOptions
-      | Auth0Strategy.StrategyOptionWithRequest = {
+      Auth0.Auth0StrategyOptions | Auth0Strategy.StrategyOptionWithRequest = {
       clientID: 'string',
       clientSecret: 'string',
       callbackURL: 'string',

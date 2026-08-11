@@ -201,8 +201,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
 
     return facebookFactory(
       this.metadata.options as
-        | FacebookStrategy.StrategyOptionWithRequest
-        | ExtendedStrategyOption,
+        FacebookStrategy.StrategyOptionWithRequest | ExtendedStrategyOption,
       verifier as VerifyFunction.FacebookAuthFn,
     );
   }
@@ -257,8 +256,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     // Cast the factory output to `Strategy` type
     return auth0Factory(
       this.metadata.options as
-        | Auth0.Auth0StrategyOptions
-        | Auth0Strategy.StrategyOptionWithRequest,
+        Auth0.Auth0StrategyOptions | Auth0Strategy.StrategyOptionWithRequest,
       verifier as VerifyFunction.Auth0Fn,
     );
   }

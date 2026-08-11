@@ -15,8 +15,7 @@ describe('getting azuread auth strategy with options', () => {
     const strategyVerifier: AzureADAuthStrategyFactory = await getStrategy();
 
     const options:
-      | IOIDCStrategyOptionWithoutRequest
-      | IOIDCStrategyOptionWithRequest = {
+      IOIDCStrategyOptionWithoutRequest | IOIDCStrategyOptionWithRequest = {
       scope: '',
       responseType: 'code',
       responseMode: 'query',
@@ -40,8 +39,7 @@ describe('getting azuread auth strategy with options', () => {
     const strategyVerifier: AzureADAuthStrategyFactory = await getStrategy();
 
     const options:
-      | IOIDCStrategyOptionWithoutRequest
-      | IOIDCStrategyOptionWithRequest = {
+      IOIDCStrategyOptionWithoutRequest | IOIDCStrategyOptionWithRequest = {
       scope: '',
       responseType: 'code',
       responseMode: 'query',
