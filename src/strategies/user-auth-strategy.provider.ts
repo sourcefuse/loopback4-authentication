@@ -1,4 +1,5 @@
-import {Context, inject, Provider} from '@loopback/core';
+import {BindingKey, Context, inject, Provider} from '@loopback/core';
+import {HttpErrors} from '@loopback/rest';
 import {SamlConfig} from '@node-saml/passport-saml';
 import {Strategy} from 'passport';
 import * as AppleStrategy from 'passport-apple';
@@ -9,6 +10,7 @@ import * as PassportBearer from 'passport-http-bearer';
 import * as InstagramStrategy from 'passport-instagram';
 import * as PassportLocal from 'passport-local';
 import * as Auth0Strategy from 'passport-auth0';
+import {AuthErrorKeys} from '../error-keys';
 import {AuthenticationBindings} from '../keys';
 import {STRATEGY} from '../strategy-name.enum';
 import {AuthenticationMetadata, IAuthUser} from '../types';
@@ -33,17 +35,22 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     @inject.context() private readonly ctx: Context,
   ) {}
 
-  async processLocalFactory(verifier: VerifierType) {
-    const localFactory = this.ctx.getSync(
-      Strategies.Passport.LOCAL_STRATEGY_FACTORY,
-      {optional: true},
-    );
-
-    if (!localFactory) {
-      throw new Error(
-        `No factory found for ${Strategies.Passport.LOCAL_STRATEGY_FACTORY}`,
-      );
+  /**
+   * An unbound factory is a supported setup (passport packages are optional),
+   * so it is answered like an unregistered route rather than as a server fault.
+   */
+  private getFactory<T>(key: BindingKey<T>): T {
+    const factory = this.ctx.getSync(key, {optional: true});
+    if (!factory) {
+      throw new HttpErrors.NotFound(AuthErrorKeys.StrategyNotAvailable);
     }
+    return factory;
+  }
+
+  async processLocalFactory(verifier: VerifierType) {
+    const localFactory = this.getFactory(
+      Strategies.Passport.LOCAL_STRATEGY_FACTORY,
+    );
 
     return localFactory(
       this.metadata.options as
@@ -54,16 +61,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
   }
 
   async processBearerFactory(verifier: VerifierType) {
-    const bearerFactory = this.ctx.getSync(
+    const bearerFactory = this.getFactory(
       Strategies.Passport.BEARER_STRATEGY_FACTORY,
-      {optional: true},
     );
-
-    if (!bearerFactory) {
-      throw new Error(
-        `No factory found for ${Strategies.Passport.BEARER_STRATEGY_FACTORY}`,
-      );
-    }
 
     return bearerFactory(
       this.metadata.options as PassportBearer.IStrategyOptions,
@@ -72,16 +72,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
   }
 
   async processResourceOwnerFactory(verifier: VerifierType) {
-    const resourceOwnerFactory = this.ctx.getSync(
+    const resourceOwnerFactory = this.getFactory(
       Strategies.Passport.RESOURCE_OWNER_STRATEGY_FACTORY,
-      {optional: true},
     );
-
-    if (!resourceOwnerFactory) {
-      throw new Error(
-        `No factory found for ${Strategies.Passport.RESOURCE_OWNER_STRATEGY_FACTORY}`,
-      );
-    }
 
     return resourceOwnerFactory(
       this.metadata
@@ -91,16 +84,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
   }
 
   async processGoogleFactory(verifier: VerifierType) {
-    const googleFactory = this.ctx.getSync(
+    const googleFactory = this.getFactory(
       Strategies.Passport.GOOGLE_OAUTH2_STRATEGY_FACTORY,
-      {optional: true},
     );
-
-    if (!googleFactory) {
-      throw new Error(
-        `No factory found for ${Strategies.Passport.GOOGLE_OAUTH2_STRATEGY_FACTORY}`,
-      );
-    }
 
     return googleFactory(
       this.metadata.options as
@@ -111,16 +97,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
   }
 
   async processAzureFactory(verifier: VerifierType) {
-    const azureFactory = this.ctx.getSync(
+    const azureFactory = this.getFactory(
       Strategies.Passport.AZURE_AD_STRATEGY_FACTORY,
-      {optional: true},
     );
-
-    if (!azureFactory) {
-      throw new Error(
-        `No factory found for ${Strategies.Passport.AZURE_AD_STRATEGY_FACTORY}`,
-      );
-    }
 
     return azureFactory(
       this.metadata.options as
@@ -131,16 +110,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
   }
 
   async processKeycloakFactory(verifier: VerifierType) {
-    const keycloakFactory = this.ctx.getSync(
+    const keycloakFactory = this.getFactory(
       Strategies.Passport.KEYCLOAK_STRATEGY_FACTORY,
-      {optional: true},
     );
-
-    if (!keycloakFactory) {
-      throw new Error(
-        `No factory found for ${Strategies.Passport.KEYCLOAK_STRATEGY_FACTORY}`,
-      );
-    }
 
     return keycloakFactory(
       this.metadata.options as Keycloak.StrategyOptions,
@@ -149,16 +121,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
   }
 
   async processInstagramFactory(verifier: VerifierType) {
-    const instagramFactory = this.ctx.getSync(
+    const instagramFactory = this.getFactory(
       Strategies.Passport.INSTAGRAM_OAUTH2_STRATEGY_FACTORY,
-      {optional: true},
     );
-
-    if (!instagramFactory) {
-      throw new Error(
-        `No factory found for ${Strategies.Passport.INSTAGRAM_OAUTH2_STRATEGY_FACTORY}`,
-      );
-    }
 
     return instagramFactory(
       this.metadata.options as
@@ -169,16 +134,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
   }
 
   async processAppleFactory(verifier: VerifierType) {
-    const appleFactory = this.ctx.getSync(
+    const appleFactory = this.getFactory(
       Strategies.Passport.APPLE_OAUTH2_STRATEGY_FACTORY,
-      {optional: true},
     );
-
-    if (!appleFactory) {
-      throw new Error(
-        `No factory found for ${Strategies.Passport.APPLE_OAUTH2_STRATEGY_FACTORY}`,
-      );
-    }
     return appleFactory(
       this.metadata.options as
         | AppleStrategy.AuthenticateOptions
@@ -188,16 +146,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
   }
 
   async processFacebookFactory(verifier: VerifierType) {
-    const facebookFactory = this.ctx.getSync(
+    const facebookFactory = this.getFactory(
       Strategies.Passport.FACEBOOK_OAUTH2_STRATEGY_FACTORY,
-      {optional: true},
     );
-
-    if (!facebookFactory) {
-      throw new Error(
-        `No factory found for ${Strategies.Passport.FACEBOOK_OAUTH2_STRATEGY_FACTORY}`,
-      );
-    }
 
     return facebookFactory(
       this.metadata.options as
@@ -207,16 +158,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
   }
 
   processCognitoFactory(verifier: VerifierType) {
-    const cognitoFactory = this.ctx.getSync(
+    const cognitoFactory = this.getFactory(
       Strategies.Passport.COGNITO_OAUTH2_STRATEGY_FACTORY,
-      {optional: true},
     );
-
-    if (!cognitoFactory) {
-      throw new Error(
-        `No factory found for ${Strategies.Passport.COGNITO_OAUTH2_STRATEGY_FACTORY}`,
-      );
-    }
 
     return cognitoFactory(
       this.metadata.options as Cognito.StrategyOptions,
@@ -225,16 +169,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
   }
 
   async processOtpAuthFactory(verifier: VerifierType) {
-    const otpFactory = this.ctx.getSync(
+    const otpFactory = this.getFactory(
       Strategies.Passport.OTP_AUTH_STRATEGY_FACTORY,
-      {optional: true},
     );
-
-    if (!otpFactory) {
-      throw new Error(
-        `No factory found for ${Strategies.Passport.OTP_AUTH_STRATEGY_FACTORY}`,
-      );
-    }
 
     return otpFactory(
       this.metadata.options as Otp.StrategyOptions,
@@ -242,16 +179,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
   async processAuth0Factory(verifier: VerifierType) {
-    const auth0Factory = this.ctx.getSync(
+    const auth0Factory = this.getFactory(
       Strategies.Passport.AUTH0_STRATEGY_FACTORY,
-      {optional: true},
     );
-
-    if (!auth0Factory) {
-      throw new Error(
-        `No factory found for ${Strategies.Passport.AUTH0_STRATEGY_FACTORY}`,
-      );
-    }
 
     // Cast the factory output to `Strategy` type
     return auth0Factory(
@@ -262,16 +192,9 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
   }
 
   async processSamlFactory(verifier: VerifierType) {
-    const samlFactory = this.ctx.getSync(
+    const samlFactory = this.getFactory(
       Strategies.Passport.SAML_STRATEGY_FACTORY,
-      {optional: true},
     );
-
-    if (!samlFactory) {
-      throw new Error(
-        `No factory found for ${Strategies.Passport.SAML_STRATEGY_FACTORY}`,
-      );
-    }
 
     return samlFactory(
       this.metadata.options as SamlConfig,
@@ -335,7 +258,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
       }
       default:
         return Promise.reject(
-          new Error(`The strategy ${name} is not available.`),
+          new HttpErrors.NotFound(AuthErrorKeys.StrategyNotAvailable),
         );
     }
   }
