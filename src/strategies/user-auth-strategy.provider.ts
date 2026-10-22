@@ -47,7 +47,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     return factory;
   }
 
-  async processLocalFactory(verifier: VerifierType) {
+  processLocalFactory(verifier: VerifierType) {
     const localFactory = this.getFactory(
       Strategies.Passport.LOCAL_STRATEGY_FACTORY,
     );
@@ -60,7 +60,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  async processBearerFactory(verifier: VerifierType) {
+  processBearerFactory(verifier: VerifierType) {
     const bearerFactory = this.getFactory(
       Strategies.Passport.BEARER_STRATEGY_FACTORY,
     );
@@ -71,7 +71,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  async processResourceOwnerFactory(verifier: VerifierType) {
+  processResourceOwnerFactory(verifier: VerifierType) {
     const resourceOwnerFactory = this.getFactory(
       Strategies.Passport.RESOURCE_OWNER_STRATEGY_FACTORY,
     );
@@ -83,7 +83,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  async processGoogleFactory(verifier: VerifierType) {
+  processGoogleFactory(verifier: VerifierType) {
     const googleFactory = this.getFactory(
       Strategies.Passport.GOOGLE_OAUTH2_STRATEGY_FACTORY,
     );
@@ -96,7 +96,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  async processAzureFactory(verifier: VerifierType) {
+  processAzureFactory(verifier: VerifierType) {
     const azureFactory = this.getFactory(
       Strategies.Passport.AZURE_AD_STRATEGY_FACTORY,
     );
@@ -109,7 +109,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  async processKeycloakFactory(verifier: VerifierType) {
+  processKeycloakFactory(verifier: VerifierType) {
     const keycloakFactory = this.getFactory(
       Strategies.Passport.KEYCLOAK_STRATEGY_FACTORY,
     );
@@ -120,7 +120,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  async processInstagramFactory(verifier: VerifierType) {
+  processInstagramFactory(verifier: VerifierType) {
     const instagramFactory = this.getFactory(
       Strategies.Passport.INSTAGRAM_OAUTH2_STRATEGY_FACTORY,
     );
@@ -133,7 +133,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  async processAppleFactory(verifier: VerifierType) {
+  processAppleFactory(verifier: VerifierType) {
     const appleFactory = this.getFactory(
       Strategies.Passport.APPLE_OAUTH2_STRATEGY_FACTORY,
     );
@@ -145,7 +145,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  async processFacebookFactory(verifier: VerifierType) {
+  processFacebookFactory(verifier: VerifierType) {
     const facebookFactory = this.getFactory(
       Strategies.Passport.FACEBOOK_OAUTH2_STRATEGY_FACTORY,
     );
@@ -168,7 +168,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  async processOtpAuthFactory(verifier: VerifierType) {
+  processOtpAuthFactory(verifier: VerifierType) {
     const otpFactory = this.getFactory(
       Strategies.Passport.OTP_AUTH_STRATEGY_FACTORY,
     );
@@ -178,7 +178,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
       verifier as VerifyFunction.OtpAuthFn,
     );
   }
-  async processAuth0Factory(verifier: VerifierType) {
+  processAuth0Factory(verifier: VerifierType) {
     const auth0Factory = this.getFactory(
       Strategies.Passport.AUTH0_STRATEGY_FACTORY,
     );
@@ -191,7 +191,7 @@ export class AuthStrategyProvider implements Provider<Strategy | undefined> {
     );
   }
 
-  async processSamlFactory(verifier: VerifierType) {
+  processSamlFactory(verifier: VerifierType) {
     const samlFactory = this.getFactory(
       Strategies.Passport.SAML_STRATEGY_FACTORY,
     );
